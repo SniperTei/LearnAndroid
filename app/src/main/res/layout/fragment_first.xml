@@ -9,11 +9,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/screenBackground"
         android:padding="16dp">
 
         <Button
             android:id="@+id/button_first"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/next"
             app:layout_constraintBottom_toTopOf="@id/textview_first"
@@ -23,10 +24,15 @@
 
         <TextView
             android:id="@+id/textview_first"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/lorem_ipsum"
+            android:background="@color/colorPrimaryDark"
+            android:fontFamily="sans-serif-condensed"
+            android:text="@string/hello_first_fragment"
+            android:textColor="@color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
