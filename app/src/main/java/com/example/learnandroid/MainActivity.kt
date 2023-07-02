@@ -3,6 +3,7 @@ package com.example.learnandroid
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -11,6 +12,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val myBtn = findViewById<Button>(R.id.my_button)
+        val tv = findViewById<TextView>(R.id.tv_data)
+        tv.setText("Hello Android")
         myBtn.setOnClickListener {
             println("myBtn click")
             // 跳转到FirstActivity2 传一个name
