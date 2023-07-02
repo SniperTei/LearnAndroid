@@ -11,9 +11,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val myBtn = findViewById<Button>(R.id.my_button)
+
         val tv = findViewById<TextView>(R.id.tv_data)
         tv.setText("Hello Android")
+
+        val myBtn = findViewById<Button>(R.id.my_button)
+        myBtn.setText("跳转")
         myBtn.setOnClickListener {
             println("myBtn click")
             // 跳转到FirstActivity2 传一个name
