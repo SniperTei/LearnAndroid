@@ -2,10 +2,10 @@ package com.example.learnandroid
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,6 +14,9 @@ class MainActivity : AppCompatActivity() {
 
         val tv = findViewById<TextView>(R.id.tv_data)
         tv.setText("Hello Android")
+        tv.setTextSize(30f)
+        tv.setTextColor(0xffff0000.toInt())
+        tv.setBackgroundColor(0xff00ff00.toInt())
 
         val myBtn = findViewById<Button>(R.id.my_button)
         myBtn.setText("跳转")
