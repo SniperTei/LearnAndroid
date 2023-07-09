@@ -13,13 +13,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val tv = findViewById<TextView>(R.id.tv_data)
-        tv.setText("Hello Android")
-        tv.setTextSize(30f)
+        tv.text = "Hello Android"
+        tv.textSize = 30f
         tv.setTextColor(0xffff0000.toInt())
         tv.setBackgroundColor(0xff00ff00.toInt())
 
         val myBtn = findViewById<Button>(R.id.my_button)
-        myBtn.setText("跳转")
+        myBtn.text = "跳转"
         myBtn.setOnClickListener {
             println("myBtn click")
             // 跳转到FirstActivity2 传一个name

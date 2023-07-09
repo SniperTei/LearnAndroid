@@ -11,7 +11,17 @@ class MyManager private constructor() {
         }
     }
 
-    // private val mFragment = MyFragment()
+//    private val mFragment = MyFragment()
+
+    // 把mFragment显示在当前activity中
+    fun showFragment(containerId: Int) {
+        print(message = "showFragment")
+    }
+
+    // 把mFragment从当前activity中移除
+    fun removeFragment() {
+        print(message = "removeFragment")
+    }
 
     fun doSomething() {
         println("doSomething")
