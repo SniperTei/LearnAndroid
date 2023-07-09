@@ -1,5 +1,7 @@
 package com.example.learnandroid.manager
 
+import com.example.learnandroid.fragment.MyFragment
+
 class MyManager private constructor() {
     companion object {
         private var instance: MyManager? = null
@@ -14,8 +16,9 @@ class MyManager private constructor() {
 //    private val mFragment = MyFragment()
 
     // 把mFragment显示在当前activity中
-    fun showFragment(containerId: Int) {
+    fun showFragment() {
         print(message = "showFragment")
+
     }
 
     // 把mFragment从当前activity中移除

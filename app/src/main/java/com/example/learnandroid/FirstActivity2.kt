@@ -1,5 +1,6 @@
 package com.example.learnandroid
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -32,6 +33,14 @@ class FirstActivity2 : AppCompatActivity() {
 
         mFragment = MyFragment()
         Log.i(TAG, "myFragment = $mFragment")
+
+        mFragment?.callback = {
+            println("callback code = $it")
+            val intent = Intent()
+            intent.putExtra("result", "Hello MainActivity")
+            setResult(RESULT_OK, intent)
+            finish()
+        }
 
         // fragmentManager
         val fragmentManager = supportFragmentManager
