@@ -1,12 +1,18 @@
 package com.example.learnandroid.fragment
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.example.learnandroid.R
+import java.io.InputStream
+import java.net.URL
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,6 +50,29 @@ class MyFragment : Fragment() {
             // 回调给activity
             onButtonPressed("000000")
         }
+
+        val imageView = rootview.findViewById<ImageView>(R.id.iv_question)
+        val questionView = rootview.findViewById<View>(R.id.tv_question)
+        val warningView = rootview.findViewById<View>(R.id.tv_warn_question)
+        val answerView = rootview.findViewById<View>(R.id.tv_answer)
+        questionView.visibility = View.GONE
+        warningView.visibility = View.GONE
+        answerView.visibility = View.GONE
+
+        // imageView 默认隐藏
+        imageView.visibility = View.VISIBLE
+        // 设置图片
+        val bitmap = getBitmapImgWithUrl("https://www.baidu.com/img/bd_logo1.png")
+        imageView.setImageBitmap(bitmap)
+        
+        // 3秒后显示
+//        imageView.postDelayed({
+//            imageView.visibility = View.GONE
+//            questionView.visibility = View.VISIBLE
+//            warningView.visibility = View.VISIBLE
+//            answerView.visibility = View.VISIBLE
+//        }, 3000)
+
         // Inflate the layout for this fragment
         return rootview
     }
@@ -53,6 +82,18 @@ class MyFragment : Fragment() {
         println("MyFragment onButtonPressed")
         // 回调给activity
         callback?.invoke(code)
+    }
+
+    // 下载图片
+    private fun getBitmapImgWithUrl(url: String): Bitmap? {
+        var bitmap: Bitmap? = null
+        try {
+            val inputStream: InputStream = URL(url).openStream()
+            bitmap = BitmapFactory.decodeStream(inputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return bitmap
     }
 
     companion object {

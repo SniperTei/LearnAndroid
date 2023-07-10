@@ -3,6 +3,7 @@ package com.example.learnandroid
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.learnandroid.manager.MyManager
 import android.util.Log
 import android.view.View
 import com.example.learnandroid.fragment.MyFragment
@@ -21,6 +22,9 @@ class FirstActivity2 : AppCompatActivity() {
         // 获取到传过来的参数name
         val name = intent.getStringExtra("name")
         Log.i(TAG, "name = $name")
+
+        val myManager = MyManager.getInstance()
+        myManager.showFragment()
 //        // 返回按钮
 //        val backBtn = findViewById<Button>(R.id.btn_back)
 //        backBtn.setOnClickListener {
@@ -31,27 +35,27 @@ class FirstActivity2 : AppCompatActivity() {
 //            finish()
 //        }
 
-        mFragment = MyFragment()
-        Log.i(TAG, "myFragment = $mFragment")
+       mFragment = MyFragment()
+       Log.i(TAG, "myFragment = $mFragment")
 
-        mFragment?.callback = {
-            println("callback code = $it")
-            val intent = Intent()
-            intent.putExtra("result", "Hello MainActivity")
-            setResult(RESULT_OK, intent)
-            finish()
-        }
+       mFragment?.callback = {
+           println("callback code = $it")
+           val intent = Intent()
+           intent.putExtra("result", "Hello MainActivity")
+           setResult(RESULT_OK, intent)
+           finish()
+       }
 
-        // fragmentManager
-        val fragmentManager = supportFragmentManager
-        Log.i(TAG, "fragmentManager = $fragmentManager")
-        // 开启一个事务
-        val transaction = fragmentManager.beginTransaction()
-        Log.i(TAG, "transaction = $transaction")
-        // 将fragment添加到布局中
-        transaction.add(R.id.fl_fragment_container, mFragment!!)
-        // 提交事务
-        transaction.commit()
+       // fragmentManager
+       val fragmentManager = supportFragmentManager
+       Log.i(TAG, "fragmentManager = $fragmentManager")
+       // 开启一个事务
+       val transaction = fragmentManager.beginTransaction()
+       Log.i(TAG, "transaction = $transaction")
+       // 将fragment添加到布局中
+       transaction.add(R.id.fl_fragment_container, mFragment!!)
+       // 提交事务
+       transaction.commit()
 
     }
 
