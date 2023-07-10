@@ -68,7 +68,7 @@
         android:textStyle="bold"
         android:layout_marginHorizontal="50dp"
         android:background="@color/design_default_color_background"
-        android:text="现在是智能核审环节，温馨提示，为了确保您的权益，智能核审中问题需由您本人回答"
+        android:text="随便写了一些文字，来看一下展示是否正常。目前看来确实正常，还不错，继续努力"
         android:textSize="20sp"
         app:layout_constraintTop_toTopOf="@+id/guideline"/>
 
