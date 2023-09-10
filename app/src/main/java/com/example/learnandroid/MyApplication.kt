@@ -4,7 +4,6 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import android.util.Log
-import com.example.learnandroid.manager.MyActivityManager
 
 class MyApplication: Application() {
 
@@ -13,40 +12,6 @@ class MyApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         Log.i(TAG, "MyApplication onCreate")
-
-        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
-            override fun onActivityPaused(activity: Activity) {
-                Log.i(TAG, "MyApplication onActivityPaused")
-            }
-
-            override fun onActivityStarted(activity: Activity) {
-                Log.i(TAG, "MyApplication onActivityStarted")
-            }
-
-            override fun onActivityDestroyed(activity: Activity) {
-                Log.i(TAG, "MyApplication onActivityDestroyed")
-                val manager = MyActivityManager.getInstance()
-                manager.removeActivity(activity)
-            }
-
-            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-                Log.i(TAG, "MyApplication onActivitySaveInstanceState")
-            }
-
-            override fun onActivityStopped(activity: Activity) {
-                Log.i(TAG, "MyApplication onActivityStopped")
-            }
-
-            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-                Log.i(TAG, "MyApplication onActivityCreated")
-                val manager = MyActivityManager.getInstance()
-                manager.addActivity(activity)
-            }
-
-            override fun onActivityResumed(activity: Activity) {
-                Log.i(TAG, "MyApplication onActivityResumed")
-            }
-        })
     }
 
     override fun onTerminate() {

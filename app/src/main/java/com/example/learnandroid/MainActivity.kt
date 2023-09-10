@@ -20,28 +20,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val tv = findViewById<TextView>(R.id.tv_data)
-        tv.text = "Hello Android"
-        tv.textSize = 30f
-        tv.setTextColor(0xffff0000.toInt())
-        tv.setBackgroundColor(0xff00ff00.toInt())
-
-        val myBtn = findViewById<Button>(R.id.my_button)
-        myBtn.text = "跳转"
-        myBtn.setOnClickListener {
-            Log.i(TAG, "jump btn click")
-            // 跳转到FirstActivity2 传一个name
-            val intent = Intent(this, FirstActivity2::class.java)
-            intent.putExtra("name", "zhengnan")
-            startActivity(intent)
-
-            // 获取到传过来的参数result
-            val result = intent.getStringExtra("result")
-            Log.i(TAG, "result = $result")
-        }
-        // // 获取到传过来的参数result
-        // val result = intent.getStringExtra("result")
-        // println("result mainact : $result")
     }
 
     override fun onStart() {
