@@ -12,6 +12,8 @@ class MainActivity : AppCompatActivity() {
 
     val TAG = "MainActivity"
 
+    var mTextView: TextView? = null
+
     private val myApplication: MyApplication by lazy {
         application as MyApplication
     }
@@ -20,12 +22,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        mTextView = findViewById<TextView>(R.id.tv_data)
+
+        val rollBtn: Button = findViewById(R.id.roll_btn)
+        rollBtn.setOnClickListener {
+            Log.i(TAG, "roll btn click")
+            rollDice()
+        }
     }
 
     override fun onStart() {
         super.onStart()
         Log.i(TAG, "MainActivity onStart")
-        
     }
 
     override fun onResume() {
@@ -51,5 +59,17 @@ class MainActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         Log.i(TAG, "MainActivity onRestart")
+    }
+
+    private fun rollDice() {
+        val dice = Dice(6)
+        val result = dice.roll()
+        mTextView?.text = result.toString()
+    }
+}
+
+class Dice(val number: Int) {
+    fun roll(): Int {
+        return (1..6).random()
     }
 }
