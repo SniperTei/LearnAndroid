@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
         val rollBtn: Button = findViewById(R.id.roll_btn)
         rollBtn.setOnClickListener {
             Log.i(TAG, "roll btn click")
+            Toast.makeText(this, "Dice Rolled!", Toast.LENGTH_SHORT).show()
             rollDice()
         }
     }
