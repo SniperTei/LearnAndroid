@@ -18,6 +18,8 @@ class MainActivity : AppCompatActivity() {
 
     var mDiceImg: ImageView? = null
 
+    var mNextBtn: Button? = null
+
     private val myApplication: MyApplication by lazy {
         application as MyApplication
     }
@@ -35,6 +37,12 @@ class MainActivity : AppCompatActivity() {
             Log.i(TAG, "roll btn click")
             Toast.makeText(this, "Dice Rolled!", Toast.LENGTH_SHORT).show()
             rollDice()
+        }
+
+        val nextBtn = findViewById<Button>(R.id.next_btn)
+        nextBtn.setOnClickListener {
+            Log.i(TAG, "next btn click")
+//            Toast.makeText(this, "what the ", Toast.LENGTH_SHORT).show()
         }
     }
 
