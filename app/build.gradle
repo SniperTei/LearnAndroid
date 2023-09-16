@@ -7,6 +7,10 @@ android {
     namespace 'com.example.learnandroid'
     compileSdk 33
 
+    dataBinding {
+        enabled = true
+    }
+
     defaultConfig {
         applicationId "com.example.learnandroid"
         minSdk 29
