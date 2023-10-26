@@ -37,6 +37,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/dice_1" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/main_desc"
+        android:maxLines="1"
+        android:ellipsize="marquee"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:clickable="true"
+        app:layout_constraintTop_toBottomOf="@id/roll_btn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <Button
         android:id="@+id/next_btn"
         android:layout_width="wrap_content"
