@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.learnandroid.activity.MyActivityA
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,6 +44,8 @@ class MainActivity : AppCompatActivity() {
         nextBtn.setOnClickListener {
             Log.i(TAG, "next btn click")
 //            Toast.makeText(this, "what the ", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, MyActivityA::class.java)
+            startActivity(intent)
         }
     }
 
