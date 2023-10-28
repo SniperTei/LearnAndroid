@@ -5,4 +5,5 @@
     <string name="main_desc">Hi ~ There. My name is Zhengnan and this is my first android app. I\'m learing Android</string>
     <string name="placeholder_username">Please input your username</string>
     <string name="placeholder_password">Please input your password</string>
+    <string name="actionbar_title">My App</string>
 </resources>

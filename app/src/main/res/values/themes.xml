@@ -6,4 +6,6 @@
     </style>
 
     <style name="Theme.LearnAndroid" parent="Base.Theme.LearnAndroid" />
+    
+<!--    <style name="Theme.LearnAndroid_A" parent="Theme.MaterialComponents.DayNight.NoActionBar"-->
 </resources>
