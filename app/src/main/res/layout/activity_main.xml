@@ -56,6 +56,8 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:hint="@string/placeholder_username"
+        android:drawableLeft="@drawable/username"
+        android:drawablePadding="15dp"
         android:layout_marginHorizontal="40dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -67,8 +69,9 @@
         android:layout_height="wrap_content"
         android:inputType="textPassword"
         android:hint="@string/placeholder_password"
+        android:drawableLeft="@drawable/password"
+        android:drawablePadding="15dp"
         android:layout_marginHorizontal="40dp"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/username_txt"/>
@@ -85,5 +88,14 @@
         tools:layout_editor_absoluteX="163dp"
         tools:layout_editor_absoluteY="787dp" />
 
+    <ProgressBar
+        android:id="@+id/main_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,23 +3,29 @@ package com.example.learnandroid
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.core.widget.ContentLoadingProgressBar
 import com.example.learnandroid.activity.MyActivityA
 
 class MainActivity : AppCompatActivity() {
 
-    val TAG = "MainActivity"
+    private val TAG = "MainActivity"
 
-    var mTextView: TextView? = null
+    private lateinit var mTextView: TextView
 
-    var mDiceImg: ImageView? = null
+    private lateinit var mDiceImg: ImageView
 
-    var mNextBtn: Button? = null
+    private lateinit var mNextBtn: Button
+
+    private lateinit var mLoadingProgressBar: ProgressBar
 
     private val myApplication: MyApplication by lazy {
         application as MyApplication
@@ -33,6 +39,8 @@ class MainActivity : AppCompatActivity() {
         // 骰子图片
         mDiceImg = findViewById<ImageView>(R.id.diceImg)
 
+        mLoadingProgressBar = findViewById(R.id.main_loading)
+
         val rollBtn: Button = findViewById(R.id.roll_btn)
         rollBtn.setOnClickListener {
             Log.i(TAG, "roll btn click")
@@ -44,9 +52,23 @@ class MainActivity : AppCompatActivity() {
         nextBtn.setOnClickListener {
             Log.i(TAG, "next btn click")
 //            Toast.makeText(this, "what the ", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MyActivityA::class.java)
-            startActivity(intent)
+//            val intent = Intent(this, MyActivityA::class.java)
+//            startActivity(intent)
+
+            if (mLoadingProgressBar.isVisible) {
+                stopLoading()
+            } else {
+                startLoading()
+            }
         }
+    }
+
+    private fun startLoading() {
+        mLoadingProgressBar.visibility = View.VISIBLE
+    }
+
+    private fun stopLoading() {
+        mLoadingProgressBar.visibility = View.GONE
     }
 
     override fun onStart() {
