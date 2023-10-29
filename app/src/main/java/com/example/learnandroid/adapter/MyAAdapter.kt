@@ -30,18 +30,36 @@ class MyAAdapter: RecyclerView.Adapter<MyAAdapter.MyAViewHolder> {
     override fun onBindViewHolder(holder: MyAViewHolder, position: Int) {
         holder.bind(data[position])
     }
-    
+
     override fun getItemCount(): Int {
-        val count = data.size
-        Log.i("Sniper", "$count")
-        return count
+        return data.size
     }
     
-    class MyAViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class MyAViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
 
         fun bind(item: MyABean) {
             itemView.findViewById<TextView>(R.id.item_my_a_name_tv).text = item.name
             itemView.findViewById<TextView>(R.id.item_my_a_age_tv).text = item.age.toString()
         }
+
+        // 点击事件
+        init {
+            itemView.setOnClickListener {
+//                Log.i("Sniper", "item clicked")
+                mOnItemClickListener.onItemClick(it, adapterPosition)
+            }
+        }
+    }
+
+    // 点击事件接口
+    interface OnItemClickListener {
+        fun onItemClick(view: View, position: Int)
+    }
+    
+    private lateinit var mOnItemClickListener: OnItemClickListener
+
+    public fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.mOnItemClickListener = listener
     }
 }
+

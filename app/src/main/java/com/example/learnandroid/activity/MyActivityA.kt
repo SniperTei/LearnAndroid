@@ -3,6 +3,7 @@ package com.example.learnandroid.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.learnandroid.R
@@ -31,7 +32,11 @@ class MyActivityA : AppCompatActivity() {
         myRecyclerView.layoutManager = layoutManager
 //
         myRecyclerView.adapter = myAAdapter
-
+        myAAdapter.setOnItemClickListener(object : MyAAdapter.OnItemClickListener {
+            override fun onItemClick(view: View, position: Int) {
+                Log.i("Sniper", "item clicked: $position")
+            }
+        })
     }
 
 
