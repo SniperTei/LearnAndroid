@@ -52,14 +52,14 @@ class MainActivity : AppCompatActivity() {
         nextBtn.setOnClickListener {
             Log.i(TAG, "next btn click")
 //            Toast.makeText(this, "what the ", Toast.LENGTH_SHORT).show()
-//            val intent = Intent(this, MyActivityA::class.java)
-//            startActivity(intent)
+            val intent = Intent(this, MyActivityA::class.java)
+            startActivity(intent)
 
-            if (mLoadingProgressBar.isVisible) {
-                stopLoading()
-            } else {
-                startLoading()
-            }
+//            if (mLoadingProgressBar.isVisible) {
+//                stopLoading()
+//            } else {
+//                startLoading()
+//            }
         }
     }
 
