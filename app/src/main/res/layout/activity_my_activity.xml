@@ -35,5 +35,10 @@
 <!--        app:layout_constraintTop_toBottomOf="@id/my_activity_text"-->
 <!--        android:text="heihei"></Button>-->
 
+    <fragment android:name="com.example.learnandroid.fragment.BlankFragment1"
+        android:id="@+id/blank_fragment_one"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
