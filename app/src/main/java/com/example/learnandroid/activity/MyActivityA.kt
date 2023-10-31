@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.learnandroid.R
@@ -37,8 +40,17 @@ class MyActivityA : AppCompatActivity() {
                 Log.i("Sniper", "item clicked: $position")
             }
         })
-    }
 
+        // 另一种方式 创建一个textview
+//        val layout = LinearLayout(this)
+//        val layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
+//        layout.layoutParams = layoutParams
+//
+//        val textView: TextView = TextView(this)
+//        textView.text = "This is a text"
+//        layout.addView(textView)
+//        setContentView(layout)
+    }
 
 
 //    lateinit var mBinding: ActivityMyActivityBinding
