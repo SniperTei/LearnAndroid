@@ -14,10 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.ContentLoadingProgressBar
 import com.example.learnandroid.activity.MyActivityA
+import com.example.learnandroid.activity.MyActivityB
 
 class MainActivity : AppCompatActivity() {
 
-    private val TAG = "MainActivity"
+//    private val TAG = "MainActivity"
+    private val TAG = "Sniper"
 
     private lateinit var mTextView: TextView
 
@@ -52,9 +54,10 @@ class MainActivity : AppCompatActivity() {
         nextBtn.setOnClickListener {
             Log.i(TAG, "next btn click")
 //            Toast.makeText(this, "what the ", Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, MyActivityA::class.java)
+//            val intent = Intent(this, MyActivityA::class.java)
+//            startActivity(intent)
+            val intent = Intent(this, MyActivityB::class.java)
             startActivity(intent)
-
 //            if (mLoadingProgressBar.isVisible) {
 //                stopLoading()
 //            } else {

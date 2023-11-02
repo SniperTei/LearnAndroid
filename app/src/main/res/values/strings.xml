@@ -7,4 +7,7 @@
     <string name="placeholder_password">Please input your password</string>
     <string name="actionbar_title">My App</string>
     <string name="ok_title">Okay</string>
+    <string name="forward_title">Forward</string>
+    <string name="btn_name_a">A Btn</string>
+    <string name="btn_name_b">B Btn</string>
 </resources>

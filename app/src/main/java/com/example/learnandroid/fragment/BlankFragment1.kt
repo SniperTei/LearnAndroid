@@ -36,9 +36,14 @@ class BlankFragment1 : Fragment() {
         val root = inflater.inflate(R.layout.fragment_blank1, container, false)
         val textView = root.findViewById<TextView>(R.id.hello_fragment_text)
         val okBtn = root.findViewById<Button>(R.id.hello_fragment_btn)
+        val forwardBtn = root.findViewById<Button>(R.id.forward_fragment_btn)
 
         okBtn.setOnClickListener {
             textView.text = "Okay btn clicked and text changed"
+        }
+
+        forwardBtn.setOnClickListener {
+//            val Intent =
         }
 
         return root

@@ -9,10 +9,10 @@
     android:layout_height="match_parent"
     tools:context=".activity.MyActivityA">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/my_rv"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/my_rv"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent" />-->
 
 <!--    <TextView-->
 <!--        android:id="@+id/my_activity_text"-->
