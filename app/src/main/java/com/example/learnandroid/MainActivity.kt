@@ -18,8 +18,8 @@ import com.example.learnandroid.activity.MyActivityB
 
 class MainActivity : AppCompatActivity() {
 
-//    private val TAG = "MainActivity"
-    private val TAG = "Sniper"
+   private val TAG = "MainActivity"
+    // private val TAG = "Sniper"
 
     private lateinit var mTextView: TextView
 

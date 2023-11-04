@@ -14,6 +14,10 @@ import com.example.learnandroid.fragment.ItemFragment1
 
 //class MyActivityB : AppCompatActivity(), OnClickListener {
 class MyActivityB : AppCompatActivity(), OnClickListener {
+
+    // TAG
+    private val TAG = "MyActivityB"
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
@@ -28,7 +32,7 @@ class MyActivityB : AppCompatActivity(), OnClickListener {
 
     override fun onClick(v: View?) {
         val clickBtn: Button = v as Button
-        Log.i("Sniper", "clicked ： ${clickBtn.text}")
+        Log.i(TAG, "clicked ： ${clickBtn.text}")
 
         if ("A Btn" == clickBtn.text) { // 点了A按钮
             replaceFragmentBelowWithFragment(BlankFragment2())
@@ -42,6 +46,7 @@ class MyActivityB : AppCompatActivity(), OnClickListener {
         // 替换成fragment
         val transaction = fragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_placeholder, fragment)
+        transaction.addToBackStack(null)
         transaction.commit()
     }
 }
