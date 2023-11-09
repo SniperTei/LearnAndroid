@@ -6,9 +6,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.learnandroid.R
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -25,6 +28,8 @@ class BlankFragment2 : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private val mOkHttpClient: OkHttpClient = OkHttpClient()
 
     // TAG
     private val TAG = "BlankFragment2"
@@ -76,11 +81,39 @@ class BlankFragment2 : Fragment() {
         // Inflate the layout for this fragment
         Log.d(TAG, "onCreateView")
         val rootView = inflater.inflate(R.layout.fragment_blank2, container, false)
-        val imageView = rootView.findViewById(R.id.blank2_frag_imgView) as ImageView
+//        val imageView = rootView.findViewById(R.id.blank2_frag_imgView) as ImageView
 
-//        imageView.background = R.drawable.
+        val getSyncBtn = rootView.findViewById<Button>(R.id.get_sync_btn)
+        getSyncBtn.setOnClickListener {
+            Log.d(TAG, "get Sync btn clicked")
+            val httpBinUrl = "https://www.httpbin.org/get"
+            getSync(httpBinUrl)
+        }
+
         return rootView
     }
+
+    // okhttp3
+    private fun getSync(url: String) {
+        // okhttp3 get sync code 新开一个thread
+        Thread(Runnable {
+            val request = Request.Builder()
+                .url(url)
+                .build()
+            try {
+                val response = mOkHttpClient.newCall(request).execute()
+                if (response.isSuccessful) {
+                    Log.d(TAG, "getSync response: ${response.body?.string()}")
+                } else {
+                    Log.d(TAG, "getSync failed")
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }).start()
+    }
+
+    // life cycle
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

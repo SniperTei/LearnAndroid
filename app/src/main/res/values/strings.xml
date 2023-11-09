@@ -10,4 +10,8 @@
     <string name="forward_title">Forward</string>
     <string name="btn_name_a">A Btn</string>
     <string name="btn_name_b">B Btn</string>
+    <string name="btn_name_get_sync">get sync</string>
+    <string name="btn_name_get_async">get async</string>
+    <string name="btn_name_post_sync">post sync</string>
+    <string name="btn_name_post_async">post async</string>
 </resources>
