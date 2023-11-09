@@ -90,10 +90,32 @@ class BlankFragment2 : Fragment() {
             getSync(httpBinUrl)
         }
 
+        val getAsyncBtn = rootView.findViewById<Button>(R.id.get_async_btn)
+        getAsyncBtn.setOnClickListener {
+            Log.d(TAG, "get Async btn clicked")
+            val httpBinUrl = "https://www.httpbin.org/get"
+            getAsync(httpBinUrl)
+        }
+
+        val postSyncBtn = rootView.findViewById<Button>(R.id.post_sync_btn)
+        postSyncBtn.setOnClickListener {
+            Log.d(TAG, "post Sync btn clicked")
+            
+            val httpBinUrl = "https://www.httpbin.org/post"
+            postSync(httpBinUrl)
+        }
+
+        val postAsyncBtn = rootView.findViewById<Button>(R.id.post_async_btn)
+        postAsyncBtn.setOnClickListener {
+            Log.d(TAG, "post Async btn clicked")
+            val httpBinUrl = "https://www.httpbin.org/post"
+            postAsync(httpBinUrl)
+        }
+
         return rootView
     }
 
-    // okhttp3
+    // okhttp3 get sync code
     private fun getSync(url: String) {
         // okhttp3 get sync code 新开一个thread
         Thread(Runnable {
@@ -111,6 +133,70 @@ class BlankFragment2 : Fragment() {
                 e.printStackTrace()
             }
         }).start()
+    }
+
+    // okhttp3 get async code
+    private fun getAsync(url: String) {
+        // okhttp3 get async code
+        val request = Request.Builder()
+            .url(url)
+            .build()
+        mOkHttpClient.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                Log.d(TAG, "getAsync failed")
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "getAsync response: ${response.body?.string()}")
+                } else {
+                    Log.d(TAG, "getAsync failed")
+                }
+            }
+        })
+    }
+
+    // okhttp3 post sync code
+    private fun postSync(url: String) {
+        // okhttp3 post sync code
+        Thread(Runnable {
+            val request = Request.Builder()
+                .url(url)
+                .post(okhttp3.RequestBody.create(null, ""))
+                .build()
+            try {
+                val response = mOkHttpClient.newCall(request).execute()
+                if (response.isSuccessful) {
+                    Log.d(TAG, "postSync response: ${response.body?.string()}")
+                } else {
+                    Log.d(TAG, "postSync failed")
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }).start()
+    }
+
+    // okhttp3 post async code
+    private fun postAsync(url: String) {
+        // okhttp3 post async code
+        val request = Request.Builder()
+            .url(url)
+            .post(okhttp3.RequestBody.create(null, ""))
+            .build()
+        mOkHttpClient.newCall(request).enqueue(object : okhttp3.Callback {
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+                Log.d(TAG, "postAsync failed")
+            }
+
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "postAsync response: ${response.body?.string()}")
+                } else {
+                    Log.d(TAG, "postAsync failed")
+                }
+            }
+        })
     }
 
     // life cycle
