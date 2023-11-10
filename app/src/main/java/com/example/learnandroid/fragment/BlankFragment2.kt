@@ -86,7 +86,7 @@ class BlankFragment2 : Fragment() {
         val getSyncBtn = rootView.findViewById<Button>(R.id.get_sync_btn)
         getSyncBtn.setOnClickListener {
             Log.d(TAG, "get Sync btn clicked")
-            val httpBinUrl = "https://www.httpbin.org/get"
+            val httpBinUrl = "https://www.httpbin.org/get?name=zhengnan&age=33"
             getSync(httpBinUrl)
         }
 
