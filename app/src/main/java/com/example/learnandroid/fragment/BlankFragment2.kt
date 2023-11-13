@@ -9,8 +9,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.learnandroid.R
+import com.example.learnandroid.network.HttpbinService
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.ResponseBody
+import retrofit2.Retrofit
 import java.io.IOException
 
 
@@ -30,6 +33,10 @@ class BlankFragment2 : Fragment() {
     private var param2: String? = null
 
     private val mOkHttpClient: OkHttpClient = OkHttpClient()
+
+    private lateinit var mHttpbinService: HttpbinService
+
+    private lateinit var mRetrofit: Retrofit
 
     // TAG
     private val TAG = "BlankFragment2"
@@ -72,6 +79,11 @@ class BlankFragment2 : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
         Log.d(TAG, "onCreate")
+        mRetrofit = Retrofit.Builder()
+            .baseUrl("https://www.httpbin.org/")
+            .build()
+
+        mHttpbinService = mRetrofit.create(HttpbinService::class.java)
     }
 
     override fun onCreateView(
@@ -94,7 +106,10 @@ class BlankFragment2 : Fragment() {
         getAsyncBtn.setOnClickListener {
             Log.d(TAG, "get Async btn clicked")
             val httpBinUrl = "https://www.httpbin.org/get"
-            getAsync(httpBinUrl)
+            // okhttp3
+//            getAsync(httpBinUrl)
+            // retrofit
+            getAsyncRetrofit()
         }
 
         val postSyncBtn = rootView.findViewById<Button>(R.id.post_sync_btn)
@@ -151,6 +166,27 @@ class BlankFragment2 : Fragment() {
                     Log.d(TAG, "getAsync response: ${response.body?.string()}")
                 } else {
                     Log.d(TAG, "getAsync failed")
+                }
+            }
+        })
+    }
+
+    private fun getAsyncRetrofit() {
+        // retrofit get async code
+        val call = mHttpbinService.get("zhengnan", 33)
+        call.enqueue(object : retrofit2.Callback<ResponseBody> {
+            override fun onFailure(call: retrofit2.Call<ResponseBody>, t: Throwable) {
+                Log.d(TAG, "getAsyncRetrofit failed")
+            }
+
+            override fun onResponse(
+                call: retrofit2.Call<ResponseBody>,
+                response: retrofit2.Response<ResponseBody>
+            ) {
+                if (response.isSuccessful) {
+                    Log.d(TAG, "getAsyncRetrofit response: ${response.body()?.string()}")
+                } else {
+                    Log.d(TAG, "getAsyncRetrofit failed")
                 }
             }
         })
