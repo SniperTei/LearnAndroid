@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.example.learnandroid.R
 import com.example.learnandroid.fragment.BlankFragment2
 import com.example.learnandroid.fragment.ItemFragment1
+import com.example.learnandroid.fragment.WanAndroidFragment
 
 //class MyActivityB : AppCompatActivity(), OnClickListener {
 class MyActivityB : AppCompatActivity(), OnClickListener {
@@ -35,7 +36,8 @@ class MyActivityB : AppCompatActivity(), OnClickListener {
         Log.i(TAG, "clicked ： ${clickBtn.text}")
 
         if ("A Btn" == clickBtn.text) { // 点了A按钮
-            replaceFragmentBelowWithFragment(BlankFragment2())
+//            replaceFragmentBelowWithFragment(BlankFragment2())
+            replaceFragmentBelowWithFragment(WanAndroidFragment())
         } else {
             replaceFragmentBelowWithFragment(ItemFragment1())
         }
