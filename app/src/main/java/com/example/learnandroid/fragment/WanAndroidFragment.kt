@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.example.learnandroid.R
+import com.example.learnandroid.bean.ErrorBean
 import com.example.learnandroid.network.WanAndroidService
+import com.google.gson.Gson
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
@@ -67,7 +69,11 @@ class WanAndroidFragment : Fragment() {
         call.enqueue(object : retrofit2.Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    Log.d(TAG, "loginWanAndroid response: ${response.body()?.string()}")
+                    val strJson = response.body()?.string()
+                    Log.d(TAG, "loginWanAndroid response: $strJson")
+                    val errorBean = Gson().fromJson(strJson, ErrorBean::class.java)
+                    Log.d(TAG, "errorBean.code ${errorBean.errorCode}")
+                    Log.d(TAG, "errorBean.msg ${errorBean.errorMsg}")
                 } else {
                     Log.d(TAG, "loginWanAndroid failed: ${response.body()?.string()}")
                 }
