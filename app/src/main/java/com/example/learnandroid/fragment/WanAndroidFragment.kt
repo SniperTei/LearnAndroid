@@ -15,6 +15,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -47,6 +48,7 @@ class WanAndroidFragment : Fragment() {
 
         mRetrofit = Retrofit.Builder()
             .baseUrl("https://www.wanandroid.com/")
+            .addConverterFactory(GsonConverterFactory.create())
             .build()
         mWanAndroidService = mRetrofit.create(WanAndroidService::class.java)
     }
@@ -69,11 +71,12 @@ class WanAndroidFragment : Fragment() {
         call.enqueue(object : retrofit2.Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
-                    val strJson = response.body()?.string()
-                    Log.d(TAG, "loginWanAndroid response: $strJson")
-                    val errorBean = Gson().fromJson(strJson, ErrorBean::class.java)
-                    Log.d(TAG, "errorBean.code ${errorBean.errorCode}")
-                    Log.d(TAG, "errorBean.msg ${errorBean.errorMsg}")
+//                    val strJson = response.body()?.string()
+                    val jsonObj = response.body()
+                    Log.d(TAG, "loginWanAndroid response: $jsonObj")
+//                    val errorBean = Gson().fromJson(strJson, ErrorBean::class.java)
+//                    Log.d(TAG, "errorBean.code ${errorBean.errorCode}")
+//                    Log.d(TAG, "errorBean.msg ${errorBean.errorMsg}")
                 } else {
                     Log.d(TAG, "loginWanAndroid failed: ${response.body()?.string()}")
                 }
