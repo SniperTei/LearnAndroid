@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:label="HomeFragment"
+        android:name="com.example.learnandroid.fragment.HomeFragment" />
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:label="DashboardFragment"
+        android:name="com.example.learnandroid.fragment.DashboardFragment" />
+
+    <fragment
+        android:id="@+id/personFragment"
+        android:label="PersonFragment"
+        android:name="com.example.learnandroid.fragment.PersonFragment" />
+
+</navigation>

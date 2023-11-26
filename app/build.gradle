@@ -75,4 +75,7 @@ dependencies {
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     // gson ： com.google.code.gson命名空间的gson库的2.10.1版本
     implementation 'com.google.code.gson:gson:2.10.1'
+    // navigation依赖
+    implementation 'androidx.navigation:navigation-fragment:2.4.1'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
 }

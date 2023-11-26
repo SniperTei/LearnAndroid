@@ -21,4 +21,7 @@
     <string name="title_home">首页</string>
     <string name="title_dashboard">仪表盘</string>
     <string name="title_mine">我的</string>
+    <string name="title_dashboard_fragment">Dashboard</string>
+    <string name="title_home_fragment">Home</string>
+    <string name="title_person_fragment">Me</string>
 </resources>
