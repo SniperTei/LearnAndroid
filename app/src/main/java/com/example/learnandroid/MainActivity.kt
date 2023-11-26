@@ -3,20 +3,12 @@ package com.example.learnandroid
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
-import androidx.core.widget.ContentLoadingProgressBar
-import androidx.viewpager2.widget.ViewPager2
-import com.example.learnandroid.activity.MyActivityA
-import com.example.learnandroid.activity.MyActivityB
-import com.example.learnandroid.adapter.MyViewPager2Adapter
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,8 +51,8 @@ class MainActivity : AppCompatActivity() {
 //            Toast.makeText(this, "what the ", Toast.LENGTH_SHORT).show()
 //            val intent = Intent(this, MyActivityA::class.java)
 //            startActivity(intent)
-            val intent = Intent(this, MyActivityB::class.java)
-            startActivity(intent)
+//            val intent = Intent(this, MyActivityB::class.java)
+//            startActivity(intent)
 //            if (mLoadingProgressBar.isVisible) {
 //                stopLoading()
 //            } else {
