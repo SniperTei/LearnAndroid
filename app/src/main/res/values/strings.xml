@@ -16,4 +16,9 @@
     <string name="btn_name_post_sync">post sync</string>
     <string name="btn_name_post_async">post async</string>
     <string name="btn_login_title">Login</string>
+    <!--  Start  -->
+    <!--  bottom tabbar strings  -->
+    <string name="title_home">首页</string>
+    <string name="title_dashboard">仪表盘</string>
+    <string name="title_mine">我的</string>
 </resources>

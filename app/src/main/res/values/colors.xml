@@ -5,6 +5,43 @@
     <color name="red">#FF0000</color>
     <color name="green">#00FF00</color>
     <color name="blue">#0000FF</color>
-    <color name="accent">#03DAC5</color>
+<!--    <color name="accent">#03DAC5</color>-->
     <color name="gray">#E0E0E0</color>
+    <color name="gray_dark">#757575</color>
+    <color name="gray_light">#BDBDBD</color>
+    <color name="gray_lighter">#F5F5F5</color>
+    <color name="gray_lightest">#FAFAFA</color>
+    <color name="transparent">#00000000</color>
+    <color name="semi_transparent">#80000000</color>
+
+    <color name="icons">#FFFFFF</color>
+    <color name="divider">#B6B6B6</color>
+
+    <!-- 主题色 -->
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorPrimaryVariant">#3700B3</color>
+
+    <!-- 辅助色 -->
+    <color name="colorSecondary">#03DAC6</color>
+    <color name="colorSecondaryVariant">#018786</color>
+    <!-- 强调色 -->
+    <color name="colorAccent">#FF4081</color>
+    <!-- 背景色 -->
+    <color name="colorBackground">#FFFFFF</color>
+    <!-- 表面色 -->
+    <color name="colorSurface">#FFFFFF</color>
+    <!-- 错误颜色 -->
+    <color name="colorError">#F44336</color>
+    <!-- 在主题色上的文本颜色 -->
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <!-- 在辅助色上的文本颜色 -->
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <!-- 在背景色上的文本颜色 -->
+    <color name="colorOnBackground">#000000</color>
+    <!-- 在表面色上的文本颜色 -->
+    <color name="colorOnSurface">#000000</color>
+    <!-- 在错误颜色上的文本颜色 -->
+    <color name="colorOnError">#FFFFFF</color>
+
 </resources>
