@@ -6,6 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.learnandroid.R
+import com.example.learnandroid.network.WanAndroidService
+import com.example.learnandroid.viewmodel.HomelistViewModel
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +26,11 @@ class HomeFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private val TAG = "HomeFragment"
+
+    // viewmodel
+    private lateinit var homeListViewModel: HomelistViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,7 +44,18 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_home, container, false)
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://www.wanandroid.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val wanandroidService = retrofit.create(WanAndroidService::class.java)
+        homeListViewModel = HomelistViewModel(wanandroidService)
+        homeListViewModel.getHomeList(0)
+
+        return rootView
     }
 
     companion object {
