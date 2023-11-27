@@ -5,10 +5,19 @@ import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
+import retrofit2.http.GET
+import retrofit2.http.Path;
+
 
 interface WanAndroidService {
     // https://www.wanandroid.com/user/login
-    @POST("user/login")
-    @FormUrlEncoded
-    public fun login(@Field("username") username: String, @Field("username") password: String): Call<ResponseBody>
+//    @POST("user/login")
+//    @FormUrlEncoded
+//    public fun login(@Field("username") username: String, @Field("username") password: String): Call<ResponseBody>
+
+    // wanandroid 首页
+    // https://www.wanandroid.com/article/list/0/json
+    @GET("article/list/{pageIndex}/json")
+    public fun getHomeList(@Path("pageIndex") index: Int): Call<ResponseBody>
+
 }
