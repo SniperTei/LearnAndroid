@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 
 class MyApplication: Application() {
 
@@ -12,6 +13,38 @@ class MyApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         Log.i(TAG, "MyApplication onCreate")
+
+        registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
+            override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+                Log.i(TAG, "MyApplication onActivityCreated")
+            }
+
+            override fun onActivityStarted(activity: Activity) {
+                Log.i(TAG, "MyApplication onActivityStarted")
+            }
+
+            override fun onActivityResumed(activity: Activity) {
+                Log.i(TAG, "MyApplication onActivityResumed")
+            }
+
+            override fun onActivityPaused(activity: Activity) {
+                Log.i(TAG, "MyApplication onActivityPaused")
+                // toast提示app已经进入后台
+                Toast.makeText(activity, "app已经进入后台", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onActivityStopped(activity: Activity) {
+                Log.i(TAG, "MyApplication onActivityStopped")
+            }
+
+            override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
+                Log.i(TAG, "MyApplication onActivitySaveInstanceState")
+            }
+
+            override fun onActivityDestroyed(activity: Activity) {
+                Log.i(TAG, "MyApplication onActivityDestroyed")
+            }
+        })
     }
 
     override fun onTerminate() {
