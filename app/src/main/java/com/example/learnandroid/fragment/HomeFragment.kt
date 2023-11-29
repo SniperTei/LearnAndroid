@@ -3,10 +3,13 @@ package com.example.learnandroid.fragment
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.learnandroid.R
+import com.example.learnandroid.adapter.HomeListAdapter
 import com.example.learnandroid.bean.WanResponseBean
 import com.example.learnandroid.network.WanAndroidService
 import com.example.learnandroid.viewmodel.HomelistViewModel
@@ -35,9 +38,10 @@ class HomeFragment : Fragment() {
     private var param2: String? = null
 
     private val TAG = "HomeFragment"
-
     // viewmodel
     private lateinit var mHomeListViewModel: HomelistViewModel
+    // home listview
+    // private lateinit var mHomeList
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +58,13 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
 
+        val homeRecycleView = rootView.findViewById<RecyclerView>(R.id.home_list)
+        val homeAdapter = activity?.let { HomeListAdapter() }
+
+        val layoutManager = LinearLayoutManager(activity)
+        homeRecycleView.layoutManager = layoutManager
+        homeRecycleView.adapter = homeAdapter
+
         mHomeListViewModel = HomelistViewModel()
         mHomeListViewModel.getHomeListApi(0).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -67,7 +78,21 @@ class HomeFragment : Fragment() {
                 }
 
                 override fun onNext(t: WanResponseBean) {
-                    Log.d(TAG, "onNext: $t")
+                    Log.d(TAG, "onNext t.data : ${t.data}")
+                    // get t.data.datas
+                    val data = t.data as Map<*, *>
+                    val list = data?.get("datas") as List<*>
+                    Log.d(TAG, "onNext list: $list")
+                    // use gson convert map to bean
+                    val gson = com.google.gson.Gson()
+                    val homeListData = ArrayList<com.example.learnandroid.bean.HomeItemBean>()
+                    for (item in list) {
+                        val json = gson.toJson(item)
+                        val homeItemBean = gson.fromJson(json, com.example.learnandroid.bean.HomeItemBean::class.java)
+                        homeListData.add(homeItemBean)
+                    }
+                    Log.d(TAG, "onNext homeListData: $homeListData")
+                    homeAdapter?.setData(homeListData)
                 }
 
                 override fun onComplete() {
