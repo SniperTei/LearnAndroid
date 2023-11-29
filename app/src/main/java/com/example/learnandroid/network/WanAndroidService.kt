@@ -16,7 +16,7 @@ interface WanAndroidService {
 //    @FormUrlEncoded
 //    public fun login(@Field("username") username: String, @Field("username") password: String): Call<ResponseBody>
 
-    // wanandroid 首页
+    // WanAndroid 首页
     // https://www.wanandroid.com/article/list/0/json
     @GET("article/list/{pageIndex}/json")
     public fun getHomeListApi(@Path("pageIndex") index: Int): Observable<WanResponseBean>

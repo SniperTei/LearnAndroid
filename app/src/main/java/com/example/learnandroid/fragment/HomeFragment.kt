@@ -54,15 +54,26 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://www.wanandroid.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
-            .build()
+        mHomeListViewModel = HomelistViewModel()
+        mHomeListViewModel.getHomeListApi(0).subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : io.reactivex.rxjava3.core.Observer<WanResponseBean> {
+                override fun onSubscribe(d: Disposable) {
+                    Log.d(TAG, "onSubscribe: $d")
+                }
 
-        val wanandroidService = retrofit.create(WanAndroidService::class.java)
-        mHomeListViewModel = HomelistViewModel(wanandroidService)
-        mHomeListViewModel.getHomeListApi(0)
+                override fun onError(e: Throwable) {
+                    Log.d(TAG, "onError: $e")
+                }
+
+                override fun onNext(t: WanResponseBean) {
+                    Log.d(TAG, "onNext: $t")
+                }
+
+                override fun onComplete() {
+                    Log.d(TAG, "onComplete: ")
+                }
+            })
         Log.d(TAG, "get home 0")
 
         return rootView
