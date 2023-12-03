@@ -1,21 +1,12 @@
 package com.example.learnandroid.viewmodel
 
-import android.util.Log
-import androidx.databinding.ObservableArrayList
 import com.example.learnandroid.bean.WanResponseBean
 import com.example.learnandroid.network.WanAndroidService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.disposables.Disposable
-import io.reactivex.rxjava3.schedulers.Schedulers
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Response
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class HomelistViewModel() {
-
+class HomeViewModel {
     private val TAG = "HomeListViewModel"
 
     private lateinit var mWanAndroidService: WanAndroidService
@@ -52,5 +43,9 @@ class HomelistViewModel() {
 //                Log.d(TAG, "onFailure: ${t.message}")
 //            }
 //        })
+    }
+
+    fun getBannerApi(): Observable<WanResponseBean> {
+        return mWanAndroidService.getBannerApi()
     }
 }

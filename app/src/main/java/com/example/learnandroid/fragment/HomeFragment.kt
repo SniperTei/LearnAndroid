@@ -9,18 +9,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.learnandroid.R
+import com.example.learnandroid.adapter.HomeBannerAdapter
 import com.example.learnandroid.adapter.HomeListAdapter
+import com.example.learnandroid.bean.HomeBannerItemBean
 import com.example.learnandroid.bean.WanResponseBean
-import com.example.learnandroid.network.WanAndroidService
-import com.example.learnandroid.viewmodel.HomelistViewModel
+import com.example.learnandroid.viewmodel.HomeViewModel
+import com.youth.banner.Banner
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.schedulers.Schedulers
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -39,7 +37,7 @@ class HomeFragment : Fragment() {
 
     private val TAG = "HomeFragment"
     // viewmodel
-    private lateinit var mHomeListViewModel: HomelistViewModel
+    private lateinit var mHomeListViewModel: HomeViewModel
     // home listview
     // private lateinit var mHomeList
 
@@ -57,7 +55,30 @@ class HomeFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
+        // 首页banner
+        val bannerList = ArrayList<HomeBannerItemBean>()
+//        val bannerItemOne = HomeBannerItemBean(
+//            "我们支持订阅啦~",
+//            30,
+//            "https://www.wanandroid.com/blogimgs/42da12d8-de56-4439-b40c-eab66c227a4b.png",
+//            1,
+//            2,
+//            "title111",
+//            0,
+//            "https://www.wanandroid.com/blog/show/3352"
+//        )
+//        bannerList.add(bannerItemOne)
+        val homeBannerAdapter = activity?.let { HomeBannerAdapter(bannerList) }
+        val banner = rootView.findViewById<Banner<HomeBannerItemBean, HomeBannerAdapter>>(R.id.home_banner)
+        banner.setBannerRound(20f)
+        banner.setAdapter(homeBannerAdapter)
 
+        val bannerLayoutManager = LinearLayoutManager(activity)
+        bannerLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+//         homeBanner.layoutManager = bannerLayoutManager
+        // homeBanner.adapter = homeBannerAdapter
+        
+        // 首页列表
         val homeRecycleView = rootView.findViewById<RecyclerView>(R.id.home_list)
         val homeAdapter = activity?.let { HomeListAdapter() }
 
@@ -65,16 +86,28 @@ class HomeFragment : Fragment() {
         homeRecycleView.layoutManager = layoutManager
         homeRecycleView.adapter = homeAdapter
 
-        mHomeListViewModel = HomelistViewModel()
+        mHomeListViewModel = HomeViewModel()
+        
+        if (homeBannerAdapter != null) {
+            getBanner(homeBannerAdapter)
+        }
+        if (homeAdapter != null) {
+            getHomeList(homeAdapter)
+        }
+
+        return rootView
+    }
+
+    private fun getHomeList(homeAdapter: HomeListAdapter) {
         mHomeListViewModel.getHomeListApi(0).subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : io.reactivex.rxjava3.core.Observer<WanResponseBean> {
+            .subscribe(object : Observer<WanResponseBean> {
                 override fun onSubscribe(d: Disposable) {
-                    Log.d(TAG, "onSubscribe: $d")
+                    Log.d(TAG, "getHomeList onSubscribe: $d")
                 }
 
                 override fun onError(e: Throwable) {
-                    Log.d(TAG, "onError: $e")
+                    Log.d(TAG, "getHomeList onError: $e")
                 }
 
                 override fun onNext(t: WanResponseBean) {
@@ -85,23 +118,55 @@ class HomeFragment : Fragment() {
                     Log.d(TAG, "onNext list: $list")
                     // use gson convert map to bean
                     val gson = com.google.gson.Gson()
-                    val homeListData = ArrayList<com.example.learnandroid.bean.HomeItemBean>()
+                    val homeListData = ArrayList<com.example.learnandroid.bean.HomeListItemBean>()
                     for (item in list) {
                         val json = gson.toJson(item)
-                        val homeItemBean = gson.fromJson(json, com.example.learnandroid.bean.HomeItemBean::class.java)
+                        val homeItemBean = gson.fromJson(json, com.example.learnandroid.bean.HomeListItemBean::class.java)
                         homeListData.add(homeItemBean)
                     }
-                    Log.d(TAG, "onNext homeListData: $homeListData")
-                    homeAdapter?.setData(homeListData)
+                    Log.d(TAG, "getHomeList onNext homeListData: $homeListData")
+                    homeAdapter.setData(homeListData)
                 }
 
                 override fun onComplete() {
-                    Log.d(TAG, "onComplete: ")
+                    Log.d(TAG, "getHomeList onComplete: ")
                 }
             })
         Log.d(TAG, "get home 0")
+    }
 
-        return rootView
+    private fun getBanner(bannerAdapter: HomeBannerAdapter) {
+        mHomeListViewModel.getBannerApi().subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : Observer<WanResponseBean> {
+                override fun onSubscribe(d: Disposable) {
+                    Log.d(TAG, "getBanner onSubscribe: $d")
+                }
+
+                override fun onError(e: Throwable) {
+                    Log.d(TAG, "getBanner onError: $e")
+                }
+
+                override fun onNext(t: WanResponseBean) {
+                    Log.d(TAG, "getBanner onNext t.data : ${t.data}")
+                    val list = t.data as List<Map<*, *>>
+                    Log.d(TAG, "onNext list: $list")
+                    // use gson convert map to bean
+                    val gson = com.google.gson.Gson()
+                    val bannerListData = ArrayList<HomeBannerItemBean>()
+                    for (item in list) {
+                        val json = gson.toJson(item)
+                        val bannerItemBean = gson.fromJson(json, HomeBannerItemBean::class.java)
+                        bannerListData.add(bannerItemBean)
+                    }
+                    bannerAdapter.setDatas(bannerListData)
+                }
+
+                override fun onComplete() {
+                    Log.d(TAG, "getBanner onComplete: ")
+                }
+            })
+        Log.d(TAG, "getBanner")
     }
 
     companion object {

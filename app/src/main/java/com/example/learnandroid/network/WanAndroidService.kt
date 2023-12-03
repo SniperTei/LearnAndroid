@@ -20,5 +20,10 @@ interface WanAndroidService {
     // https://www.wanandroid.com/article/list/0/json
     @GET("article/list/{pageIndex}/json")
     public fun getHomeListApi(@Path("pageIndex") index: Int): Observable<WanResponseBean>
+
+    // WanAndroid Banner
+    // https://www.wanandroid.com/banner/json
+    @GET("banner/json")
+    public fun getBannerApi(): Observable<WanResponseBean>
     
 }

@@ -43,5 +43,7 @@
     <color name="colorOnSurface">#000000</color>
     <!-- 在错误颜色上的文本颜色 -->
     <color name="colorOnError">#FFFFFF</color>
+    <!-- 黑色半透明背景 -->
+    <color name="black_translucent">#80000000</color>
 
 </resources>

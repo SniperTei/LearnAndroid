@@ -1,6 +1,6 @@
 package com.example.learnandroid.bean
 
-data class HomeItemBean(
+data class HomeListItemBean(
     val adminAdd: Boolean,
     val apkLink: String,
     val audit: Int,

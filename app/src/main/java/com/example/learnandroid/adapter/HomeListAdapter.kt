@@ -7,18 +7,18 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.learnandroid.R
-import com.example.learnandroid.bean.HomeItemBean
+import com.example.learnandroid.bean.HomeListItemBean
 
 class HomeListAdapter: RecyclerView.Adapter<HomeListAdapter.ViewHolder>() {
 
     private val TAG = "HomeListAdapter"
 
-    private var mHomeListData: List<HomeItemBean> = listOf()
+    private var mHomeListData: List<HomeListItemBean> = listOf()
 
     private lateinit var mContext: Context
 
     // 设置数据
-    fun setData(data: List<HomeItemBean>) {
+    fun setData(data: List<HomeListItemBean>) {
         mHomeListData = data
         notifyDataSetChanged()
     }
@@ -49,7 +49,7 @@ class HomeListAdapter: RecyclerView.Adapter<HomeListAdapter.ViewHolder>() {
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        fun bindData(item: HomeItemBean) {
+        fun bindData(item: HomeListItemBean) {
             val title = itemView.findViewById<TextView>(R.id.home_list_item_title)
             title.text = item.title
         }
