@@ -15,6 +15,7 @@ import com.example.learnandroid.bean.HomeBannerItemBean
 import com.example.learnandroid.bean.WanResponseBean
 import com.example.learnandroid.viewmodel.HomeViewModel
 import com.youth.banner.Banner
+import com.youth.banner.indicator.CircleIndicator
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observer
 import io.reactivex.rxjava3.disposables.Disposable
@@ -41,6 +42,8 @@ class HomeFragment : Fragment() {
     // home listview
     // private lateinit var mHomeList
 
+    private var mHomeBanner: Banner<HomeBannerItemBean, HomeBannerAdapter>? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -58,9 +61,12 @@ class HomeFragment : Fragment() {
         // 首页banner
         val bannerList = ArrayList<HomeBannerItemBean>()
         val homeBannerAdapter = activity?.let { HomeBannerAdapter(bannerList) }
-        val banner = rootView.findViewById<Banner<HomeBannerItemBean, HomeBannerAdapter>>(R.id.home_banner)
-        banner.setBannerRound(20f)
-        banner.setAdapter(homeBannerAdapter)
+        val mHomeBanner = rootView.findViewById<Banner<HomeBannerItemBean, HomeBannerAdapter>>(R.id.home_banner)
+        mHomeBanner.setBannerRound(20f)
+        mHomeBanner.isAutoLoop(true)
+        val circleIndicator = CircleIndicator(activity)
+        mHomeBanner.indicator = circleIndicator
+        mHomeBanner.setAdapter(homeBannerAdapter, true)
 
         val bannerLayoutManager = LinearLayoutManager(activity)
         bannerLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
@@ -85,6 +91,65 @@ class HomeFragment : Fragment() {
         }
 
         return rootView
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        Log.d(TAG, "onViewCreated")
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        Log.d(TAG, "onDestroyView")
+    }
+
+    override fun onDestroy() {
+        Log.d(TAG, "onDestroy")
+        super.onDestroy()
+        mHomeBanner?.destroy()
+    }
+
+    override fun onPause() {
+        Log.d(TAG, "onPause")
+        super.onPause()
+    }
+
+    override fun onResume() {
+        Log.d(TAG, "onResume")
+        super.onResume()
+    }
+
+    override fun onStart() {
+        Log.d(TAG, "onStart")
+        super.onStart()
+        mHomeBanner?.start()
+        
+    }
+
+    override fun onStop() {
+        Log.d(TAG, "onStop")
+        super.onStop()
+        mHomeBanner?.stop()
+    }
+
+    companion object {
+        /**
+         * Use this factory method to create a new instance of
+         * this fragment using the provided parameters.
+         *
+         * @param param1 Parameter 1.
+         * @param param2 Parameter 2.
+         * @return A new instance of fragment HomeFragment.
+         */
+        // TODO: Rename and change types and number of parameters
+        @JvmStatic
+        fun newInstance(param1: String, param2: String) =
+            HomeFragment().apply {
+                arguments = Bundle().apply {
+                    putString(ARG_PARAM1, param1)
+                    putString(ARG_PARAM2, param2)
+                }
+            }
     }
 
     private fun getHomeList(homeAdapter: HomeListAdapter) {
@@ -156,25 +221,5 @@ class HomeFragment : Fragment() {
                 }
             })
         Log.d(TAG, "getBanner")
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }
