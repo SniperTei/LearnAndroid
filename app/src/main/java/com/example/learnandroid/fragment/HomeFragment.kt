@@ -57,17 +57,6 @@ class HomeFragment : Fragment() {
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
         // 首页banner
         val bannerList = ArrayList<HomeBannerItemBean>()
-//        val bannerItemOne = HomeBannerItemBean(
-//            "我们支持订阅啦~",
-//            30,
-//            "https://www.wanandroid.com/blogimgs/42da12d8-de56-4439-b40c-eab66c227a4b.png",
-//            1,
-//            2,
-//            "title111",
-//            0,
-//            "https://www.wanandroid.com/blog/show/3352"
-//        )
-//        bannerList.add(bannerItemOne)
         val homeBannerAdapter = activity?.let { HomeBannerAdapter(bannerList) }
         val banner = rootView.findViewById<Banner<HomeBannerItemBean, HomeBannerAdapter>>(R.id.home_banner)
         banner.setBannerRound(20f)
