@@ -5,6 +5,10 @@ import android.app.Application
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.lifecycle.ProcessLifecycleOwner
 
 class MyApplication: Application() {
 
@@ -13,6 +17,9 @@ class MyApplication: Application() {
     override fun onCreate() {
         super.onCreate()
         Log.i(TAG, "MyApplication onCreate")
+        // 前后台监听
+        val lifecycleObserver = AppLifecycleObserver()
+        ProcessLifecycleOwner.get().lifecycle.addObserver(lifecycleObserver)
 
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
@@ -80,5 +87,20 @@ class MyApplication: Application() {
     override fun registerComponentCallbacks(callback: android.content.ComponentCallbacks) {
         super.registerComponentCallbacks(callback)
         Log.i(TAG, "MyApplication registerComponentCallbacks")
+    }
+
+    private class AppLifecycleObserver: LifecycleObserver {
+
+        private val TAG = "AppLifecycleObserver"
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_START)
+        fun onForeground() {
+            Log.i(TAG, "AppLifecycleObserver onForeground")
+        }
+
+        @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
+        fun onBackground() {
+            Log.i(TAG, "AppLifecycleObserver onBackground")
+        }
     }
 }
