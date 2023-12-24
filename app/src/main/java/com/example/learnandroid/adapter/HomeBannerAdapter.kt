@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+//import com.bumptech.glide.Glide
 import com.example.learnandroid.R
 import com.example.learnandroid.bean.HomeBannerItemBean
 import com.youth.banner.adapter.BannerAdapter
@@ -38,7 +38,7 @@ class HomeBannerAdapter: BannerAdapter<HomeBannerItemBean, HomeBannerAdapter.Hom
         fun bind(item: HomeBannerItemBean?) {
             Log.d(TAG, "bind item: $item")
             mHomeBannerTitle.text = item?.title
-            Glide.with(itemView.context).load(item?.imagePath).into(mHomeBannerImage)
+//            Glide.with(itemView.context).load(item?.imagePath).into(mHomeBannerImage)
         }
     }
 }
