@@ -1,5 +1,6 @@
 package com.example.learnandroid.network
 
+import com.example.learnandroid.bean.HomeBannerItemBean
 import io.reactivex.rxjava3.core.Observable
 import com.example.learnandroid.bean.WanResponseBean
 import retrofit2.Call
@@ -18,12 +19,12 @@ interface WanAndroidService {
 
     // WanAndroid 首页
     // https://www.wanandroid.com/article/list/0/json
-    @GET("article/list/{pageIndex}/json")
-    public fun getHomeListApi(@Path("pageIndex") index: Int): Observable<WanResponseBean>
+//    @GET("article/list/{pageIndex}/json")
+//    public fun getHomeListApi(@Path("pageIndex") index: Int): Call<WanResponseBean>
 
     // WanAndroid Banner
     // https://www.wanandroid.com/banner/json
     @GET("banner/json")
-    public fun getBannerApi(): Observable<WanResponseBean>
+    public fun getBannerApi(): WanResponseBean<HomeBannerItemBean>
     
 }
