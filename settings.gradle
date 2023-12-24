@@ -35,3 +35,4 @@ dependencyResolutionManagement { // 依赖仓库地址
 }
 rootProject.name = "LearnAndroid"
 include ':app'
+include ':common_module'
