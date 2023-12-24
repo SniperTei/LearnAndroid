@@ -6,7 +6,7 @@ import io.reactivex.rxjava3.core.Observable
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-class HomeViewModel {
+class HomeViewModel: BaseViewModel() {
     private val TAG = "HomeListViewModel"
 
     private lateinit var mWanAndroidService: WanAndroidService
