@@ -1,10 +1,13 @@
 package com.example.learnandroid.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.learnandroid.bean.HomeBannerItemBean
 import com.example.learnandroid.bean.WanResponseBean
 import com.example.learnandroid.network.WanAndroidService
 import io.reactivex.rxjava3.core.Observable
+import kotlinx.coroutines.launch
 import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -14,9 +17,12 @@ class HomeViewModel: BaseViewModel() {
     // homeListLiveData
 //    private var mHomeListData: Observable<WanResponseBean>? = null
     // homeBannerLiveData
-    private var mHomeBannerLiveData: MutableLiveData<WanResponseBean<HomeBannerItemBean>>? = null
+    var mHomeBannerLiveData: MutableLiveData<WanResponseBean<ArrayList<HomeBannerItemBean>>> = MutableLiveData()
 
-    private lateinit var mWanAndroidService: WanAndroidService
+    private var mWanAndroidService: WanAndroidService
+
+    // handler
+    private var mHandler = android.os.Handler()
 
     // 构造函数
     init {
@@ -52,15 +58,17 @@ class HomeViewModel: BaseViewModel() {
 //    }
 
     fun getBannerApi() {
-        mHomeBannerLiveData?.value = mWanAndroidService.getBannerApi()
+        Log.d(TAG, "get banner api response before : ${mHomeBannerLiveData.value}")
+        // scope.launch
+        viewModelScope.launch {
+            mHomeBannerLiveData.value = mWanAndroidService.getBannerApi()
+            Log.d(TAG, "get banner api response after : ${mHomeBannerLiveData.value}")
+        }
     }
 
-    public fun getHomeBannerLiveData(): MutableLiveData<WanResponseBean<HomeBannerItemBean>> {
-        if (mHomeBannerLiveData == null) {
-            mHomeBannerLiveData = MutableLiveData()
-        }
-        return mHomeBannerLiveData!!
-    }
+//    public fun getHomeBannerLiveData(): MutableLiveData<WanResponseBean<ArrayList<HomeBannerItemBean>>> {
+//        return mHomeBannerLiveData
+//    }
 
 //    fun getBannerApi(): Observable<WanResponseBean> {
 //        return mWanAndroidService.getBannerApi()

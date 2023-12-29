@@ -151,19 +151,10 @@ class HomeFragment : BaseFragment() {
     }
 
     private fun bindBannerData(homeBannerAdapter: HomeBannerAdapter) {
-        mHomeListViewModel?.getHomeBannerLiveData()?.observe(this, Observer {
+        mHomeListViewModel?.mHomeBannerLiveData?.observe(viewLifecycleOwner, Observer {
             Log.d(TAG, "bindBannerData it.data: ${it.data}")
-            val list = it.data as List<Map<*, *>>
-            Log.d(TAG, "bindBannerData list: $list")
-            // use gson convert map to bean
-            val gson = Gson()
-            val bannerListData = ArrayList<HomeBannerItemBean>()
-            for (item in list) {
-                val json = gson.toJson(item)
-                val bannerItemBean = gson.fromJson(json, HomeBannerItemBean::class.java)
-                bannerListData.add(bannerItemBean)
-            }
-            homeBannerAdapter.setDatas(bannerListData)
+
+            homeBannerAdapter.setDatas(it.data)
         })
     }
 

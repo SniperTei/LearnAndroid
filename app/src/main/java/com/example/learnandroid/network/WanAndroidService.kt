@@ -25,6 +25,6 @@ interface WanAndroidService {
     // WanAndroid Banner
     // https://www.wanandroid.com/banner/json
     @GET("banner/json")
-    public fun getBannerApi(): WanResponseBean<HomeBannerItemBean>
+    public suspend fun getBannerApi(): WanResponseBean<ArrayList<HomeBannerItemBean>>
     
 }
