@@ -1,46 +1,49 @@
 plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
 //    id 'org.jetbrains.kotlin.kapt'
 }
 
 android {
-    namespace 'com.example.learnandroid'
+    namespace = "com.example.learnandroid"
     // Android SDK version
-    compileSdk 34
+    compileSdk = 33
 
-    dataBinding {
-        enabled = true
-    }
+//    dataBinding {
+//        enabled = true
+//    }
 
     defaultConfig {
         // appId
-        applicationId "com.example.learnandroid"
+        applicationId = "com.example.learnandroid"
         // 最小SDK版本
-        minSdk 29
+        minSdk = 24
         // 目标版本
-        targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        targetSdk = 33
+        versionCode = 1
+        versionName = "1.0"
 
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     // 构建类型
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            isMinifyEnabled = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "1.8"
     }
     buildFeatures {
-        viewBinding true
+        viewBinding = true
     }
 //    kotlin {
 //        jvmToolchain(8)
@@ -62,17 +65,17 @@ dependencies {
     // Dependency on local binaries
     // implementation fileTree(dir: 'libs', include: ['*.jar'])
     // 添加RecyclerView的依赖包
-    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
     // 添加ViewPage2的依赖包
-    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation("androidx.viewpager2:viewpager2:1.0.0")
     // navigation依赖
-    implementation 'androidx.navigation:navigation-fragment:2.4.1'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.4.1'
+    implementation("androidx.navigation:navigation-fragment:2.4.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.4.1")
     // Rx依赖
 //    implementation 'io.reactivex.rxjava3:rxandroid:3.0.2'
 //    implementation 'io.reactivex.rxjava3:rxjava:3.1.5'
     // banner依赖
-    implementation 'io.github.youth5201314:banner:2.2.2'
+    implementation("io.github.youth5201314:banner:2.2.2")
     // 引用本地commcon库
-    implementation project(':common_module')
+//    implementation project(":common_module")
 }
