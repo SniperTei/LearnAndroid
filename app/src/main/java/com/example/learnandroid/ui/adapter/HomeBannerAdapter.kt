@@ -1,4 +1,4 @@
-package com.example.learnandroid.adapter
+package com.example.learnandroid.ui.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,12 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-//import com.bumptech.glide.Glide
 import com.example.learnandroid.R
-import com.example.learnandroid.bean.HomeBannerItemBean
+import com.example.learnandroid.data.model.bean.HomeBannerItemBean
 import com.youth.banner.adapter.BannerAdapter
-import com.youth.banner.adapter.BannerImageAdapter
-import com.youth.banner.holder.BannerImageHolder
 
 class HomeBannerAdapter: BannerAdapter<HomeBannerItemBean, HomeBannerAdapter.HomeBannerViewHolder> {
     private val TAG = "HomeBannerAdapter"

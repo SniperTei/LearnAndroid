@@ -1,14 +1,8 @@
 package com.example.learnandroid.network
 
-import com.example.learnandroid.bean.HomeBannerItemBean
-import io.reactivex.rxjava3.core.Observable
-import com.example.learnandroid.bean.WanResponseBean
-import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import com.example.learnandroid.data.model.bean.HomeBannerItemBean
+import com.example.learnandroid.data.model.bean.WanAndroidResponse
 import retrofit2.http.GET
-import retrofit2.http.Path;
 
 
 interface WanAndroidService {
@@ -25,6 +19,6 @@ interface WanAndroidService {
     // WanAndroid Banner
     // https://www.wanandroid.com/banner/json
     @GET("banner/json")
-    public suspend fun getBannerApi(): WanResponseBean<ArrayList<HomeBannerItemBean>>
+    suspend fun getBannerApi(): WanAndroidResponse<ArrayList<HomeBannerItemBean>>
     
 }
