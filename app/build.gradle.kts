@@ -77,5 +77,5 @@ dependencies {
     // banner依赖
     implementation("io.github.youth5201314:banner:2.2.2")
     // 引用本地commcon库
-//    implementation project(":common_module")
+    implementation(project(":common_module"))
 }
