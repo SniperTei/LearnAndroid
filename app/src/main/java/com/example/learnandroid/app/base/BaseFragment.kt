@@ -1,4 +1,6 @@
 package com.example.learnandroid.app.base
 
-abstract class BaseFragment {
+import androidx.fragment.app.Fragment
+
+abstract class BaseFragment: Fragment() {
 }

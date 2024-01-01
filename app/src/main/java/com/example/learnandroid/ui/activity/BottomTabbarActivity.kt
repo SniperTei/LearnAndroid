@@ -27,9 +27,9 @@ class BottomTabbarActivity: AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottom_navigationView)
         mNavigationController?.let { NavigationUI.setupWithNavController(bottomNavigationView, it) }
 
-//        mBinding.navHostFragment.post(Runnable {
-//            mNavigationController = findNavController(mBinding.navHostFragment)
-//        })
+        mBinding.navHostFragment.post(Runnable {
+            mNavigationController = findNavController(mBinding.navHostFragment)
+        })
         mBinding.bottomNavigationView.setOnItemSelectedListener {
             when (it.itemId) {
                 R.id.navigation_home -> {
