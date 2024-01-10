@@ -8,7 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.learnandroid.R
-import com.example.learnandroid.data.model.bean.HomeBannerItemBean
+import com.example.learnandroid.home.model.bean.HomeBannerItemBean
 import com.youth.banner.adapter.BannerAdapter
 
 class HomeBannerAdapter: BannerAdapter<HomeBannerItemBean, HomeBannerAdapter.HomeBannerViewHolder> {

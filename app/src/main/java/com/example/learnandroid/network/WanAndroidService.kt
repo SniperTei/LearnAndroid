@@ -1,7 +1,7 @@
 package com.example.learnandroid.network
 
-import com.example.learnandroid.data.model.bean.HomeBannerItemBean
 import com.example.learnandroid.data.model.bean.WanAndroidResponse
+import com.example.learnandroid.home.model.bean.HomeBannerItemBean
 import retrofit2.http.GET
 
 

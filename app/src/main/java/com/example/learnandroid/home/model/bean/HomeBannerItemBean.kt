@@ -1,4 +1,4 @@
-package com.example.learnandroid.data.model.bean
+package com.example.learnandroid.home.model.bean
 
 data class HomeBannerItemBean(
     val desc: String,
