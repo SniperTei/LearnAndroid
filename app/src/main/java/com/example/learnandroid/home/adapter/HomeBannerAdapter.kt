@@ -1,4 +1,4 @@
-package com.example.learnandroid.ui.adapter
+package com.example.learnandroid.home.adapter
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +15,8 @@ class HomeBannerAdapter: BannerAdapter<HomeBannerItemBean, HomeBannerAdapter.Hom
     private val TAG = "HomeBannerAdapter"
 
     constructor(mDatas: MutableList<HomeBannerItemBean>?) : super(mDatas)
+
+    constructor() : super(null)
 
     override fun onCreateHolder(parent: ViewGroup?, viewType: Int): HomeBannerViewHolder {
         val view = LayoutInflater.from(parent?.context).inflate(R.layout.home_banner_item, parent, false)
