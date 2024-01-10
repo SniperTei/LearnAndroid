@@ -6,6 +6,11 @@ import retrofit2.http.GET
 
 
 interface WanAndroidService {
+
+    companion object { // 环境配置
+        const val BASE_URL = "https://www.wanandroid.com/"
+    }
+
     // https://www.wanandroid.com/user/login
 //    @POST("user/login")
 //    @FormUrlEncoded

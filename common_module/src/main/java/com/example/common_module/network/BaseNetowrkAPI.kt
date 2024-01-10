@@ -3,8 +3,8 @@ package com.example.common_module.network
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
-abstract class BaseNetworkApi {
-    
+abstract class BaseNetworkAPI {
+
     private val client: OkHttpClient
         get() {
             val builder = OkHttpClient.Builder()

@@ -1,5 +1,6 @@
 package com.example.learnandroid.home.model.bean
 
+
 data class HomeBannerItemBean(
     val desc: String,
     val id: Int,
