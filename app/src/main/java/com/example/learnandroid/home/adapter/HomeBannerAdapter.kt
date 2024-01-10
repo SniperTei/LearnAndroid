@@ -14,7 +14,7 @@ import com.youth.banner.adapter.BannerAdapter
 class HomeBannerAdapter: BannerAdapter<HomeBannerItemBean, HomeBannerAdapter.HomeBannerViewHolder> {
     private val TAG = "HomeBannerAdapter"
 
-    constructor(mDatas: MutableList<HomeBannerItemBean>?) : super(mDatas)
+    constructor(mDatas: ArrayList<HomeBannerItemBean>?) : super(mDatas)
 
     constructor() : super(null)
 
