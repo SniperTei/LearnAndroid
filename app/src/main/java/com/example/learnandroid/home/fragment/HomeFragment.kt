@@ -27,7 +27,11 @@ class HomeFragment: BaseFragment() {
 
     private lateinit var homeViewModel: HomeViewModel
 
-   private lateinit var mHomeBannerAdapter: HomeBannerAdapter
+    private lateinit var mHomeBannerAdapter: HomeBannerAdapter
+
+    private lateinit var mBanner: Banner<HomeBannerItemBean, HomeBannerAdapter>
+
+    private lateinit var mHomeList: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,35 +42,53 @@ class HomeFragment: BaseFragment() {
         ViewModelProvider(this).get(HomeViewModel::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
+        // view
+        initView(root)
 
-        val banner = root.findViewById<Banner<HomeBannerItemBean, HomeBannerAdapter>>(R.id.home_banner)
-        banner.setBannerRound(20f)
+        // bind
+        bindViews()
+
+        // data
+        initData()
+
+        return root
+    }
+
+    private fun initView(root: View) {
+        mBanner = root.findViewById<Banner<HomeBannerItemBean, HomeBannerAdapter>>(R.id.home_banner)
+        mBanner.setBannerRound(20f)
         val bannerLayoutManager = LinearLayoutManager(activity)
         bannerLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
 
-        homeViewModel.getBanner().observe(this, Observer<WanAndroidResponse<ArrayList<HomeBannerItemBean>>> {
-            Log.d("HomeFragment", "getBanner: $it")
-            mHomeBannerAdapter = HomeBannerAdapter(it.data)
-            banner.setAdapter(mHomeBannerAdapter)
-        })
-
         // 首页列表
-        val homeRecycleView = root.findViewById<RecyclerView>(R.id.home_list)
+        mHomeList = root.findViewById<RecyclerView>(R.id.home_list)
         val homeAdapter = activity?.let { HomeListAdapter() }
 
         val layoutManager = LinearLayoutManager(activity)
-        homeRecycleView.layoutManager = layoutManager
-        homeRecycleView.adapter = homeAdapter
+        mHomeList.layoutManager = layoutManager
+        mHomeList.adapter = homeAdapter
+    }
+
+    // data
+    private fun initData() {
+        homeViewModel.getHomeBanner()
+        homeViewModel.getHomeList()
+    }
+
+    private fun bindViews() {
+        homeViewModel.getBanner().observe(this, Observer<WanAndroidResponse<ArrayList<HomeBannerItemBean>>> {
+            Log.d("HomeFragment", "getBanner: $it")
+            mHomeBannerAdapter = HomeBannerAdapter(it.data)
+            mBanner.setAdapter(mHomeBannerAdapter)
+        })
 
         homeViewModel.getHomeListData().observe(this, Observer<WanAndroidResponse<com.example.learnandroid.home.model.bean.HomeDataBean<ArrayList<com.example.learnandroid.home.model.bean.HomeListItemBean>>>> {
             Log.d("HomeFragment", "getHomeListData: $it")
-            homeAdapter?.setData(it.data.datas)
+            mHomeList.adapter?.let { homeAdapter ->
+                if (homeAdapter is HomeListAdapter) {
+                    homeAdapter.setData(it.data.datas)
+                }
+            }
         })
-
-
-        homeViewModel.getHomeBanner()
-        homeViewModel.getHomeList()
-
-        return root
     }
 }
