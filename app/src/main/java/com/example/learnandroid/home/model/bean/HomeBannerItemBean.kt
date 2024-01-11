@@ -2,12 +2,12 @@ package com.example.learnandroid.home.model.bean
 
 
 data class HomeBannerItemBean(
-    val desc: String,
-    val id: Int,
-    val imagePath: String,
-    val isVisible: Int,
-    val order: Int,
-    val title: String,
-    val type: Int,
-    val url: String
+    var desc: String,
+    var id: Int,
+    var imagePath: String,
+    var isVisible: Int,
+    var order: Int,
+    var title: String,
+    var type: Int,
+    var url: String
 )
