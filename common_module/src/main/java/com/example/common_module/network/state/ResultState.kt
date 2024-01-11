@@ -16,42 +16,12 @@ sealed class ResultState<out T> {
             return Error(exception)
         }
 
-        fun <T> onLoading(): ResultState<T> {
-            return Loading
+        fun <T> onLoading(loadingMsg: String): ResultState<T> {
+            return Loading(loadingMsg)
         }
     }
 
     data class Success<out T>(val data: T): ResultState<T>()
-    data class Error(val exception: AppException): ResultState<Nothing>()
-    object Loading: ResultState<Nothing>()
-}
-
-/**
- * 处理返回值
- * @param result 请求结果
- */
-fun <T> MutableLiveData<ResultState<T>>.paresResult(result: BaseNetworkResponse<T>) {
-    value = when {
-        result.isResponseSuccess() -> {
-            ResultState.onSuccess(result.getResponseData())
-        }
-        else -> {
-            ResultState.onError(AppException(result.getResponseCode(), result.getResponseMsg()))
-        }
-    }
-}
-
-/**
- * 不处理返回值 直接返回请求结果
- * @param result 请求结果
- */
-fun <T> MutableLiveData<ResultState<T>>.paresResult(result: T) {
-    value = ResultState.onSuccess(result)
-}
-
-/**
- * 异常转换异常处理
- */
-fun <T> MutableLiveData<ResultState<T>>.paresException(e: Throwable) {
-    this.value = ResultState.onError(ExceptionHandle.handleException(e))
+    data class Error(val error: AppException): ResultState<Nothing>()
+    data class Loading(val loadingMsg:String): ResultState<Nothing>()
 }

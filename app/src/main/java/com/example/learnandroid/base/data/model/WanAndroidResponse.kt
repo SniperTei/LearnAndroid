@@ -1,4 +1,4 @@
-package com.example.learnandroid.data.model.bean
+package com.example.learnandroid.base.data.model
 
 import com.example.common_module.network.BaseNetworkResponse
 

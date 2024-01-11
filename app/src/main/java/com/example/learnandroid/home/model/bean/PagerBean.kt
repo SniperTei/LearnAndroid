@@ -1,6 +1,6 @@
 package com.example.learnandroid.home.model.bean
 
-data class HomeDataBean<T>(
+data class PagerBean<T>(
     var curPage: Int,
     var datas: T,
     var offset: Int,

@@ -5,15 +5,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.common_module.ext.parseState
 import com.example.learnandroid.R
-import com.example.learnandroid.app.base.BaseFragment
-import com.example.learnandroid.data.model.bean.WanAndroidResponse
+import com.example.learnandroid.base.ui.BaseFragment
 import com.example.learnandroid.home.adapter.HomeBannerAdapter
 import com.example.learnandroid.home.adapter.HomeListAdapter
 import com.example.learnandroid.home.model.bean.HomeBannerItemBean
@@ -72,23 +69,26 @@ class HomeFragment: BaseFragment() {
     // data
     private fun initData() {
         homeViewModel.getHomeBanner()
-        homeViewModel.getHomeList()
+//        homeViewModel.getHomeList()
     }
 
     private fun bindViews() {
-        homeViewModel.getBanner().observe(this) {
+        homeViewModel.getBannerData().observe(this) { it ->
             Log.d("HomeFragment", "getBanner: $it")
-            mHomeBannerAdapter = HomeBannerAdapter(it.data)
-            mBanner.setAdapter(mHomeBannerAdapter)
+            parseState(it, {
+                Log.d(TAG, "parseState of it : $it")
+                mHomeBannerAdapter = HomeBannerAdapter(it)
+                mBanner.setAdapter(mHomeBannerAdapter)
+            })
         }
 
         homeViewModel.getHomeListData().observe(this) {
             Log.d("HomeFragment", "getHomeListData: $it")
-            mHomeList.adapter?.let { homeAdapter ->
-                if (homeAdapter is HomeListAdapter) {
-                    homeAdapter.setData(it.data.datas)
-                }
-            }
+//            mHomeList.adapter?.let { homeAdapter ->
+//                if (homeAdapter is HomeListAdapter) {
+//                    homeAdapter.setData(it.data.datas)
+//                }
+//            }
         }
     }
 }
