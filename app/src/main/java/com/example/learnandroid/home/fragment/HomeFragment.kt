@@ -39,7 +39,7 @@ class HomeFragment: BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         homeViewModel =
-        ViewModelProvider(this).get(HomeViewModel::class.java)
+            ViewModelProvider(this)[HomeViewModel::class.java]
         val root = inflater.inflate(R.layout.fragment_home, container, false)
 
         // view
@@ -76,19 +76,19 @@ class HomeFragment: BaseFragment() {
     }
 
     private fun bindViews() {
-        homeViewModel.getBanner().observe(this, Observer<WanAndroidResponse<ArrayList<HomeBannerItemBean>>> {
+        homeViewModel.getBanner().observe(this) {
             Log.d("HomeFragment", "getBanner: $it")
             mHomeBannerAdapter = HomeBannerAdapter(it.data)
             mBanner.setAdapter(mHomeBannerAdapter)
-        })
+        }
 
-        homeViewModel.getHomeListData().observe(this, Observer<WanAndroidResponse<com.example.learnandroid.home.model.bean.HomeDataBean<ArrayList<com.example.learnandroid.home.model.bean.HomeListItemBean>>>> {
+        homeViewModel.getHomeListData().observe(this) {
             Log.d("HomeFragment", "getHomeListData: $it")
             mHomeList.adapter?.let { homeAdapter ->
                 if (homeAdapter is HomeListAdapter) {
                     homeAdapter.setData(it.data.datas)
                 }
             }
-        })
+        }
     }
 }
