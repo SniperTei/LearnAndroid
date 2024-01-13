@@ -69,7 +69,7 @@ class HomeFragment: BaseFragment() {
     // data
     private fun initData() {
         homeViewModel.getHomeBanner()
-//        homeViewModel.getHomeList()
+        homeViewModel.getHomeList(true)
     }
 
     private fun bindViews() {
@@ -84,11 +84,12 @@ class HomeFragment: BaseFragment() {
 
         homeViewModel.getHomeListData().observe(this) {
             Log.d("HomeFragment", "getHomeListData: $it")
-//            mHomeList.adapter?.let { homeAdapter ->
-//                if (homeAdapter is HomeListAdapter) {
-//                    homeAdapter.setData(it.data.datas)
-//                }
-//            }
+
+            mHomeList.adapter?.let { homeAdapter ->
+                if (homeAdapter is HomeListAdapter) {
+                    homeAdapter.setData(it.listData)
+                }
+            }
         }
     }
 }

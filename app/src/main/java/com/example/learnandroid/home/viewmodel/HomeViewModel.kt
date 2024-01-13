@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common_module.ext.parseException
 import com.example.common_module.ext.parseResult
+import com.example.common_module.network.state.ListDataUiState
 import com.example.common_module.network.state.ResultState
 import com.example.learnandroid.base.data.model.WanAndroidResponse
 import com.example.learnandroid.home.model.bean.HomeBannerItemBean
@@ -18,48 +19,56 @@ import kotlinx.coroutines.launch
 class HomeViewModel: ViewModel() {
     private val TAG = "HomeViewModel"
 
-    private val bannerData = MutableLiveData<ResultState<ArrayList<HomeBannerItemBean>>>()
+    private var mPageNo = 0
 
-    private val homeList = MutableLiveData<WanAndroidResponse<PagerBean<ArrayList<HomeListItemBean>>>>()
+    private val mBannerData = MutableLiveData<ResultState<ArrayList<HomeBannerItemBean>>>()
+
+    private val mHomeList = MutableLiveData<ListDataUiState<ArrayList<HomeListItemBean>>>()
     
-    private val homeRepository = HomeRepository()
-
+    private val mHomeRepository = HomeRepository()
+// val listDataUiState = ListDataUiState()
     fun getHomeBanner() {
         viewModelScope.launch {
             runCatching {
-                bannerData.value = ResultState.onLoading("loading...")
-                homeRepository.getBannerFromServer()
+                mBannerData.value = ResultState.onLoading("loading...")
+                mHomeRepository.getBannerFromServer()
             }.onSuccess {
                 Log.d("HomeViewModel", "getBannerFromServer success : $it")
                 if (it.isResponseSuccess()) {
-                    bannerData.parseResult(it.getResponseData())
+                    mBannerData.parseResult(it.getResponseData())
                 }
             }.onFailure {
                 Log.d("HomeViewModel", "getBannerFromServer failure")
-                bannerData.parseException(it)
+                mBannerData.parseException(it)
             }
         }
     }
 
-    fun getHomeList() {
+    fun getHomeList(isRefresh: Boolean) {
+        if (isRefresh) {
+            mPageNo = 0
+        }
         viewModelScope.launch {
             runCatching {
-                val homeListResult = homeRepository.getHomeListFromServer()
-                Log.d("HomeViewModel", "homeListResult: $homeListResult")
-                 homeList.value = homeListResult
+                mHomeRepository.getHomeListFromServer(mPageNo)
             }.onSuccess {
+                val isEmpty = it.data.total > 0
+                val hasMore = it.data.size * (it.data.curPage + 1) < it.data.total
+                val datas: ArrayList<HomeListItemBean> = it.data.datas
+                mHomeList.value = ListDataUiState(true, isRefresh = true, isEmpty = isEmpty, hasMore = hasMore, listData = datas)
                 Log.d("HomeViewModel", "getHomeListFromServer success")
             }.onFailure {
+                mHomeList.value = ListDataUiState(false, "myerror", listData = error("errmsg"))
                 Log.d("HomeViewModel", "getHomeListFromServer failure")
             }
         }
     }
 
     fun getBannerData(): LiveData<ResultState<ArrayList<HomeBannerItemBean>>> {
-        return bannerData
+        return mBannerData
     }
 
-    fun getHomeListData(): LiveData<WanAndroidResponse<PagerBean<ArrayList<HomeListItemBean>>>> {
-        return homeList
+    fun getHomeListData(): LiveData<ListDataUiState<ArrayList<HomeListItemBean>>> {
+        return mHomeList
     }
 }

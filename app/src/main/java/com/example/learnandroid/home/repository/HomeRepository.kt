@@ -30,8 +30,8 @@ class HomeRepository {
     }
 
     // 首页列表
-    suspend fun getHomeListFromServer(): WanAndroidResponse<PagerBean<ArrayList<HomeListItemBean>>> {
-        return wanAndroidService.getHomeListApi(0)
+    suspend fun getHomeListFromServer(pageNo: Int): WanAndroidResponse<PagerBean<ArrayList<HomeListItemBean>>> {
+        return wanAndroidService.getHomeListApi(pageNo)
     }
 
     fun getHomeListFromDatabase() {
