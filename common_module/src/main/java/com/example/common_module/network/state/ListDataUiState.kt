@@ -14,5 +14,5 @@ data class ListDataUiState<T>(
     //是第一页且没有数据
     val isFirstEmpty:Boolean = false,
     //列表数据
-    val listData: T
+    val listData: ArrayList<T>
 )

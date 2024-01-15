@@ -23,7 +23,7 @@ class HomeViewModel: ViewModel() {
 
     private val mBannerData = MutableLiveData<ResultState<ArrayList<HomeBannerItemBean>>>()
 
-    private val mHomeList = MutableLiveData<ListDataUiState<ArrayList<HomeListItemBean>>>()
+    private val mHomeList = MutableLiveData<ListDataUiState<HomeListItemBean>>()
     
     private val mHomeRepository = HomeRepository()
 // val listDataUiState = ListDataUiState()
@@ -68,7 +68,7 @@ class HomeViewModel: ViewModel() {
         return mBannerData
     }
 
-    fun getHomeListData(): LiveData<ListDataUiState<ArrayList<HomeListItemBean>>> {
+    fun getHomeListData(): LiveData<ListDataUiState<HomeListItemBean>> {
         return mHomeList
     }
 }
