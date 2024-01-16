@@ -3,7 +3,7 @@ package com.example.common_module.base.viewmodel
 import androidx.lifecycle.ViewModel
 import com.example.common_module.data.livedata.EventLiveData
 
-class BaseViewModel: ViewModel() {
+open class BaseViewModel: ViewModel() {
     val loadingChange: UiLoadingChange by lazy { UiLoadingChange() }
 
     /**
@@ -11,8 +11,8 @@ class BaseViewModel: ViewModel() {
      */
     inner class UiLoadingChange {
         //显示加载框
-        val showDialog by lazy { EventLiveData<String>() }
+        val startLoading by lazy { EventLiveData<String>() }
         //隐藏
-        val dismissDialog by lazy { EventLiveData<Boolean>() }
+        val stopLoading by lazy { EventLiveData<Boolean>() }
     }
 }

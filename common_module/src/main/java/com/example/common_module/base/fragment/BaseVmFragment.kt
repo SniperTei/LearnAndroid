@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,8 @@ import com.example.common_module.network.manager.NetState
 import com.example.common_module.network.manager.NetworkStateManager
 
 abstract class BaseVmFragment<VM: BaseViewModel>: Fragment() {
+
+    private val TAG = "BaseVmFragment"
 
     private val mHandler = Handler(Looper.getMainLooper())
     //是否第一次加载
@@ -37,7 +40,8 @@ abstract class BaseVmFragment<VM: BaseViewModel>: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+        Log.d(TAG, "onCreateView")
+        return inflater.inflate(layoutId(), container, false)
     }
 
     override fun onAttach(context: Context) {
@@ -47,7 +51,7 @@ abstract class BaseVmFragment<VM: BaseViewModel>: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d(TAG, "onViewCreated")
         isFirst = true
         mViewModel = createViewModel()
         initView(savedInstanceState)
@@ -113,19 +117,19 @@ abstract class BaseVmFragment<VM: BaseViewModel>: Fragment() {
      */
     open fun initData() {}
 
-    abstract fun showLoading(message: String = "请求网络中...")
+    abstract fun startLoading(message: String = "请求网络中...")
 
-    abstract fun dismissLoading()
+    abstract fun stopLoading()
 
     /**
      * 注册 UI 事件
      */
     private fun registorDefUIChange() {
-        mViewModel.loadingChange.showDialog.observeSticky(this, Observer {
-            showLoading(it)
+        mViewModel.loadingChange.startLoading.observeSticky(this, Observer {
+            startLoading(it)
         })
-        mViewModel.loadingChange.dismissDialog.observeSticky(this, Observer {
-            dismissLoading()
+        mViewModel.loadingChange.stopLoading.observeSticky(this, Observer {
+            stopLoading()
         })
     }
 
@@ -136,12 +140,12 @@ abstract class BaseVmFragment<VM: BaseViewModel>: Fragment() {
     protected fun addLoadingObserve(vararg viewModels: BaseViewModel) {
         viewModels.forEach { viewModel ->
             //显示弹窗
-            viewModel.loadingChange.showDialog.observeSticky(this, Observer {
-                showLoading(it)
+            viewModel.loadingChange.startLoading.observeSticky(this, Observer {
+                startLoading(it)
             })
             //关闭弹窗
-            viewModel.loadingChange.dismissDialog.observeSticky(this, Observer {
-                dismissLoading()
+            viewModel.loadingChange.stopLoading.observeSticky(this, Observer {
+                stopLoading()
             })
         }
     }

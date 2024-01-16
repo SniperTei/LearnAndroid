@@ -58,6 +58,6 @@ dependencies {
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     // 可选 - ProcessLifecycleOwner给整个 app进程 提供一个lifecycle
     api("androidx.lifecycle:lifecycle-process:$lifecycleVersion")
-    //
+    // kunminx
     implementation("com.kunminx.arch:unpeek-livedata:7.8.0")
 }

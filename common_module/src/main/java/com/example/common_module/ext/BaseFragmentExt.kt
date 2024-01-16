@@ -1,5 +1,8 @@
 package com.example.common_module.ext
 
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.example.common_module.network.AppException
 import com.example.common_module.network.state.ResultState
 

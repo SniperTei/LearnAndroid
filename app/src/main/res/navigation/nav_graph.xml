@@ -12,11 +12,11 @@
     <fragment
         android:id="@+id/dashboardFragment"
         android:label="DashboardFragment"
-        android:name="com.example.learnandroid.ui.fragment.DashboardFragment" />
+        android:name="com.example.learnandroid.dashboard.fragment.DashboardFragment" />
 
     <fragment
         android:id="@+id/personFragment"
         android:label="PersonFragment"
-        android:name="com.example.learnandroid.ui.fragment.PersonFragment" />
+        android:name="com.example.learnandroid.person.fragment.PersonFragment" />
 
 </navigation>
