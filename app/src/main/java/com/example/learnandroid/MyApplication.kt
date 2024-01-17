@@ -8,7 +8,7 @@ import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
-import androidx.lifecycle.ProcessLifecycleOwner
+//import androidx.lifecycle.ProcessLifecycleOwner
 
 class MyApplication: Application() {
 
@@ -18,8 +18,8 @@ class MyApplication: Application() {
         super.onCreate()
         Log.i(TAG, "MyApplication onCreate")
         // 前后台监听
-        val lifecycleObserver = AppLifecycleObserver()
-        ProcessLifecycleOwner.get().lifecycle.addObserver(lifecycleObserver)
+//        val lifecycleObserver = AppLifecycleObserver()
+//        ProcessLifecycleOwner.get().lifecycle.addObserver(lifecycleObserver)
 
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {

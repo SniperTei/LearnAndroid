@@ -2,12 +2,7 @@ package com.example.learnandroid.home.fragment
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.common_module.base.fragment.BaseVmFragment
@@ -15,7 +10,6 @@ import com.example.common_module.ext.parseState
 import com.example.learnandroid.R
 import com.example.learnandroid.base.ext.startLoadingExt
 import com.example.learnandroid.base.ext.stopLoadingExt
-import com.example.learnandroid.base.ui.BaseFragment
 import com.example.learnandroid.home.adapter.HomeBannerAdapter
 import com.example.learnandroid.home.adapter.HomeListAdapter
 import com.example.learnandroid.home.model.bean.HomeBannerItemBean
