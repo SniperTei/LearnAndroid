@@ -52,9 +52,9 @@ dependencies {
     // gson ： com.google.code.gson命名空间的gson库的2.10.1版本
     api("com.google.code.gson:gson:2.10.1")
     // lifeCycle
-//    val lifecycleVersion = "2.2.0"
-//    api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
-//    api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    val lifecycleVersion = "2.2.0"
+    api("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     // 可选 - ProcessLifecycleOwner给整个 app进程 提供一个lifecycle
 //    api("androidx.lifecycle:lifecycle-process:$lifecycleVersion")
     // kunminx
