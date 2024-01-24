@@ -7,12 +7,11 @@ import com.example.learnandroid.home.model.bean.PagerBean
 import retrofit2.http.GET
 import retrofit2.http.Path
 
+val wanAndroidService: WanAndroidService by lazy {
+    AppNetworkAPI.INSTANCE.getAPI(WanAndroidService::class.java, AppEnvironment.getBaseURL())
+}
 
 interface WanAndroidService {
-
-    companion object { // 环境配置
-        const val BASE_URL = "https://www.wanandroid.com/"
-    }
 
     // https://www.wanandroid.com/user/login
 //    @POST("user/login")
