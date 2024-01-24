@@ -1,4 +1,4 @@
-package com.example.learnandroid.network
+package com.example.learnandroid.app.data.repository.server
 
 import com.example.common_module.network.BaseNetworkAPI
 import com.example.common_module.network.interceptor.log.LogInterceptor

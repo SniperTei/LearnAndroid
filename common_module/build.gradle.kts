@@ -57,6 +57,12 @@ dependencies {
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     // 可选 - ProcessLifecycleOwner给整个 app进程 提供一个lifecycle
 //    api("androidx.lifecycle:lifecycle-process:$lifecycleVersion")
+    // dialog
+    implementation("com.afollestad.material-dialogs:lifecycle:3.3.0")
+    implementation("com.afollestad.material-dialogs:core:3.3.0")
+    implementation("com.afollestad.material-dialogs:color:3.3.0")
+    implementation("com.afollestad.material-dialogs:datetime:3.3.0")
+    implementation("com.afollestad.material-dialogs:bottomsheets:3.3.0")
     // kunminx
     implementation("com.kunminx.arch:unpeek-livedata:7.8.0")
 }

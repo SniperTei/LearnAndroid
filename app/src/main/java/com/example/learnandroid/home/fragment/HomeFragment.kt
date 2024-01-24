@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.common_module.base.fragment.BaseVmFragment
 import com.example.common_module.ext.parseState
 import com.example.learnandroid.R
-import com.example.learnandroid.base.ext.startLoadingExt
-import com.example.learnandroid.base.ext.stopLoadingExt
+import com.example.common_module.ext.loading.startLoadingExt
+import com.example.common_module.ext.loading.stopLoadingExt
 import com.example.learnandroid.home.adapter.HomeBannerAdapter
 import com.example.learnandroid.home.adapter.HomeListAdapter
 import com.example.learnandroid.home.model.bean.HomeBannerItemBean

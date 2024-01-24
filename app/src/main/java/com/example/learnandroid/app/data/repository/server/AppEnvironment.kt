@@ -1,4 +1,4 @@
-package com.example.learnandroid.network
+package com.example.learnandroid.app.data.repository.server
 
 enum class AppEnv {
     DEV,
@@ -11,7 +11,7 @@ class AppEnvironment {
         private const val TEST_URL = "https://www.wanandroid.com/"
         private const val PRD_URL = "https://www.wanandroid.com/"
 
-        private var currentEnv:AppEnv = AppEnv.PRD
+        private var currentEnv: AppEnv = AppEnv.PRD
 
         fun setEnv(env: AppEnv) {
             currentEnv = env

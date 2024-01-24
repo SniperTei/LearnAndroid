@@ -3,17 +3,14 @@ package com.example.learnandroid.home.viewmodel
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common_module.base.viewmodel.BaseViewModel
 import com.example.common_module.ext.parseException
 import com.example.common_module.ext.parseResult
 import com.example.common_module.network.state.ListDataUiState
 import com.example.common_module.network.state.ResultState
-import com.example.learnandroid.base.data.model.WanAndroidResponse
 import com.example.learnandroid.home.model.bean.HomeBannerItemBean
 import com.example.learnandroid.home.model.bean.HomeListItemBean
-import com.example.learnandroid.home.model.bean.PagerBean
 import com.example.learnandroid.home.repository.HomeRepository
 import kotlinx.coroutines.launch
 

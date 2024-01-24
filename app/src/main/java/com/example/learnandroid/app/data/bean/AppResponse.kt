@@ -1,8 +1,8 @@
-package com.example.learnandroid.base.data.model
+package com.example.learnandroid.app.data.bean
 
 import com.example.common_module.network.BaseNetworkResponse
 
-data class WanAndroidResponse<T>(val errorCode: Int, val errorMsg: String, val data: T): BaseNetworkResponse<T>() {
+data class AppResponse<T>(val errorCode: Int, val errorMsg: String, val data: T): BaseNetworkResponse<T>() {
     override fun isResponseSuccess(): Boolean {
         return errorCode == 0
     }

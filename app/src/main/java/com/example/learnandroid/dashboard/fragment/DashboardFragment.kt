@@ -3,9 +3,9 @@ package com.example.learnandroid.dashboard.fragment
 import android.os.Bundle
 import android.util.Log
 import com.example.common_module.base.fragment.BaseVmFragment
+import com.example.common_module.ext.loading.startLoadingExt
+import com.example.common_module.ext.loading.stopLoadingExt
 import com.example.learnandroid.R
-import com.example.learnandroid.base.ext.startLoadingExt
-import com.example.learnandroid.base.ext.stopLoadingExt
 import com.example.learnandroid.dashboard.viewmodel.DashboardVM
 
 class DashboardFragment: BaseVmFragment<DashboardVM>() {
