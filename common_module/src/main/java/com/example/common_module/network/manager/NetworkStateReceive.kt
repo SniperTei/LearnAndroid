@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
-import com.example.common_module.util.NetworkUtil
+import com.example.common_module.network.NetworkUtil
 
 class NetworkStateReceive: BroadcastReceiver() {
     var isInit = true

@@ -35,6 +35,25 @@ abstract class BaseVmFragment<VM: BaseViewModel>: Fragment() {
      */
     abstract fun layoutId(): Int
 
+    /**
+     * 初始化view
+     */
+    abstract fun initView(savedInstanceState: Bundle?)
+
+    /**
+     * 懒加载
+     */
+    abstract fun lazyLoadData()
+
+    /**
+     * 创建观察者
+     */
+    abstract fun createObserver()
+
+    abstract fun startLoading(message: String = "正在加载中...")
+
+    abstract fun stopLoading()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -72,21 +91,6 @@ abstract class BaseVmFragment<VM: BaseViewModel>: Fragment() {
         return ViewModelProvider(this)[getVmClazz(this)]
     }
 
-    /**
-     * 初始化view
-     */
-    abstract fun initView(savedInstanceState: Bundle?)
-
-    /**
-     * 懒加载
-     */
-    abstract fun lazyLoadData()
-
-    /**
-     * 创建观察者
-     */
-    abstract fun createObserver()
-
     override fun onResume() {
         super.onResume()
         onVisible()
@@ -116,10 +120,6 @@ abstract class BaseVmFragment<VM: BaseViewModel>: Fragment() {
      * Fragment执行onCreate后触发的方法
      */
     open fun initData() {}
-
-    abstract fun startLoading(message: String = "请求网络中...")
-
-    abstract fun stopLoading()
 
     /**
      * 注册 UI 事件
