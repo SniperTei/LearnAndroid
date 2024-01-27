@@ -7,16 +7,16 @@
     <fragment
         android:id="@+id/homeFragment"
         android:label="HomeFragment"
-        android:name="com.example.learnandroid.home.fragment.HomeFragment" />
+        android:name="com.example.home_module.ui.fragment.HomeFragment" />
 
     <fragment
         android:id="@+id/dashboardFragment"
         android:label="DashboardFragment"
-        android:name="com.example.learnandroid.dashboard.fragment.DashboardFragment" />
+        android:name="com.example.dashboard_module.ui.fragment.DashboardFragment" />
 
     <fragment
         android:id="@+id/personFragment"
         android:label="PersonFragment"
-        android:name="com.example.learnandroid.person.fragment.PersonFragment" />
+        android:name="com.example.my_module.ui.fragment.MyFragment" />
 
 </navigation>

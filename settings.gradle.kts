@@ -15,4 +15,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "LearnAndroid"
 include(":app")
-include(":common_module")
+include(":common_library")
+include(":my_module")
+include(":dashboard_module")
+include(":home_module")

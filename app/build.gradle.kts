@@ -7,7 +7,7 @@ plugins {
 android {
     namespace = "com.example.learnandroid"
     // Android SDK version
-    compileSdk = 33
+    compileSdk = 34
 
 //    dataBinding {
 //        enabled = true
@@ -17,7 +17,7 @@ android {
         // appId
         applicationId = "com.example.learnandroid"
         // 最小SDK版本
-        minSdk = 24
+        minSdk = 29
         // 目标版本
         targetSdk = 33
         versionCode = 1
@@ -54,15 +54,13 @@ dependencies {
 
     // Dependency on local binaries
     // implementation fileTree(dir: 'libs', include: ['*.jar'])
-    // 添加RecyclerView的依赖包
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-    // 添加ViewPage2的依赖包
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
     // navigation依赖
     implementation("androidx.navigation:navigation-fragment:2.4.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.4.1")
-    // banner依赖
-    implementation("io.github.youth5201314:banner:2.2.2")
     // 引用本地commcon库
-    implementation(project(":common_module"))
+    implementation(project(":common_library"))
+    // 其他模块
+    implementation(project(":dashboard_module"))
+    implementation(project(":my_module"))
+    implementation(project(":home_module"))
 }
