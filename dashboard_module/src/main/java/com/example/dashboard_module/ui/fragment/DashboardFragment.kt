@@ -29,19 +29,19 @@ class DashboardFragment : BaseVmFragment<DashboardViewModel>() {
     }
 
     override fun lazyLoadData() {
-        TODO("Not yet implemented")
+        LogUtil.debugInfo(TAG, "lazyLoadData")
     }
 
     override fun createObserver() {
-        TODO("Not yet implemented")
+        LogUtil.debugInfo(TAG, "createObserver")
     }
 
     override fun startLoading(message: String) {
-        TODO("Not yet implemented")
+
     }
 
     override fun stopLoading() {
-        TODO("Not yet implemented")
+
     }
 
 }

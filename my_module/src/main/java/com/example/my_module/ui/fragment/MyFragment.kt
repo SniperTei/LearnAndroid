@@ -15,23 +15,23 @@ class MyFragment : BaseVmFragment<MyViewModel>() {
     }
 
     override fun initView(savedInstanceState: Bundle?) {
-        LogUtil.debugInfo(TAG, "Dashboard fragment")
+        LogUtil.debugInfo(TAG, "My fragment")
     }
 
     override fun lazyLoadData() {
-        TODO("Not yet implemented")
+        LogUtil.debugInfo(TAG, "lazyLoadData")
     }
 
     override fun createObserver() {
-        TODO("Not yet implemented")
+        LogUtil.debugInfo(TAG, "createObserver")
     }
 
     override fun startLoading(message: String) {
-        TODO("Not yet implemented")
+
     }
 
     override fun stopLoading() {
-        TODO("Not yet implemented")
+
     }
 
 }
