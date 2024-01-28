@@ -19,4 +19,13 @@
         android:label="PersonFragment"
         android:name="com.example.my_module.ui.fragment.MyFragment" />
 
+<!--    <fragment-->
+<!--        android:id="@+id/loginFragment"-->
+<!--        android:label="LoginFragment"-->
+<!--        android:name="com.example.my_module.ui.fragment.LoginFragment" />-->
+
+<!--    <action-->
+<!--        android:id="@+id/action_fragmentMyInfo_to_FragmentLogin"-->
+<!--        app:destination="@id/loginFragment" />-->
+
 </navigation>
