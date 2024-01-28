@@ -38,14 +38,14 @@ class HomeFragment : BaseVmFragment<HomeViewModel>() {
         val root = view ?: return
         mBanner = root.findViewById<Banner<HomeBannerItemBean, HomeBannerAdapter>>(R.id.home_banner)
         mBanner.setBannerRound(20f)
-        val bannerLayoutManager = LinearLayoutManager(activity)
+        val bannerLayoutManager = LinearLayoutManager(mActivity)
         bannerLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
 
         // 首页列表
         mHomeList = root.findViewById<RecyclerView>(R.id.home_list)
         val homeAdapter = activity?.let { HomeListAdapter() }
 
-        val layoutManager = LinearLayoutManager(activity)
+        val layoutManager = LinearLayoutManager(mActivity)
         mHomeList.layoutManager = layoutManager
         mHomeList.adapter = homeAdapter
     }

@@ -1,5 +1,6 @@
 package com.example.home_module.ui.adapter
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,13 +16,14 @@ class HomeListAdapter: RecyclerView.Adapter<HomeListAdapter.ViewHolder>() {
 
     private var mHomeListData: ArrayList<HomeListItemBean>? = null
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setData(data: ArrayList<HomeListItemBean>) {
         mHomeListData = data
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent?.context).inflate(R.layout.home_list_item, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.home_list_item, parent, false)
         return ViewHolder(view)
     }
 
