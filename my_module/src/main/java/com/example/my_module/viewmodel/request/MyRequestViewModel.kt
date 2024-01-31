@@ -1,4 +1,4 @@
-package com.example.my_module.viewmodel
+package com.example.my_module.viewmodel.request
 
 import androidx.lifecycle.viewModelScope
 import com.example.common_library.app.base.viewmodel.BaseViewModel
@@ -6,9 +6,9 @@ import com.example.common_library.log.LogUtil
 import com.example.my_module.data.repository.MyRepository
 import kotlinx.coroutines.launch
 
-class MyViewModel: BaseViewModel() {
+class MyRequestViewModel: BaseViewModel() {
 
-    private val TAG = "MyViewModel"
+    private val TAG = "MyRequestViewModel"
 
     private val myRepository = MyRepository()
     fun getMyInfo() {

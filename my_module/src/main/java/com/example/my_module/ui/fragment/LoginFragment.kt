@@ -2,13 +2,10 @@ package com.example.my_module.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.example.common_library.app.base.fragment.BaseVmFragment
 import com.example.common_library.log.LogUtil
 import com.example.my_module.R
-import com.example.my_module.viewmodel.LoginViewModel
+import com.example.my_module.viewmodel.state.LoginViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
