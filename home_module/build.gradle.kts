@@ -47,5 +47,6 @@ dependencies {
     // banner依赖
     implementation("io.github.youth5201314:banner:2.2.2")
 
-    implementation(project(":common_library"))
+    implementation(project(mapOf("path" to ":common_library")))
+    implementation(project(":core_library"))
 }
