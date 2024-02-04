@@ -56,7 +56,7 @@ class RequestHomeVM: BaseViewModel() {
                 mHomeList.value = ListDataUiState(true, isRefresh = true, isEmpty = isEmpty, hasMore = hasMore, listData = datas)
                 Log.d("HomeViewModel", "getHomeListFromServer success")
             }.onFailure {
-                mHomeList.value = ListDataUiState(false, "myerror", listData = error("errmsg"))
+//                mHomeList.value = ListDataUiState(false, "myerror", listData = error("errmsg"))
                 Log.d("HomeViewModel", "getHomeListFromServer failure")
             }
         }
