@@ -5,7 +5,7 @@
 
     <application>
         <activity
-            android:name="com.example.common_library.app.base.activity.TestActivity"
+            android:name="com.example.core_library.ui.activity.TestActivity"
             android:exported="false" />
     </application>
 

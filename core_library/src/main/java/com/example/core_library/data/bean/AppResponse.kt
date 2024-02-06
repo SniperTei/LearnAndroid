@@ -1,4 +1,4 @@
-package com.example.common_library.app.base.bean
+package com.example.core_library.data.bean
 
 import com.example.common_library.network.BaseNetworkResponse
 

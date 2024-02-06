@@ -1,4 +1,4 @@
-package com.example.common_library.app.network
+package com.example.core_library.network
 
 import com.example.common_library.network.BaseNetworkAPI
 import com.example.common_library.network.interceptor.log.LogInterceptor

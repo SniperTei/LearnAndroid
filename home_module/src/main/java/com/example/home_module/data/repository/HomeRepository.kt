@@ -1,6 +1,6 @@
 package com.example.home_module.data.repository
 
-import com.example.common_library.app.base.bean.AppResponse
+import com.example.core_library.data.bean.AppResponse
 import com.example.home_module.data.bean.HomeBannerItemBean
 import com.example.home_module.data.bean.HomeListItemBean
 import com.example.home_module.data.bean.PagerBean

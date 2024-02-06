@@ -1,8 +1,8 @@
 package com.example.home_module.data.repository.server
 
-import com.example.common_library.app.base.bean.AppResponse
+import com.example.core_library.data.bean.AppResponse
 import com.example.common_library.app.network.AppEnvironment
-import com.example.common_library.app.network.AppNetworkAPI
+import com.example.core_library.network.AppNetworkAPI
 import com.example.home_module.data.bean.HomeBannerItemBean
 import com.example.home_module.data.bean.HomeListItemBean
 import com.example.home_module.data.bean.PagerBean

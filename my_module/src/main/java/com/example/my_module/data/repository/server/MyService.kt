@@ -1,8 +1,8 @@
 package com.example.my_module.data.repository.server
 
-import com.example.common_library.app.base.bean.AppResponse
+import com.example.core_library.data.bean.AppResponse
 import com.example.common_library.app.network.AppEnvironment
-import com.example.common_library.app.network.AppNetworkAPI
+import com.example.core_library.network.AppNetworkAPI
 import com.example.my_module.data.bean.MyInfoBean
 import retrofit2.http.GET
 

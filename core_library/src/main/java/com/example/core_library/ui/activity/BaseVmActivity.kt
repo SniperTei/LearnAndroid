@@ -1,4 +1,4 @@
-package com.example.common_library.app.base.activity
+package com.example.core_library.ui.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

@@ -68,5 +68,5 @@ dependencies {
     implementation("com.afollestad.material-dialogs:datetime:3.3.0")
     implementation("com.afollestad.material-dialogs:bottomsheets:3.3.0")
     // kunminx
-    implementation("com.kunminx.arch:unpeek-livedata:7.8.0")
+    api("com.kunminx.arch:unpeek-livedata:7.8.0")
 }

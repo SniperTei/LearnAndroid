@@ -1,4 +1,4 @@
-package com.example.common_library.app.base.fragment
+package com.example.core_library.ui.fragment
 
 import android.content.Context
 import android.os.Bundle

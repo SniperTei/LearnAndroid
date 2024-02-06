@@ -1,6 +1,6 @@
 package com.example.my_module.data.repository
 
-import com.example.common_library.app.base.bean.AppResponse
+import com.example.core_library.data.bean.AppResponse
 import com.example.my_module.data.bean.MyInfoBean
 import com.example.my_module.data.repository.server.myService
 
