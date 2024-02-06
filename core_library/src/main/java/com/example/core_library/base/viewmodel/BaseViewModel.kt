@@ -1,4 +1,4 @@
-package com.example.common_library.app.base.viewmodel
+package com.example.core_library.base.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.common_library.data.livedata.EventLiveData

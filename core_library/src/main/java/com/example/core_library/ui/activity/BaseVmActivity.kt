@@ -3,7 +3,7 @@ package com.example.core_library.ui.activity
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.common_library.app.base.viewmodel.BaseViewModel
+import com.example.core_library.base.viewmodel.BaseViewModel
 import com.example.common_library.ext.getVmClazz
 
 abstract class BaseVmActivity<VM: BaseViewModel>: AppCompatActivity() {

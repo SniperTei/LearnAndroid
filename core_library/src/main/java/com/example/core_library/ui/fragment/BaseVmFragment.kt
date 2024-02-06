@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.common_library.app.base.viewmodel.BaseViewModel
+import com.example.core_library.base.viewmodel.BaseViewModel
 import com.example.common_library.ext.getVmClazz
 import com.example.common_library.network.manager.NetState
 import com.example.common_library.network.manager.NetworkStateManager

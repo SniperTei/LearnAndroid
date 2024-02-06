@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.common_library.app.base.viewmodel.BaseViewModel
+import com.example.core_library.base.viewmodel.BaseViewModel
 import com.example.common_library.ext.parseException
 import com.example.common_library.ext.parseResult
 import com.example.common_library.network.state.ListDataUiState

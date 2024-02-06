@@ -59,6 +59,8 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.4.1")
     // 引用本地commcon库
     implementation(project(":common_library"))
+    // core
+    implementation(project(":core_library"))
     // 其他模块
     implementation(project(":dashboard_module"))
     implementation(project(":my_module"))
