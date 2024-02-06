@@ -35,4 +35,11 @@ android {
 dependencies {
 
     implementation(project(":common_library"))
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    val arouterVersion = "1.5.2"
+    // 组件化开发组件
+    api("com.alibaba:arouter-api:$arouterVersion")
+    annotationProcessor("com.alibaba:arouter-compiler:$arouterVersion")
 }

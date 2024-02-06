@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
+import com.alibaba.android.arouter.launcher.ARouter
+
 //import androidx.lifecycle.ProcessLifecycleOwner
 
 class MyApplication: Application() {
@@ -20,6 +22,8 @@ class MyApplication: Application() {
         // 前后台监听
 //        val lifecycleObserver = AppLifecycleObserver()
 //        ProcessLifecycleOwner.get().lifecycle.addObserver(lifecycleObserver)
+
+        ARouter.init(this);
 
         registerActivityLifecycleCallbacks(object : ActivityLifecycleCallbacks {
             override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {

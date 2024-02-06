@@ -1,7 +1,10 @@
 package com.example.dashboard_module.ui.fragment
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import com.alibaba.android.arouter.launcher.ARouter
+import com.example.common_library.ext.view.clickNoRepeat
 import com.example.core_library.ui.fragment.BaseVmFragment
 import com.example.common_library.log.LogUtil
 import com.example.dashboard.R
@@ -26,6 +29,10 @@ class DashboardFragment : BaseVmFragment<DashboardViewModel>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         LogUtil.debugInfo(TAG, "Dashboard fragment")
+        val helloTv = requireView().findViewById<TextView>(R.id.tv_hello_dash)
+        helloTv.clickNoRepeat {
+            ARouter.getInstance().build("/test/testActivity").navigation();
+        }
     }
 
     override fun lazyLoadData() {
