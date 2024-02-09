@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
 }
 
 android {
@@ -12,6 +13,14 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+        kapt {
+            arguments {
+                // 根据模块名来命名路由根节点
+                arg("AROUTER_MODULE_NAME", project.name)
+                // 生成JSON文件
+                arg("AROUTER_GENERATE_DOC", "enable")
+            }
+        }
     }
 
     buildTypes {
@@ -41,5 +50,5 @@ dependencies {
     val arouterVersion = "1.5.2"
     // 组件化开发组件
     api("com.alibaba:arouter-api:$arouterVersion")
-    annotationProcessor("com.alibaba:arouter-compiler:$arouterVersion")
+    kapt("com.alibaba:arouter-compiler:$arouterVersion")
 }

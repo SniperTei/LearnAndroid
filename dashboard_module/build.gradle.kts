@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+//    id("kotlin-kapt")
 }
 
 android {
@@ -42,4 +43,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     implementation(project(":common_library"))
     implementation(project(":core_library"))
+    // 组件化
+//    val arouterVersion = "1.5.2"
+//    kapt("com.alibaba:arouter-compiler:$arouterVersion")
 }
