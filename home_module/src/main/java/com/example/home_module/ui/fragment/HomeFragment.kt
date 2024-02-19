@@ -13,8 +13,8 @@ import com.example.home_module.R
 import com.example.home_module.data.bean.HomeBannerItemBean
 import com.example.home_module.ui.adapter.HomeBannerAdapter
 import com.example.home_module.ui.adapter.HomeListAdapter
-import com.example.home_module.viewmodel.HomeViewModel
-import com.example.home_module.viewmodel.RequestHomeVM
+import com.example.home_module.viewmodel.state.HomeViewModel
+import com.example.home_module.viewmodel.request.RequestHomeVM
 import com.youth.banner.Banner
 
 

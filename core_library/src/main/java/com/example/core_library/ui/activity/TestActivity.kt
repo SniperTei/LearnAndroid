@@ -5,7 +5,7 @@ import android.os.Bundle
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.core_library.R
 
-@Route(path = "/test/core/test-activity")
+@Route(path = "/core/test/test-activity")
 class TestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

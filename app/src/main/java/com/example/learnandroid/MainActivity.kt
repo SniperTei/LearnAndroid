@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
+import com.alibaba.android.arouter.launcher.ARouter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity: AppCompatActivity() {
@@ -31,12 +32,14 @@ class MainActivity: AppCompatActivity() {
             when (it.itemId) {
                 R.id.navigation_home -> {
                     Log.i(TAG, "0 item : ${it.itemId}")
-                    mNavigationController?.navigate(R.id.homeFragment)
+//                    mNavigationController?.navigate(R.id.homeFragment)
+                    ARouter.getInstance().build("/core/test/test-activity").navigation()
                     true
                 }
                 R.id.navigation_dashboard -> {
                     Log.i(TAG, "1 item : ${it.itemId}")
-                    mNavigationController?.navigate(R.id.dashboardFragment)
+//                    mNavigationController?.navigate(R.id.dashboardFragment)
+                    ARouter.getInstance().build("/home/test/home-test-activity").navigation()
                     true
                 }
                 R.id.navigation_mine -> {

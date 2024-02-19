@@ -3,6 +3,7 @@ package com.example.my_module.ui.fragment
 import android.os.Bundle
 import android.widget.TextView
 import androidx.fragment.app.viewModels
+import com.alibaba.android.arouter.launcher.ARouter
 import com.example.core_library.ui.fragment.BaseVmFragment
 import com.example.common_library.log.LogUtil
 import com.example.my_module.R
@@ -27,13 +28,13 @@ class MyFragment : BaseVmFragment<MyViewModel>() {
        val navController =
 //        val nsv_my_info = root.findViewById<NestedScrollView>(R.id.nsv_my_info)
         tv_name.setOnClickListener {
-
+            ARouter.getInstance().build("/home/test/home-test-activity").navigation()
             // 展示登录fragment
-            val loginFragment = LoginFragment()
-            val transaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.fragment_container_view_tag, loginFragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+//            val loginFragment = LoginFragment()
+//            val transaction = parentFragmentManager.beginTransaction()
+//            transaction.replace(R.id.fragment_container_view_tag, loginFragment)
+//            transaction.addToBackStack(null)
+//            transaction.commit()
         }
     }
 
