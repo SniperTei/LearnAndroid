@@ -24,4 +24,16 @@ class HomeTestActivity : AppCompatActivity() {
 
         LogUtil.debugInfo(TAG, "my info name : ${myInfo.get("name")}")
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        // onSave 执行在 onStop 之前，但不限于在 onPause 之前或之后
+        LogUtil.debugInfo(TAG, "on save instance state")
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+
+        LogUtil.debugInfo(TAG, "on restore instance state")
+    }
 }
