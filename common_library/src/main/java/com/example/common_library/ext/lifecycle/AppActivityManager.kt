@@ -1,14 +1,22 @@
 package com.example.common_library.ext.lifecycle
 
 import android.app.Activity
+import androidx.appcompat.app.AppCompatActivity
 import java.util.LinkedList
 
 object AppActivityManger {
     //activity集合
-    private val mActivityList = LinkedList<Activity>()
+//    private val mActivityList = LinkedList<Activity>()
+    private val mActivityList = LinkedList<AppCompatActivity>()
 
     //当前activity
-    val currentActivity: Activity?
+//    val currentActivity: Activity?
+//        get() =
+//            if (mActivityList.isEmpty()) null
+//            else mActivityList.last
+
+    //当前activity
+    val currentActivity: AppCompatActivity?
         get() =
             if (mActivityList.isEmpty()) null
             else mActivityList.last
@@ -17,7 +25,7 @@ object AppActivityManger {
      * activity入栈
      * @param activity Activity
      */
-    fun pushActivity(activity: Activity) {
+    fun pushActivity(activity: AppCompatActivity) {
         if (mActivityList.contains(activity)) {
             if (mActivityList.last != activity) {
                 mActivityList.remove(activity)
@@ -32,7 +40,7 @@ object AppActivityManger {
      * activity出栈
      * @param activity Activity
      */
-    fun popActivity(activity: Activity) {
+    fun popActivity(activity: AppCompatActivity) {
         mActivityList.remove(activity)
     }
 
@@ -47,7 +55,7 @@ object AppActivityManger {
      * 关闭传入的activity
      * @param activity Activity
      */
-    fun finishActivity(activity: Activity) {
+    fun finishActivity(activity: AppCompatActivity) {
         mActivityList.remove(activity)
         activity.finish()
     }
