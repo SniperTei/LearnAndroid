@@ -26,6 +26,7 @@ class LoginFragment : BaseVmFragment<LoginViewModel>() {
 
     override fun initView(savedInstanceState: Bundle?) {
         LogUtil.debugInfo(TAG, "initView")
+
     }
 
     override fun lazyLoadData() {

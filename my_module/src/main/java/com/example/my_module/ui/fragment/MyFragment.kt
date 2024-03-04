@@ -33,14 +33,9 @@ class MyFragment : BaseVmFragment<MyViewModel>() {
 //        val nsv_my_info = root.findViewById<NestedScrollView>(R.id.nsv_my_info)
         tv_name.setOnClickListener {
             LogUtil.debugInfo(TAG, "tv name clicked")
-            mLoginImpl.showLoginPage()
+            val manager = mActivity.supportFragmentManager
+            mLoginImpl.showLoginPage(supportFragmentManager = manager)
 //            ARouter.getInstance().build("/home/test/home-test-activity").navigation()
-            // 展示登录fragment
-//            val loginFragment = LoginFragment()
-//            val transaction = parentFragmentManager.beginTransaction()
-//            transaction.replace(R.id.fragment_container_view_tag, loginFragment)
-//            transaction.addToBackStack(null)
-//            transaction.commit()
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.core_library.service.login
 
+import androidx.fragment.app.FragmentManager
 import com.alibaba.android.arouter.facade.template.IProvider
 import org.json.JSONObject
 
@@ -10,5 +11,7 @@ interface LoginProvider: IProvider {
 
     fun logout()
 
-    fun showLoginPage()
+    fun showLoginPage(supportFragmentManager: FragmentManager)
+
+    fun showRegisterPage(supportFragmentManager: FragmentManager)
 }
