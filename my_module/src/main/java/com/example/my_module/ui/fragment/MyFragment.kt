@@ -6,6 +6,8 @@ import androidx.fragment.app.viewModels
 import com.alibaba.android.arouter.launcher.ARouter
 import com.example.core_library.ui.fragment.BaseVmFragment
 import com.example.common_library.log.LogUtil
+import com.example.core_library.service.login.LoginProvider
+import com.example.core_library.service.my.MyServiceProvider
 import com.example.my_module.R
 import com.example.my_module.viewmodel.request.MyRequestViewModel
 import com.example.my_module.viewmodel.state.MyViewModel
@@ -16,6 +18,8 @@ class MyFragment : BaseVmFragment<MyViewModel>() {
     private val TAG = "MyFragment"
 
     private val myRequestViewModel: MyRequestViewModel by viewModels()
+
+    private val mLoginImpl: LoginProvider = ARouter.getInstance().build("/myModule/loginImpl").navigation() as LoginProvider
     override fun layoutId(): Int {
         return R.layout.fragment_my
     }
@@ -28,7 +32,9 @@ class MyFragment : BaseVmFragment<MyViewModel>() {
        val navController =
 //        val nsv_my_info = root.findViewById<NestedScrollView>(R.id.nsv_my_info)
         tv_name.setOnClickListener {
-            ARouter.getInstance().build("/home/test/home-test-activity").navigation()
+            LogUtil.debugInfo(TAG, "tv name clicked")
+            mLoginImpl.showLoginPage()
+//            ARouter.getInstance().build("/home/test/home-test-activity").navigation()
             // 展示登录fragment
 //            val loginFragment = LoginFragment()
 //            val transaction = parentFragmentManager.beginTransaction()

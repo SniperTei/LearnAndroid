@@ -6,17 +6,10 @@ import java.util.LinkedList
 
 object AppActivityManger {
     //activity集合
-//    private val mActivityList = LinkedList<Activity>()
-    private val mActivityList = LinkedList<AppCompatActivity>()
+    private val mActivityList = LinkedList<Activity>()
 
     //当前activity
-//    val currentActivity: Activity?
-//        get() =
-//            if (mActivityList.isEmpty()) null
-//            else mActivityList.last
-
-    //当前activity
-    val currentActivity: AppCompatActivity?
+    val currentActivity: Activity?
         get() =
             if (mActivityList.isEmpty()) null
             else mActivityList.last
@@ -25,7 +18,7 @@ object AppActivityManger {
      * activity入栈
      * @param activity Activity
      */
-    fun pushActivity(activity: AppCompatActivity) {
+    fun pushActivity(activity: Activity) {
         if (mActivityList.contains(activity)) {
             if (mActivityList.last != activity) {
                 mActivityList.remove(activity)
@@ -40,7 +33,7 @@ object AppActivityManger {
      * activity出栈
      * @param activity Activity
      */
-    fun popActivity(activity: AppCompatActivity) {
+    fun popActivity(activity: Activity) {
         mActivityList.remove(activity)
     }
 
@@ -55,7 +48,7 @@ object AppActivityManger {
      * 关闭传入的activity
      * @param activity Activity
      */
-    fun finishActivity(activity: AppCompatActivity) {
+    fun finishActivity(activity: Activity) {
         mActivityList.remove(activity)
         activity.finish()
     }

@@ -8,7 +8,7 @@ import com.example.common_library.ext.log.logd
 class LifeCycleCallback : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
-//        AppActivityManger.pushActivity(activity)
+        AppActivityManger.pushActivity(activity)
         "onActivityCreated : ${activity.localClassName}".logd()
     }
     override fun onActivityStarted(activity: Activity) {
@@ -26,7 +26,7 @@ class LifeCycleCallback : Application.ActivityLifecycleCallbacks {
 
     override fun onActivityDestroyed(activity: Activity) {
         "onActivityDestroyed : ${activity.localClassName}".logd()
-//        AppActivityManger.popActivity(activity)
+        AppActivityManger.popActivity(activity)
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
