@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">WebBox</string>
     <!-- LoginActivity -->
-    <string name="username_hint">用户名</string>
+    <string name="username_hint">手机号/邮箱</string>
     <string name="password_hint">密码</string>
     <string name="login_btn">登录</string>
     <string name="register_link">立即注册</string>
@@ -10,4 +10,17 @@
     <string name="forget_password_link">忘记密码?</string>
     <!-- RegisterActivity -->
     <string name="register">注册</string>
+    <string name="email_phone_hint">邮箱/手机号</string>
+<!--    <string name="password_hint">密码</string>-->
+    <string name="confirm_password_hint">再次输入密码</string>
+    <string name="nickname_hint">昵称（选填）</string>
+    <string name="gender_hint">性别</string>
+    <string name="gender_male">男</string>
+    <string name="gender_female">女</string>
+    <string name="birthday_hint">生日（选填）</string>
+    <string name="register_success">注册成功</string>
+    <string name="password_not_match">两次输入的密码不一致</string>
+    <string name="input_valid_email_phone">请输入有效的邮箱或手机号</string>
+    <string name="password_too_short">密码长度不能少于6位</string>
+    <string name="register_failed">注册失败，请重试</string>
 </resources>
