@@ -31,7 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="WebBox"
+            android:text="@string/app_name"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="#333333" />
@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:hint="用户名">
+            android:hint="@string/username_hint">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/username_input"
@@ -71,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:hint="密码"
+            android:hint="@string/password_hint"
             app:endIconMode="password_toggle">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginBottom="24dp"
-            android:text="忘记密码?"
+            android:text="@string/forget_password_link"
             android:textColor="#007AFF"
             android:textSize="14sp" />
 
@@ -98,7 +98,7 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#007AFF"
-            android:text="登录"
+            android:text="@string/login_btn"
             android:textColor="#FFFFFF"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -114,7 +114,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="还没有账号?"
+                android:text="@string/register_help_msg"
                 android:textColor="#666666"
                 android:textSize="14sp" />
 
@@ -123,7 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:text="立即注册"
+                android:text="@string/register_link"
                 android:textColor="#007AFF"
                 android:textSize="14sp"
                 android:textStyle="bold" />
@@ -159,7 +159,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:text="其他登录方式"
+                android:text="@string/other_login_way"
                 android:textColor="#999999"
                 android:textSize="14sp" />
 
