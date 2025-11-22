@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!-- 允许应用与所有来源的网络通信，但优先使用加密连接 -->
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+    
+    <!-- 针对特定域名允许明文HTTP流量 -->
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- 允许localhost的明文HTTP流量（适用于本地开发和测试） -->
+        <domain includeSubdomains="true">localhost</domain>
+        <!-- 允许IPv4本地回环地址 -->
+        <domain includeSubdomains="true">10.0.2.2</domain> <!-- Android模拟器访问主机127.0.0.1 -->
+        
+        <!-- 可选：添加开发环境IP地址 -->
+        <!-- <domain includeSubdomains="true">192.168.3.49</domain> -->
+        <!-- <domain includeSubdomains="true">192.168.130.128</domain> -->
+        
+        <!-- 信任系统证书和用户证书（便于开发环境使用自签名证书） -->
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>
