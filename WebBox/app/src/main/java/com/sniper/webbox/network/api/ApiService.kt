@@ -47,14 +47,36 @@ open class ApiService {
      */
     private fun <T> parseResponse(responseString: String, clazz: Class<T>): ApiResponse<T> {
         try {
-            val adapter = com.google.gson.Gson().getAdapter(ApiResponse::class.java)
-            val result = adapter.fromJson(responseString) as ApiResponse<T>
+            val gson = com.google.gson.Gson()
             
-            if (!result.isSuccess()) {
-                throw NetworkException(result.msg, result.statusCode)
+            // 先解析基础响应结构
+            val jsonObject = gson.fromJson(responseString, com.google.gson.JsonObject::class.java)
+            val code = jsonObject.get("code").asString
+            val statusCode = jsonObject.get("statusCode").asInt
+            val msg = jsonObject.get("msg").asString
+            val timestamp = jsonObject.get("timestamp").asString
+            
+            // 创建ApiResponse实例
+            val response = ApiResponse<T>()
+            response.code = code
+            response.statusCode = statusCode
+            response.msg = msg
+            response.timestamp = timestamp
+            
+            // 解析data字段（如果存在且不为null）
+            if (jsonObject.has("data") && !jsonObject.get("data").isJsonNull) {
+                val dataJson = jsonObject.get("data")
+                if (dataJson.isJsonObject || dataJson.isJsonArray || dataJson.isJsonPrimitive) {
+                    response.data = gson.fromJson(dataJson, clazz)
+                }
             }
             
-            return result
+            // 检查是否成功
+            if (!response.isSuccess()) {
+                throw NetworkException(response.msg, response.statusCode)
+            }
+            
+            return response
         } catch (e: Exception) {
             if (e is NetworkException) {
                 throw e

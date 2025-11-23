@@ -42,6 +42,12 @@ class LoginActivity : BaseActivity() {
         qqLoginButton = findViewById(R.id.qq_login)
     }
 
+    override fun initData() {
+        super.initData()
+        // 初始化用户管理器
+        AppUserManager.init(this)
+    }
+
     override fun initListener() {
         // 登录按钮点击事件
         loginButton.setOnClickListener {
@@ -139,27 +145,34 @@ class LoginActivity : BaseActivity() {
                         AppUserManager.saveUserInfo(userInfo)
                         Log.d(TAG, "User info fetched and saved: ${userInfo.username}")
                         
-                        // 登录和获取用户信息都成功后，跳转到主界面
+                        // 登录和获取用户信息都成功后，跳转到WebActivity并加载测试页面
                         showShortToast("登录成功")
-                        // 这里需要替换为实际的主界面Activity
-                        // startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                        finish()
+                        navigateToTestBridge()
                     }
                 } else {
                     // 虽然登录成功，但获取用户信息失败，也视为登录成功
-                    // 可以后续再获取用户信息
                     showShortToast("登录成功")
-                    // startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                    finish()
+                    navigateToTestBridge()
                 }
             } catch (e: Exception) {
                 // 获取用户信息失败，但登录已经成功，可以后续再获取
                 Log.w(TAG, "Failed to fetch user info: ${e.message}", e)
                 showShortToast("登录成功")
-                // startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                finish()
+                navigateToTestBridge()
             }
         }
+    }
+    
+    /**
+     * 跳转到测试页面
+     */
+    private fun navigateToTestBridge() {
+        val intent = Intent(this, Class.forName("com.sniper.webbox.web.activity.WebActivity"))
+        intent.putExtra("extra_url", "file:///android_asset/test_bridge.html")
+        intent.putExtra("extra_title", "JS Bridge测试")
+        intent.putExtra("extra_show_toolbar", true)
+        startActivity(intent)
+        finish()
     }
     
     private fun navigateToRegister() {

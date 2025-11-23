@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.sniper.webbox.user.model.UserInfo
+import androidx.core.content.edit
 
 /**
  * 用户管理单例
@@ -45,11 +46,11 @@ object AppUserManager {
         this.isLoggedIn = true
 
         // 持久化存储认证信息
-        sharedPreferences.edit()
-            .putString(KEY_TOKEN, accessToken)
-            .putString(KEY_TOKEN_TYPE, tokenType)
-            .putBoolean(KEY_LOGIN_STATUS, true)
-            .apply()
+        sharedPreferences.edit {
+            putString(KEY_TOKEN, accessToken)
+                .putString(KEY_TOKEN_TYPE, tokenType)
+                .putBoolean(KEY_LOGIN_STATUS, true)
+        }
     }
 
     /**
