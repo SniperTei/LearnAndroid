@@ -20,10 +20,33 @@
             // 生成唯一的回调ID
             var callbackId = 'cb_' + this.uniqueId++;
             
-            // 存储回调函数
-            this.callbacks[callbackId] = {
-                success: successCallback,
-                error: errorCallback
+            // 定义回调函数，接收code、msg、data三个参数
+            window[callbackId] = function(code, msg, data) {
+                log('收到回调: ' + callbackId + ', code: ' + code + ', msg: ' + msg);
+                
+                // 根据code判断成功或失败
+                if (code === '000000') {
+                    // 成功回调
+                    if (successCallback) {
+                        try {
+                            successCallback(data);
+                        } catch (e) {
+                            log('执行成功回调失败: ' + e.message, 'error');
+                        }
+                    }
+                } else {
+                    // 失败回调
+                    if (errorCallback) {
+                        try {
+                            errorCallback({code: code, msg: msg});
+                        } catch (e) {
+                            log('执行失败回调失败: ' + e.message, 'error');
+                        }
+                    }
+                }
+                
+                // 执行完回调后删除
+                delete window[callbackId];
             };
             
             // 构造调用数据
@@ -44,29 +67,10 @@
                 if (errorCallback) {
                     errorCallback({code: '900001', msg: '调用原生方法失败: ' + e.message});
                 }
-            }
-        },
-        
-        /**
-         * 处理原生回调
-         * @param {string} callbackId - 回调ID
-         * @param {string} status - 状态，'success'或'error'
-         * @param {Object} result - 回调结果
-         */
-        handleCallback: function(callbackId, status, result) {
-            var callback = this.callbacks[callbackId];
-            if (callback) {
-                try {
-                    if (status === 'success' && callback.success) {
-                        callback.success(result);
-                    } else if (status === 'error' && callback.error) {
-                        callback.error(result);
-                    }
-                } catch (e) {
-                    log('执行回调失败: ' + e.message, 'error');
+                // 清理回调
+                if (window[callbackId]) {
+                    delete window[callbackId];
                 }
-                // 执行完回调后删除
-                delete this.callbacks[callbackId];
             }
         }
     };
@@ -103,23 +107,10 @@
         }
     }
     
-    // 暴露全局方法，供原生调用
+    // 暴露全局方法
     window.jsBridge = jsBridge;
     window.log = log;
     
     // 初始化日志
-    log('JS Bridge 初始化完成');
+    console.log('JS Bridge 初始化完成');
 })(window);
-
-/**
- * 原生回调入口函数
- * 此函数将被原生代码调用
- */
-function onNativeCallback(callbackId, status, resultJson) {
-    try {
-        var result = JSON.parse(resultJson);
-        jsBridge.handleCallback(callbackId, status, result);
-    } catch (e) {
-        log('解析回调数据失败: ' + e.message, 'error');
-    }
-}

@@ -44,12 +44,15 @@ class JSCallback(private val webView: WebView, private val callbackId: String) {
     private fun invokeCallback(result: Map<String, Any?>) {
         if (callbackId.isNotEmpty()) {
             try {
-                // 将结果转换为JSON字符串
-                val jsonResult = gson.toJson(result)
+                // 获取code, msg和data
+                val code = result["code"] as String
+                val msg = result["msg"] as String
+                val data = gson.toJson(result["data"])
                 
-                // 在主线程执行JavaScript
+                // 在主线程执行JavaScript，直接调用回调函数，传递code, msg, data
                 webView.post {
-                    webView.evaluateJavascript("window.$callbackId($jsonResult)", null)
+                    val jsCall = "window.$callbackId(\"$code\", \"$msg\", $data)"
+                    webView.evaluateJavascript(jsCall, null)
                 }
             } catch (e: Exception) {
                 // 处理JSON序列化或JavaScript执行错误

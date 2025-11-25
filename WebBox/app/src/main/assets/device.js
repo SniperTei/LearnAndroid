@@ -132,6 +132,14 @@ class DeviceBridge {
   }
 
   /**
+   * 获取用户信息
+   * @returns {Promise} 返回Promise对象
+   */
+  async getUserInfoFromApp() {
+    return this.call('userInfo.getUserInfoFromApp', {});
+  }
+
+  /**
    * 执行耗时操作
    * @returns {Promise} 返回Promise对象
    */

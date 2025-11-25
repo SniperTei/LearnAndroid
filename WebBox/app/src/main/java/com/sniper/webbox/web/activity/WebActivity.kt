@@ -19,6 +19,9 @@ import com.sniper.webbox.base.activity.BaseActivity
 import com.sniper.webbox.web.bridge.JSBridgeImpl
 import com.sniper.webbox.web.bridge.JSBridgeManager
 import com.sniper.webbox.web.bridge.handler.DeviceHandler
+import com.sniper.webbox.web.bridge.handler.UserInfoHandler
+
+
 
 class WebActivity : BaseActivity() {
     companion object {
@@ -175,6 +178,7 @@ class WebActivity : BaseActivity() {
         
         // 注册JS处理器
         JSBridgeManager.instance.registerHandler(DeviceHandler(this))
+        JSBridgeManager.instance.registerHandler(UserInfoHandler(this))
     }
 
     /**

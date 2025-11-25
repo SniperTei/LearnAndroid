@@ -77,6 +77,12 @@
         <button onclick="testGetDeviceInfo()">获取设备信息</button>
         <div class="result" id="deviceInfoResult"></div>
     </div>
+
+    <div class="section">
+        <h2>用户信息测试</h2>
+        <button onclick="testGetUserInfoFromApp()">获取用户信息</button>
+        <div class="result" id="userInfoResult"></div>
+    </div>
     
     <div class="section">
         <h2>耗时操作测试</h2>
@@ -124,7 +130,19 @@
                 document.getElementById('deviceInfoResult').textContent = JSON.stringify(error, null, 2);
             });
         }
-        
+
+        function testGetUserInfoFromApp() {
+            console.log('开始调用获取用户信息方法');
+            jsBridge.call('userInfo.getUserInfoFromApp', {}, function(result) {
+                console.log('获取用户信息成功');
+                document.getElementById('userInfoResult').textContent = JSON.stringify(result, null, 2);
+            }, function(error) {
+                console.log('获取用户信息失败: ' + JSON.stringify(error));
+                document.getElementById('userInfoResult').textContent = JSON.stringify(error, null, 2);
+            });
+        }
+
+
         function testDoSomethingCostVeryLongTime() {
             log('开始调用耗时操作');
             jsBridge.call('device.doSomethingCostVeryLongTime', {'param1': 'test'}, function(result) {
