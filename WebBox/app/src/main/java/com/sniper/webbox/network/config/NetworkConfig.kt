@@ -6,8 +6,9 @@ package com.sniper.webbox.network.config
  */
 object NetworkConfig {
     // 基础URL
-    // private var baseUrl: String = "http://192.168.130.128:8000"
+//    private var baseUrl: String = "http://192.168.130.128:8000"
     private var baseUrl: String = "http://10.0.2.2:8000"
+//    private var baseUrl: String = "http://0.0.0.0:8000"
     
     // 是否启用日志
     var logEnable: Boolean = true
@@ -16,7 +17,7 @@ object NetworkConfig {
     var defaultTimeout: Long = 30000
     
     // 连接超时时间（毫秒）
-    var connectTimeout: Long = 15000
+    var connectTimeout: Long = 30000
     
     // 读取超时时间（毫秒）
     var readTimeout: Long = 30000

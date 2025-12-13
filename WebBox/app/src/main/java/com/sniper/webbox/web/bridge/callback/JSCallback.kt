@@ -14,44 +14,35 @@ class JSCallback(private val webView: WebView, private val callbackId: String) {
      * 成功回调
      * @param data 要返回的数据，可以是任意类型，会被自动转换为JSON
      */
-    fun success(data: Any?) {
-        val result = mapOf(
-            "code" to "000000",
-            "msg" to "success",
-            "data" to data
-        )
-        invokeCallback(result)
+    fun success(code: String = "000000", msg: String = "success", data: Any? = null) {
+        invokeCallback(code, msg, data)
     }
     
     /**
      * 失败回调
      * @param code 错误码
-     * @param message 错误信息
+     * @param msg 错误信息
+     * @param data 失败时的附加数据
      */
-    fun error(code: String = "900009", message: String = "操作失败") {
-        val result = mapOf(
-            "code" to code,
-            "msg" to message,
-            "data" to null
-        )
-        invokeCallback(result)
+    fun error(code: String = "999999", msg: String = "error", data: Any? = null) {
+        invokeCallback(code, msg, data)
     }
     
     /**
      * 调用H5回调函数
-     * @param result 要返回的数据
+     * @param code 状态码
+     * @param msg 状态信息
+     * @param data 要返回的数据
      */
-    private fun invokeCallback(result: Map<String, Any?>) {
+    private fun invokeCallback(code: String = "000000", msg: String = "success", data: Any? = null) {
         if (callbackId.isNotEmpty()) {
             try {
-                // 获取code, msg和data
-                val code = result["code"] as String
-                val msg = result["msg"] as String
-                val data = gson.toJson(result["data"])
+                // 将结果对象序列化为JSON字符串
+                val resultJson = gson.toJson(data)
                 
-                // 在主线程执行JavaScript，直接调用回调函数，传递code, msg, data
+                // 在主线程执行JavaScript，直接调用回调函数，传递完整的结果对象
                 webView.post {
-                    val jsCall = "window.$callbackId(\"$code\", \"$msg\", $data)"
+                    val jsCall = "window.$callbackId($code, $msg, $resultJson)"
                     webView.evaluateJavascript(jsCall, null)
                 }
             } catch (e: Exception) {

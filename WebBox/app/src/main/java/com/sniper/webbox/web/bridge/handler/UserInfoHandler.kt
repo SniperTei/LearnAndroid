@@ -3,6 +3,7 @@ package com.sniper.webbox.web.bridge.handler
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import com.google.gson.Gson
 import com.sniper.webbox.user.manager.AppUserManager
 
@@ -18,26 +19,27 @@ class UserInfoHandler(private val context: Context) : JSHandler {
         return "userInfo"
     }
 
-    override fun handle(params: String, callback: (String) -> Unit) {
-        when (params) {
+    override fun handle(
+        functionName: String,
+        params: String,
+        callback: (code: String, msg: String, data: Any?) -> Unit
+    ) {
+        Log.d("UserInfoHandler", "handle function: $functionName, params: $params")
+
+        when (functionName) {
             "getUserInfoFromApp" -> {
                 // 从AppUserManager获取用户信息
                 val userInfo = AppUserManager.getUserInfoForH5()
                 
                 // 确保在主线程回调
                 mainHandler.post {
-                    callback(userInfo)
+                    callback("000000", "success", userInfo)
                 }
             }
             else -> {
                 // 不支持的方法
-                val errorResult = mapOf(
-                    "code" to "900001",
-                    "msg" to "不支持的方法: $params",
-                    "data" to null
-                )
                 mainHandler.post {
-                    callback(gson.toJson(errorResult))
+                    callback("900001", "不支持的方法: $functionName", null)
                 }
             }
         }

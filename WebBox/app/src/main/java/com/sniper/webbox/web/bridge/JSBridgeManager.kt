@@ -3,6 +3,8 @@ package com.sniper.webbox.web.bridge
 import android.content.Context
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
+import com.google.gson.Gson
 import com.sniper.webbox.web.bridge.callback.JSCallback
 import com.sniper.webbox.web.bridge.handler.JSHandler
 
@@ -59,15 +61,23 @@ class JSBridgeManager private constructor() {
                 callback?.error("900404", "未找到模块: $moduleName")
                 return
             }
+            Log.d("JSBridgeManager", "handle: $moduleName.$functionName")
+
+            // 将paramsMap转换为JSON字符串
+            val paramsJson = if (params != null) {
+                Gson().toJson(params)
+            } else {
+                ""
+            }
             
             // 调用处理器的handle方法，并传入回调函数
             // 处理器执行完成后，会调用我们提供的回调函数，然后我们再通过JSCallback回调给H5
-            handler.handle(functionName) { result ->
+            handler.handle(functionName, paramsJson) { code, msg, data ->
                 // 确保在主线程执行回调，因为evaluateJavascript需要在主线程调用
                 mainHandler.post {
                     try {
-                        // 成功回调给H5
-                        callback?.success(result)
+                        // 成功回调给H5，传递正确的参数
+                        callback?.success(code, msg, data)
                     } catch (e: Exception) {
                         // 回调过程中出错
                         callback?.error("900500", "回调处理异常: ${e.message}")
@@ -91,6 +101,18 @@ class JSBridgeManager private constructor() {
      * @param callback 回调接口
      */
     fun handle(method: String, params: String, callback: JSCallback?) {
-        handle(method, null, callback)
+        try {
+            Log.d("JSBridgeManager", "handle string params: $method, params: $params")
+            // 尝试解析参数字符串为Map
+            val paramsMap = if (params.isNotEmpty() && params != "null") {
+                Gson().fromJson(params, Map::class.java) as? Map<String, Any>
+            } else {
+                null
+            }
+            handle(method, paramsMap, callback)
+        } catch (e: Exception) {
+            Log.e("JSBridgeManager", "parse params error: ${e.message}")
+            callback?.error("900001", "参数解析失败: ${e.message}")
+        }
     }
 }

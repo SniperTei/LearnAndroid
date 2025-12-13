@@ -1,8 +1,10 @@
 package com.sniper.webbox.web.activity
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.KeyEvent
 import android.view.View
 import android.webkit.JavascriptInterface
@@ -172,10 +174,8 @@ class WebActivity : BaseActivity() {
                 }
             }
         }
-
-        // 添加JavaScript接口
-        webView.addJavascriptInterface(WebAppInterface(), "Android")
-        
+        // 直接将JSBridgeImpl作为JavaScript接口
+        webView.addJavascriptInterface(jsBridgeImpl, "Android")  
         // 注册JS处理器
         JSBridgeManager.instance.registerHandler(DeviceHandler(this))
         JSBridgeManager.instance.registerHandler(UserInfoHandler(this))
@@ -227,6 +227,16 @@ class WebActivity : BaseActivity() {
      * JavaScript接口类，供网页调用Android方法
      */
     inner class WebAppInterface {
+
+        private var context: Context
+        private var webView: WebView
+
+        //传context和webview的构造函数
+        constructor(context: Context, webView: WebView) {
+            this.context = context
+            this.webView = webView
+        }
+
         @JavascriptInterface
         fun showToast(message: String) {
             runOnUiThread { 
@@ -250,9 +260,12 @@ class WebActivity : BaseActivity() {
                 val params = jsonObject.optString("params", "")
                 val callbackId = jsonObject.optString("callbackId", "")
                 
+                Log.d("WebAppInterface", "callNative method: $method, params: $params, callbackId: $callbackId")
+                
                 // 调用JSBridgeImpl处理原生调用
-                jsBridgeImpl.callNative(method, params, callbackId)
+                jsBridgeImpl.callNative(data)
             } catch (e: Exception) {
+                Log.e("WebAppInterface", "callNative error: ${e.message}")
                 // 解析失败，通过错误回调通知JS
                 val errorCallback = "onNativeCallback('${System.currentTimeMillis()}', 'error', '{\"code\":\"900001\",\"msg\":\"解析调用数据失败: ${e.message}\",\"data\":null}')"
                 webView.evaluateJavascript(errorCallback, null)

@@ -94,8 +94,13 @@ class DeviceBridge {
       // Android通过addJavascriptInterface注入的对象调用原生
       if (window.Android && window.Android.callNative) {
         console.log('调用Android原生方法:', { method, params, callbackId });
-        // 直接调用Android.callNative，参数顺序为method, params, callbackId
-        window.Android.callNative(method, JSON.stringify(params), callbackId);
+        // 构造调用数据，与JSBridgeImpl.callNative方法的参数格式一致
+        const data = {
+          method: method,
+          params: params,
+          callbackId: callbackId
+        };
+        window.Android.callNative(JSON.stringify(data));
         console.log('Android原生方法调用成功');
       } else {
         console.error('Android原生桥接未注册或方法不存在');
@@ -109,42 +114,66 @@ class DeviceBridge {
    * 通用调用方法 - 支持Promise
    * @param {string} method - 方法名，支持"模块名.方法名"格式
    * @param {object} params - 参数对象
-   * @returns {Promise} 返回Promise对象
+   * @returns {Promise} 返回Promise对象，resolve整个原始结果（包含code、msg、data）
    */
   call(method, params = {}) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
+      // 始终resolve整个结果，不做内部判断，让外部决定如何处理
       this.callNative(method, params, (result) => {
-        if (result && result.code === '000000' || result && result.success) {
-          resolve(result.data || result);
-        } else {
-          reject(new Error(result.message || '调用失败'));
-        }
+        resolve(result);
       });
     });
   }
 
   /**
-   * 获取设备信息
-   * @returns {Promise} 返回Promise对象
+   * 支持回调的通用调用方法
+   * @param {string} method - 方法名
+   * @param {object} params - 参数对象
+   * @param {function} callback - 可选的回调函数，接收完整的原始结果（包含code、msg、data）
+   * @returns {Promise} 返回Promise对象，resolve整个原始结果
    */
-  async getDeviceInfo() {
-    return this.call('device.getDeviceInfo', {});
+  async callWithCallback(method, params = {}, callback = null) {
+    try {
+      const result = await this.call(method, params);
+      // 如果提供了回调，则调用它，传递完整的原始结果
+      if (typeof callback === 'function') {
+        callback(result);
+      }
+      return result;
+    } catch (error) {
+      // 如果提供了回调，则调用它
+      if (typeof callback === 'function') {
+        callback({ code: '999999', msg: error.message || '调用失败', data: null });
+      }
+      throw error;
+    }
+  }
+
+  /**
+   * 获取设备信息
+   * @param {function} callback - 可选的回调函数，接收完整的原始结果（包含code、msg、data）
+   * @returns {Promise} 返回Promise对象，resolve整个原始结果
+   */
+  async getDeviceInfo(callback = null) {
+    return this.callWithCallback('device.getDeviceInfo', {}, callback);
   }
 
   /**
    * 获取用户信息
-   * @returns {Promise} 返回Promise对象
+   * @param {function} callback - 可选的回调函数，接收完整的原始结果（包含code、msg、data）
+   * @returns {Promise} 返回Promise对象，resolve整个原始结果
    */
-  async getUserInfoFromApp() {
-    return this.call('userInfo.getUserInfoFromApp', {});
+  async getUserInfoFromApp(callback = null) {
+    return this.callWithCallback('userInfo.getUserInfoFromApp', {}, callback);
   }
 
   /**
    * 执行耗时操作
-   * @returns {Promise} 返回Promise对象
+   * @param {function} callback - 可选的回调函数，接收完整的原始结果（包含code、msg、data）
+   * @returns {Promise} 返回Promise对象，resolve整个原始结果
    */
-  async doSomethingCostVeryLongTime() {
-    return this.call('device.doSomethingCostVeryLongTime', {});
+  async doSomethingCostVeryLongTime(callback = null) {
+    return this.callWithCallback('device.doSomethingCostVeryLongTime', {}, callback);
   }
 
   /**

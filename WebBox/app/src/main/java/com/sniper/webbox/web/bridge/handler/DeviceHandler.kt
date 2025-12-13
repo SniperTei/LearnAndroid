@@ -15,13 +15,12 @@ class DeviceHandler(private val context: Context) : JSHandler {
         return "device"
     }
     
-    override fun handle(params: String, callback: (String) -> Unit) {
-        when (params) {
+    override fun handle(functionName: String, params: String, callback: (code: String, msg: String, data: Any?) -> Unit) {
+        when (functionName) {
             "getDeviceInfo" -> {
                 // 获取设备信息并通过callback返回
                 val deviceInfo = getDeviceInfo()
-                val jsonResult = gson.toJson(deviceInfo)
-                callback(jsonResult)
+                callback("000000", "success", deviceInfo)
             }
             "doSomethingCostVeryLongTime" -> {
                 // 耗时操作放在子线程执行，避免阻塞主线程
@@ -32,17 +31,26 @@ class DeviceHandler(private val context: Context) : JSHandler {
                         
                         // 确保在主线程回调，因为涉及UI交互
                         mainHandler.post {
-                            callback("{\"message\": \"耗时操作完成\", \"status\": \"success\"}")
+                            callback("000000", "success", mapOf(
+                                "message" to "耗时操作完成",
+                                "status" to "success"
+                            ))
                         }
                     } catch (e: Exception) {
                         mainHandler.post {
-                            callback("{\"message\": \"操作失败: ${e.message}\", \"status\": \"error\"}")
+                            callback("100009", "shibai", mapOf(
+                                "message" to "操作失败: ${e.message}",
+                                "status" to "error"
+                            ))
                         }
                     }
                 }.start()
             }
             else -> {
-                callback("{\"message\": \"不支持的方法: $params\", \"status\": \"error\"}")
+                callback("100009", "shibai", mapOf(
+                    "message" to "不支持的方法: $functionName",
+                    "status" to "error"
+                ))
             }
         }
     }

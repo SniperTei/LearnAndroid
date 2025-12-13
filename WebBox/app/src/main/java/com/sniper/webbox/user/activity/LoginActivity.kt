@@ -46,6 +46,12 @@ class LoginActivity : BaseActivity() {
         super.initData()
         // 初始化用户管理器
         AppUserManager.init(this)
+        
+        // 检查用户是否已登录，如果已登录则直接跳转到WebActivity
+        if (AppUserManager.isLoggedIn()) {
+            Log.d(TAG, "用户已登录，直接跳转到WebActivity")
+            navigateToTestBridge()
+        }
     }
 
     override fun initListener() {
@@ -168,8 +174,13 @@ class LoginActivity : BaseActivity() {
      */
     private fun navigateToTestBridge() {
         val intent = Intent(this, Class.forName("com.sniper.webbox.web.activity.WebActivity"))
-        intent.putExtra("extra_url", "file:///android_asset/test_bridge.html")
-        intent.putExtra("extra_title", "JS Bridge测试")
+//         intent.putExtra("extra_url", "file:///android_asset/test_bridge.html")
+//         intent.putExtra("extra_title", "JS Bridge测试")
+//         intent.putExtra("extra_show_toolbar", true)
+//         startActivity(intent)
+//        intent.putExtra("extra_url", "http://10.0.2.2:5173")
+        intent.putExtra("extra_url", "http://10.0.2.2:5173")
+        intent.putExtra("extra_title", "首页")
         intent.putExtra("extra_show_toolbar", true)
         startActivity(intent)
         finish()
