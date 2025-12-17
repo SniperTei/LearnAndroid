@@ -2,9 +2,9 @@ package com.sniper.webbox.web.bridge
 
 interface JSBridgeInterface {
     /**
-     * H5 调用原生的统一入口：接收一个JSON字符串参数
+     * H5 调用原生的统一入口：接收method、params和callbackId三个参数
      */
-    fun callNative(data: String)
+    fun callNative(method: String, params: String, callbackId: String)
 
     /**
      * 原生主动调用 H5 的方法

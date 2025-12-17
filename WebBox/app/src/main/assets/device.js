@@ -94,13 +94,8 @@ class DeviceBridge {
       // Android通过addJavascriptInterface注入的对象调用原生
       if (window.Android && window.Android.callNative) {
         console.log('调用Android原生方法:', { method, params, callbackId });
-        // 构造调用数据，与JSBridgeImpl.callNative方法的参数格式一致
-        const data = {
-          method: method,
-          params: params,
-          callbackId: callbackId
-        };
-        window.Android.callNative(JSON.stringify(data));
+        // 直接传递三个参数给原生，不需要JSON序列化
+        window.Android.callNative(method, JSON.stringify(params), callbackId);
         console.log('Android原生方法调用成功');
       } else {
         console.error('Android原生桥接未注册或方法不存在');

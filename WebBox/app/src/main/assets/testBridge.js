@@ -58,8 +58,8 @@
             
             // 调用原生方法
             try {
-                // 通过Android接口调用原生方法
-                window.Android.callNative(JSON.stringify(data));
+                // 通过Android接口调用原生方法，传递三个参数
+                window.Android.callNative(method, JSON.stringify(params), callbackId);
                 log('调用原生方法: ' + method);
             } catch (e) {
                 log('调用原生方法失败: ' + e.message, 'error');

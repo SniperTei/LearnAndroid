@@ -41,8 +41,9 @@ class JSCallback(private val webView: WebView, private val callbackId: String) {
                 val resultJson = gson.toJson(data)
                 
                 // 在主线程执行JavaScript，直接调用回调函数，传递完整的结果对象
+                // 注意：code和msg需要用引号包裹，否则会被JavaScript当作变量名解析
                 webView.post {
-                    val jsCall = "window.$callbackId($code, $msg, $resultJson)"
+                    val jsCall = "window.$callbackId('$code', '$msg', $resultJson)"
                     webView.evaluateJavascript(jsCall, null)
                 }
             } catch (e: Exception) {

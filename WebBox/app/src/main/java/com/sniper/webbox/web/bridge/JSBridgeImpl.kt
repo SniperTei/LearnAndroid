@@ -14,21 +14,13 @@ class JSBridgeImpl(
     private val bridgeManager = JSBridgeManager.instance
     
     /**
-     * 直接供H5调用的接口，接收一个JSON字符串参数
+     * 直接供H5调用的接口，接收method、params和callbackId三个参数
      */
     @JavascriptInterface
-    override fun callNative(data: String) {
+    override fun callNative(method: String, params: String, callbackId: String) {
         activity.runOnUiThread {
-            Log.d("JSBridgeImpl", "callNative data: $data")
+            Log.d("JSBridgeImpl", "callNative - method: $method, params: $params, callbackId: $callbackId")
             try {
-                // 解析JS传来的调用数据
-                val jsonObject = JSONObject(data)
-                val method = jsonObject.optString("method", "")
-                val params = jsonObject.optString("params", "{}")
-                val callbackId = jsonObject.optString("callbackId", "")
-                
-                Log.d("JSBridgeImpl", "Parsed - method: $method, params: $params, callback: $callbackId")
-                
                 // 创建JS回调对象
                 val jsCallback = JSCallback(webView, callbackId)
                 
@@ -36,15 +28,6 @@ class JSBridgeImpl(
                 bridgeManager.handle(method, params, jsCallback)
             } catch (e: Exception) {
                 Log.e("JSBridgeImpl", "callNative error: ${e.message}")
-                
-                // 尝试解析回调ID，以便返回错误信息
-                var callbackId = ""
-                try {
-                    val jsonObject = JSONObject(data)
-                    callbackId = jsonObject.optString("callbackId", "")
-                } catch (innerE: Exception) {
-                    // 忽略解析错误
-                }
                 
                 // 创建JS回调对象
                 val jsCallback = JSCallback(webView, callbackId)
