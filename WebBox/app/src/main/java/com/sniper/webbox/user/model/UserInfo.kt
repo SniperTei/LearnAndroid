@@ -5,7 +5,7 @@ package com.sniper.webbox.user.model
  * 根据获取用户信息API返回的data字段结构定义
  */
 data class UserInfo(
-    val id: Int,              // 用户ID
+    val id: String,           // 用户ID（MongoDB ObjectId，字符串类型）
     val email: String,        // 邮箱
     val username: String,     // 用户名
     val mobile: String,       // 手机号

@@ -1,10 +1,12 @@
 package com.sniper.webbox.web.bridge.handler
 
 import android.content.Context
+import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.google.gson.Gson
+import com.sniper.webbox.user.activity.LoginActivity
 import com.sniper.webbox.user.manager.AppUserManager
 
 /**
@@ -36,6 +38,17 @@ class UserInfoHandler(private val context: Context) : JSHandler {
                     callback("000000", "success", userInfo)
                 }
             }
+            "logout" -> {
+                Log.d("UserInfoHandler", "logout function called")
+                // 调用AppUserManager的logout方法
+                AppUserManager.logout()
+                // 返回到登录页 LoginActivity
+                val intent = Intent(context, LoginActivity::class.java)
+//                val intent = context.packageManager.getLaunchIntentForPackage(context.packageName)
+//                intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                context.startActivity(intent)
+                finishCurrentActivity()
+            }
             else -> {
                 // 不支持的方法
                 mainHandler.post {
@@ -43,5 +56,10 @@ class UserInfoHandler(private val context: Context) : JSHandler {
                 }
             }
         }
+    }
+
+    // 辅助方法：关闭当前Activity
+    private fun finishCurrentActivity() {
+        (context as? android.app.Activity)?.finish()
     }
 }
