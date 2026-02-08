@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import com.google.gson.Gson
 import com.sniper.webbox.user.activity.LoginActivity
 import com.sniper.webbox.user.manager.AppUserManager
 
@@ -14,7 +13,6 @@ import com.sniper.webbox.user.manager.AppUserManager
  * 负责处理H5对用户信息的请求
  */
 class UserInfoHandler(private val context: Context) : JSHandler {
-    private val gson = Gson()
     private val mainHandler = Handler(Looper.getMainLooper())
 
     override fun getModuleName(): String {
@@ -32,7 +30,8 @@ class UserInfoHandler(private val context: Context) : JSHandler {
             "getUserInfoFromApp" -> {
                 // 从AppUserManager获取用户信息
                 val userInfo = AppUserManager.getUserInfoForH5()
-                
+                Log.d("UserInfoHandler", "getUserInfoForH5 result: $userInfo")
+
                 // 确保在主线程回调
                 mainHandler.post {
                     callback("000000", "success", userInfo)

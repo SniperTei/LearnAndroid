@@ -140,14 +140,15 @@ object AppUserManager {
     }
 
     /**
-     * 获取用于H5交互的用户信息JSON
+     * 获取用于H5交互的用户信息
+     * 返回Map对象，让JSCallback统一序列化，避免双重序列化问题
      */
-    fun getUserInfoForH5(): String {
-        return gson.toJson(mapOf(
+    fun getUserInfoForH5(): Map<String, Any?> {
+        return mapOf(
             "token" to authToken,
             "tokenType" to tokenType,
             "userInfo" to userInfo,
             "isLoggedIn" to isLoggedIn
-        ))
+        )
     }
 }
