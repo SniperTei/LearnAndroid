@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 微信图标（简化版） -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#000000"
+        android:pathData="M12,2C6.5,2 2,5.58 2,9.9c0,2.41 1.37,4.55 3.5,5.93 -0.15,1.12 -0.56,2.5 -1.38,3.53 1.86,-0.06 3.54,-0.71 4.88,-1.77 0.65,0.09 1.32,0.14 2,0.14 5.5,0 10,-3.58 10,-7.9S17.5,2 12,2z" />
+</vector>

@@ -22,6 +22,7 @@ class LoginActivity : BaseActivity() {
     private lateinit var usernameInput: EditText
     private lateinit var passwordInput: EditText
     private lateinit var loginButton: Button
+    private lateinit var skipLoginButton: Button
     private lateinit var registerLink: TextView
     private lateinit var forgotPasswordLink: TextView
     private lateinit var wechatLoginButton: ImageButton
@@ -36,6 +37,7 @@ class LoginActivity : BaseActivity() {
         usernameInput = findViewById(R.id.username_input)
         passwordInput = findViewById(R.id.password_input)
         loginButton = findViewById(R.id.login_button)
+        skipLoginButton = findViewById(R.id.skip_login_button)
         registerLink = findViewById(R.id.register_link)
         forgotPasswordLink = findViewById(R.id.forgot_password)
         wechatLoginButton = findViewById(R.id.wechat_login)
@@ -59,22 +61,27 @@ class LoginActivity : BaseActivity() {
         loginButton.setOnClickListener {
             performLogin()
         }
-        
+
+        // 免登录按钮点击事件
+        skipLoginButton.setOnClickListener {
+            handleSkipLogin()
+        }
+
         // 注册链接点击事件
         registerLink.setOnClickListener {
             navigateToRegister()
         }
-        
+
         // 忘记密码链接点击事件
         forgotPasswordLink.setOnClickListener {
             handleForgotPassword()
         }
-        
+
         // 微信登录按钮点击事件
         wechatLoginButton.setOnClickListener {
             handleWechatLogin()
         }
-        
+
         // QQ登录按钮点击事件
         qqLoginButton.setOnClickListener {
             handleQQLogin()
@@ -181,7 +188,7 @@ class LoginActivity : BaseActivity() {
 //        intent.putExtra("extra_url", "http://10.0.2.2:5173")
         intent.putExtra("extra_url", "http://10.0.2.2:5173")
         intent.putExtra("extra_title", "首页")
-        intent.putExtra("extra_show_toolbar", true)
+        intent.putExtra("extra_show_toolbar", false)  // 隐藏原生导航栏，让H5页面全屏显示
         startActivity(intent)
         finish()
     }
@@ -211,5 +218,17 @@ class LoginActivity : BaseActivity() {
     private fun handleQQLogin() {
         // 处理QQ登录逻辑
         showShortToast("QQ登录功能暂未实现")
+    }
+
+    /**
+     * 处理免登录体验
+     * 直接跳转到首页，不保存任何登录信息
+     */
+    private fun handleSkipLogin() {
+        Log.d(TAG, "用户选择免登录体验")
+        showShortToast("进入免登录体验模式")
+
+        // 直接跳转到首页，不需要登录
+        navigateToTestBridge()
     }
 }

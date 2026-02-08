@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.KeyEvent
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebResourceRequest
@@ -16,10 +17,12 @@ import android.webkit.WebViewClient
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.sniper.webbox.BuildConfig
 import com.sniper.webbox.R
 import com.sniper.webbox.base.activity.BaseActivity
 import com.sniper.webbox.web.bridge.JSBridgeImpl
 import com.sniper.webbox.web.bridge.JSBridgeManager
+import com.sniper.webbox.web.bridge.handler.CameraHandler
 import com.sniper.webbox.web.bridge.handler.DeviceHandler
 import com.sniper.webbox.web.bridge.handler.UserInfoHandler
 
@@ -103,15 +106,21 @@ class WebActivity : BaseActivity() {
 
     /**
      * 配置WebView的各种设置
+     * 优化安全性，防止恶意代码注入
      */
     private fun configureWebView() {
         val webSettings = webView.settings
 
-        // 启用JavaScript
+        // 启用JavaScript（必需，用于H5交互）
         webSettings.javaScriptEnabled = true
 
-        // 允许混合内容（HTTP和HTTPS）
-        webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+        // 混合内容模式：仅允许HTTPS，不安全HTTP内容将被阻止
+        // 对于开发环境，可以使用MIXED_CONTENT_COMPATIBILITY_MODE
+        webSettings.mixedContentMode = if (isDevelopmentEnvironment()) {
+            WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE
+        } else {
+            WebSettings.MIXED_CONTENT_NEVER_ALLOW
+        }
 
         // 设置缓存模式
         webSettings.cacheMode = WebSettings.LOAD_DEFAULT
@@ -122,11 +131,13 @@ class WebActivity : BaseActivity() {
         // 启用数据库存储
         webSettings.databaseEnabled = true
 
-        // 启用App缓存
-//        webSettings.setAppCacheEnabled(true)
-
         // 设置UserAgent
         webSettings.userAgentString = webSettings.userAgentString + " WebBoxApp"
+
+        // 安全设置：禁用文件访问（防止file://协议攻击）
+        webSettings.allowFileAccess = false
+        webSettings.allowFileAccessFromFileURLs = false
+        webSettings.allowUniversalAccessFromFileURLs = false
 
         // 设置WebViewClient
         webView.webViewClient = object : WebViewClient() {
@@ -174,11 +185,27 @@ class WebActivity : BaseActivity() {
                 }
             }
         }
-        // 直接将JSBridgeImpl作为JavaScript接口
-        webView.addJavascriptInterface(jsBridgeImpl, "Android")  
+
+        // 注册JS Bridge
+        webView.addJavascriptInterface(jsBridgeImpl, "Android")
+
         // 注册JS处理器
         JSBridgeManager.instance.registerHandler(DeviceHandler(this))
         JSBridgeManager.instance.registerHandler(UserInfoHandler(this))
+        JSBridgeManager.instance.registerHandler(CameraHandler(this))
+    }
+
+    /**
+     * 判断是否为开发环境
+     * @return 是否为开发环境
+     */
+    private fun isDevelopmentEnvironment(): Boolean {
+        // 检查URL是否包含开发环境的特征
+        val url = url.orEmpty()
+        return url.contains("10.0.2.2") ||
+                url.contains("192.168") ||
+                url.contains("localhost") ||
+                BuildConfig.DEBUG
     }
 
     /**
@@ -302,11 +329,32 @@ class WebActivity : BaseActivity() {
 
     /**
      * 处理Activity销毁
+     * 正确清理WebView，防止内存泄漏
      */
     override fun onDestroy() {
-        // 清理WebView资源
-        webView.removeAllViews()
-        webView.destroy()
+        try {
+            // 1. 停止WebView加载
+            webView.stopLoading()
+
+            // 2. 清除WebView的焦点
+            webView.clearFocus()
+
+            // 3. 移除JavaScript接口（重要：防止内存泄漏）
+            webView.removeJavascriptInterface("Android")
+
+            // 4. 将WebView从父容器中移除
+            val parent = webView.parent as? ViewGroup
+            parent?.removeView(webView)
+
+            // 5. 销毁WebView
+            webView.destroy()
+
+            // 6. 清理JSBridgeManager中的Handler引用
+            JSBridgeManager.instance.clearHandlers()
+        } catch (e: Exception) {
+            Log.e(TAG, "Error destroying WebView: ${e.message}", e)
+        }
+
         super.onDestroy()
     }
 }

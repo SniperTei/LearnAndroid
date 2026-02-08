@@ -2,6 +2,7 @@ package com.sniper.webbox.network.manager
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.sniper.webbox.BuildConfig
 import com.sniper.webbox.network.api.ApiRequest
 import com.sniper.webbox.network.config.NetworkConfig
 import com.sniper.webbox.network.enums.ParamType
@@ -64,7 +65,12 @@ object NetworkManager {
         // 添加日志拦截器
         if (NetworkConfig.logEnable) {
             val loggingInterceptor = HttpLoggingInterceptor()
-            loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY
+            // 在生产环境，只记录基本信息
+            loggingInterceptor.level = if (isProductionBuild()) {
+                HttpLoggingInterceptor.Level.BASIC
+            } else {
+                HttpLoggingInterceptor.Level.BODY
+            }
             builder.addInterceptor(loggingInterceptor)
         }
 
@@ -87,8 +93,10 @@ object NetworkManager {
             builder.cache(Cache(cacheDir!!, NetworkConfig.cacheSize))
         }
 
-        // 配置SSL验证
-        if (NetworkConfig.ignoreSSLVerify) {
+        // ⚠️ SSL证书验证配置
+        // 仅在开发环境且明确配置时才忽略SSL验证
+        // 生产环境必须启用SSL验证
+        if (!isProductionBuild() && NetworkConfig.ignoreSSLVerify) {
             configureSSLSkipVerify(builder)
         }
 
@@ -96,8 +104,21 @@ object NetworkManager {
     }
 
     /**
+     * 判断是否为生产构建
+     * @return 是否为生产环境
+     */
+    private fun isProductionBuild(): Boolean {
+        // 通过BuildConfig.DEBUG判断，或通过检查域名
+        val baseUrl = NetworkConfig.getBaseUrl()
+        return !BuildConfig.DEBUG &&
+                !baseUrl.contains("localhost") &&
+                !baseUrl.contains("10.0.2.2") &&
+                !baseUrl.contains("192.168")
+    }
+
+    /**
      * 配置忽略SSL证书验证
-     * 仅用于测试环境，生产环境请不要使用
+     * ⚠️ 仅用于开发环境，生产环境切勿使用
      */
     private fun configureSSLSkipVerify(builder: OkHttpClient.Builder) {
         try {

@@ -1,23 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  网络安全配置
+
+  安全策略：
+  1. 默认不允许明文HTTP流量（只允许HTTPS）
+  2. 仅对开发环境域名允许明文流量
+  3. 生产环境必须使用HTTPS
+-->
 <network-security-config>
-    <!-- 允许应用与所有来源的网络通信，但优先使用加密连接 -->
+    <!-- 基础配置：默认不允许明文流量 -->
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
             <certificates src="system" />
         </trust-anchors>
     </base-config>
-    
-    <!-- 针对特定域名允许明文HTTP流量 -->
+
+    <!-- 开发环境配置：仅允许特定域名使用明文流量 -->
     <domain-config cleartextTrafficPermitted="true">
-        <!-- 允许localhost的明文HTTP流量（适用于本地开发和测试） -->
+        <!-- 本地开发环境 -->
         <domain includeSubdomains="true">localhost</domain>
-        <!-- 允许IPv4本地回环地址 -->
-        <domain includeSubdomains="true">10.0.2.2</domain> <!-- Android模拟器访问主机127.0.0.1 -->
-        
-        <!-- 可选：添加开发环境IP地址 -->
-        <!-- <domain includeSubdomains="true">192.168.3.49</domain> -->
-        <!-- <domain includeSubdomains="true">192.168.130.128</domain> -->
-        
+        <domain includeSubdomains="true">10.0.2.2</domain> <!-- Android模拟器访问主机 -->
+
+        <!-- 内网开发环境（可根据实际开发环境修改） -->
+        <domain includeSubdomains="true">192.168.130.128</domain>
+
         <!-- 信任系统证书和用户证书（便于开发环境使用自签名证书） -->
         <trust-anchors>
             <certificates src="system" />

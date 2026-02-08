@@ -1,198 +1,340 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- 美化版登录页面 - Neo-Pop风格 -->
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
+    android:background="#F5F5F5"
     tools:context=".user.activity.LoginActivity">
 
-    <!-- 顶部Logo和应用名称 -->
-    <LinearLayout
-        android:id="@+id/logo_container"
+    <!-- 顶部渐变背景装饰 -->
+    <View
+        android:id="@+id/header_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="280dp"
+        android:background="@drawable/login_header_gradient" />
 
-        <ImageView
-            android:id="@+id/logo_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/ic_launcher_foreground"
-            android:contentDescription="应用Logo"
-            android:background="@drawable/ic_launcher_background" />
+    <!-- 装饰性圆形 -->
+    <View
+        android:id="@+id/decor_circle_1"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_marginTop="-40dp"
+        android:layout_marginStart="-30dp"
+        android:background="@drawable/decor_circle_1" />
 
-        <TextView
-            android:id="@+id/app_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="@string/app_name"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="#333333" />
-    </LinearLayout>
+    <View
+        android:id="@+id/decor_circle_2"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginEnd="-20dp"
+        android:layout_gravity="end"
+        android:background="@drawable/decor_circle_2" />
 
-    <!-- 登录表单 -->
-    <LinearLayout
-        android:id="@+id/login_form"
+    <!-- 主内容区域 -->
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginHorizontal="30dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/logo_container">
+        android:layout_height="match_parent"
+        android:fillViewport="true">
 
-        <!-- 用户名输入框 -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/username_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:hint="@string/username_hint">
+            android:orientation="vertical"
+            android:paddingTop="40dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/username_input"
+            <!-- Logo和应用名称 -->
+            <LinearLayout
+                android:id="@+id/logo_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="text"
-                android:maxLength="20" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:gravity="center"
+                android:orientation="vertical">
 
-        <!-- 密码输入框 -->
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password_layout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:hint="@string/password_hint"
-            app:endIconMode="password_toggle">
+                <!-- Logo容器，带阴影效果 -->
+                <FrameLayout
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="16dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password_input"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/logo_shadow" />
+
+                    <ImageView
+                        android:id="@+id/logo_image"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_gravity="center"
+                        android:contentDescription="应用Logo"
+                        android:src="@drawable/ic_launcher_foreground" />
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/app_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/app_name"
+                    android:textColor="#FFFFFF"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:shadowColor="#40000000"
+                    android:shadowDx="0"
+                    android:shadowDy="2"
+                    android:shadowRadius="4" />
+
+                <TextView
+                    android:id="@+id/app_slogan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="探索生活，享受美好"
+                    android:textColor="#E0E0E0"
+                    android:textSize="14sp" />
+            </LinearLayout>
+
+            <!-- 登录表单卡片 -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/login_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="32dp"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#FFFFFF">
 
-        <!-- 忘记密码链接 -->
-        <TextView
-            android:id="@+id/forgot_password"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end"
-            android:layout_marginBottom="24dp"
-            android:text="@string/forget_password_link"
-            android:textColor="#007AFF"
-            android:textSize="14sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
 
-        <!-- 登录按钮 -->
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#007AFF"
-            android:text="@string/login_btn"
-            android:textColor="#FFFFFF"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:cornerRadius="25dp" />
+                    <!-- 欢迎文字 -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        android:text="欢迎回来 👋"
+                        android:textColor="#333333"
+                        android:textSize="24sp"
+                        android:textStyle="bold" />
 
-        <!-- 注册链接 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center">
+                    <!-- 用户名输入框 -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/username_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:hint="@string/username_hint"
+                        app:boxStrokeColor="#667EEA"
+                        app:boxStrokeWidth="2dp"
+                        app:hintTextColor="#667EEA"
+                        app:startIconDrawable="@drawable/ic_user_icon"
+                        app:startIconTint="#667EEA">
 
-            <TextView
-                android:layout_width="wrap_content"
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/username_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:maxLength="20"
+                            android:textColor="#333333"
+                            android:textSize="16sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- 密码输入框 -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/password_layout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:hint="@string/password_hint"
+                        app:boxStrokeColor="#667EEA"
+                        app:boxStrokeWidth="2dp"
+                        app:endIconMode="password_toggle"
+                        app:endIconTint="#667EEA"
+                        app:hintTextColor="#667EEA"
+                        app:startIconDrawable="@drawable/ic_password_icon"
+                        app:startIconTint="#667EEA">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/password_input"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:textColor="#333333"
+                            android:textSize="16sp" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- 忘记密码 -->
+                    <TextView
+                        android:id="@+id/forgot_password"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginBottom="16dp"
+                        android:padding="4dp"
+                        android:text="@string/forget_password_link"
+                        android:textColor="#667EEA"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <!-- 登录按钮 -->
+                    <Button
+                        android:id="@+id/login_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginBottom="12dp"
+                        android:background="@drawable/login_button_gradient"
+                        android:elevation="4dp"
+                        android:text="@string/login_btn"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="16dp"
+                        app:rippleColor="#FFFFFF" />
+
+                    <!-- 免登录按钮 -->
+                    <Button
+                        android:id="@+id/skip_login_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginBottom="16dp"
+                        android:background="@drawable/skip_login_button_bg"
+                        android:elevation="2dp"
+                        android:text="免登录体验"
+                        android:textColor="#764BA2"
+                        android:textSize="16sp"
+                        app:cornerRadius="12dp" />
+
+                    <!-- 注册链接 -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/register_help_msg"
+                            android:textColor="#999999"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/register_link"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:padding="4dp"
+                            android:text="@string/register_link"
+                            android:textColor="#667EEA"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- 底部第三方登录区域 -->
+            <LinearLayout
+                android:id="@+id/third_party_login"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/register_help_msg"
-                android:textColor="#666666"
-                android:textSize="14sp" />
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="32dp"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/register_link"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:text="@string/register_link"
-                android:textColor="#007AFF"
-                android:textSize="14sp"
-                android:textStyle="bold" />
+                <!-- 分隔线 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="40dp"
+                    android:layout_marginBottom="20dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="#E0E0E0" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="16dp"
+                        android:text="@string/other_login_way"
+                        android:textColor="#999999"
+                        android:textSize="14sp" />
+
+                    <View
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_weight="1"
+                        android:background="#E0E0E0" />
+                </LinearLayout>
+
+                <!-- 第三方登录图标 -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <!-- 微信登录 -->
+                    <FrameLayout
+                        android:id="@+id/wechat_login_container"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_marginHorizontal="12dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/social_button_bg" />
+
+                        <ImageButton
+                            android:id="@+id/wechat_login"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:background="@color/transparent"
+                            android:contentDescription="微信登录"
+                            android:src="@drawable/ic_wechat"
+                            android:tint="#07C160" />
+                    </FrameLayout>
+
+                    <!-- QQ登录 -->
+                    <FrameLayout
+                        android:id="@+id/qq_login_container"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_marginHorizontal="12dp">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/social_button_bg" />
+
+                        <ImageButton
+                            android:id="@+id/qq_login"
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:layout_gravity="center"
+                            android:background="@color/transparent"
+                            android:contentDescription="QQ登录"
+                            android:src="@drawable/ic_qq"
+                            android:tint="#12B7F5" />
+                    </FrameLayout>
+                </LinearLayout>
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <!-- 第三方登录区域 -->
-    <LinearLayout
-        android:id="@+id/third_party_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="40dp"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <!-- 分隔线 -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="#E0E0E0" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:text="@string/other_login_way"
-                android:textColor="#999999"
-                android:textSize="14sp" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="#E0E0E0" />
-        </LinearLayout>
-
-        <!-- 第三方登录图标 -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/wechat_login"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="16dp"
-                android:background="@drawable/ic_launcher_background"
-                android:contentDescription="微信登录"
-                android:src="@drawable/ic_launcher_foreground" />
-
-            <ImageButton
-                android:id="@+id/qq_login"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_marginHorizontal="16dp"
-                android:background="@drawable/ic_launcher_background"
-                android:contentDescription="QQ登录"
-                android:src="@drawable/ic_launcher_foreground" />
-        </LinearLayout>
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -9,6 +9,10 @@ android {
         version = release(36)
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId = "com.sniper.webbox"
         minSdk = 29

@@ -12,18 +12,36 @@ class JSBridgeManager private constructor() {
     // 存储 模块名 与 handler 的映射（如 "device" → DeviceHandler()）
     private val handlerMap = mutableMapOf<String, JSHandler>()
     private val mainHandler = Handler(Looper.getMainLooper())
-    
+
+    // 允许的模块名白名单（防止注入攻击）
+    private val allowedModules = setOf("device", "userInfo", "camera")
+
+    // 允许的函数名正则表达式（只允许字母、数字、下划线）
+    private val functionNamePattern = Regex("^[a-zA-Z0-9_]+$")
+
     companion object {
         val instance by lazy { JSBridgeManager() }
     }
-    
+
     /**
      * 注册处理器
      * @param handler 处理器实例，会自动获取模块名
      */
     fun registerHandler(handler: JSHandler) {
         val moduleName = handler.getModuleName()
-        handlerMap[moduleName] = handler
+        if (moduleName in allowedModules) {
+            handlerMap[moduleName] = handler
+        } else {
+            throw IllegalArgumentException("Module '$moduleName' is not in the allowed list")
+        }
+    }
+
+    /**
+     * 清理所有Handler（用于防止内存泄漏）
+     * 应在Activity onDestroy时调用
+     */
+    fun clearHandlers() {
+        handlerMap.clear()
     }
     
     /**
@@ -43,21 +61,40 @@ class JSBridgeManager private constructor() {
      */
     fun handle(method: String, params: Map<String, Any>?, callback: JSCallback?) {
         try {
+            // 验证方法名格式
+            if (!validateMethod(method)) {
+                callback?.error("900400", "方法名格式无效或包含非法字符")
+                Log.e("JSBridgeManager", "Invalid method name: $method")
+                return
+            }
+
             // 解析方法名，格式为"模块名.方法名"
             val parts = method.split(".")
             if (parts.size != 2) {
-                // callback?.error(400, "方法格式错误，请使用'模块名.方法名'格式")
                 callback?.error("900400", "方法格式错误，请使用'模块名.方法名'格式")
                 return
             }
-            
+
             val moduleName = parts[0]
             val functionName = parts[1]
-            
+
+            // 验证模块名是否在白名单中
+            if (moduleName !in allowedModules) {
+                callback?.error("900403", "模块 '$moduleName' 不存在或未授权")
+                Log.e("JSBridgeManager", "Module not in whitelist: $moduleName")
+                return
+            }
+
+            // 验证函数名格式
+            if (!functionNamePattern.matches(functionName)) {
+                callback?.error("900400", "函数名包含非法字符")
+                Log.e("JSBridgeManager", "Invalid function name: $functionName")
+                return
+            }
+
             // 获取对应的处理器
             val handler = getHandler(moduleName)
             if (handler == null) {
-                // callback?.error(404, "未找到模块: $moduleName")
                 callback?.error("900404", "未找到模块: $moduleName")
                 return
             }
@@ -69,7 +106,7 @@ class JSBridgeManager private constructor() {
             } else {
                 ""
             }
-            
+
             // 调用处理器的handle方法，并传入回调函数
             // 处理器执行完成后，会调用我们提供的回调函数，然后我们再通过JSCallback回调给H5
             handler.handle(functionName, paramsJson) { code, msg, data ->
@@ -84,14 +121,30 @@ class JSBridgeManager private constructor() {
                     }
                 }
             }
-            
+
         } catch (e: Exception) {
             // 确保在主线程执行错误回调
             mainHandler.post {
-                // callback?.error(500, "处理异常: ${e.message}")
                 callback?.error("900500", "处理异常: ${e.message}")
             }
         }
+    }
+
+    /**
+     * 验证方法名格式
+     * @param method 方法名
+     * @return 是否有效
+     */
+    private fun validateMethod(method: String): Boolean {
+        // 方法名不能为空
+        if (method.isBlank()) return false
+
+        // 方法名长度限制（防止过长的字符串）
+        if (method.length > 100) return false
+
+        // 方法名不能包含特殊字符（除了点号和下划线）
+        val validPattern = Regex("^[a-zA-Z0-9_.]+$")
+        return validPattern.matches(method)
     }
     
     /**
