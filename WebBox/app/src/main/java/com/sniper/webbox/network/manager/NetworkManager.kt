@@ -1,5 +1,6 @@
 package com.sniper.webbox.network.manager
 
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.sniper.webbox.BuildConfig
@@ -11,6 +12,7 @@ import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.logging.HttpLoggingInterceptor
+import okio.Buffer
 import java.io.File
 import java.io.IOException
 import java.security.SecureRandom
@@ -50,7 +52,10 @@ object NetworkManager {
      */
     private fun getOkHttpClient(): OkHttpClient {
         if (okHttpClient == null) {
+            Log.d("NetworkManager", "🏗️ 创建新的 OkHttpClient 实例")
             okHttpClient = buildOkHttpClient()
+        } else {
+            Log.d("NetworkManager", "♻️ 使用缓存的 OkHttpClient 实例")
         }
         return okHttpClient!!
     }
@@ -62,6 +67,11 @@ object NetworkManager {
     private fun buildOkHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
 
+        // 🆕 添加详细的请求/响应日志拦截器（放在最前面，确保能拦截所有请求）
+        val detailedLoggingInterceptor = DetailedLoggingInterceptor()
+        builder.addInterceptor(detailedLoggingInterceptor)
+        Log.d("NetworkManager", "✅ DetailedLoggingInterceptor 已添加到 OkHttpClient")
+
         // 添加日志拦截器
         if (NetworkConfig.logEnable) {
             val loggingInterceptor = HttpLoggingInterceptor()
@@ -72,6 +82,7 @@ object NetworkManager {
                 HttpLoggingInterceptor.Level.BODY
             }
             builder.addInterceptor(loggingInterceptor)
+            Log.d("NetworkManager", "✅ HttpLoggingInterceptor 已添加 (level=${loggingInterceptor.level})")
         }
 
         // 添加认证拦截器
@@ -352,5 +363,102 @@ object NetworkManager {
      */
     fun clearCache() {
         okHttpClient = null
+    }
+
+    /**
+     * 🆕 详细的日志拦截器
+     * 打印请求参数和响应结果
+     */
+    private class DetailedLoggingInterceptor : Interceptor {
+        private val TAG = "NetworkLog"
+
+        override fun intercept(chain: Interceptor.Chain): Response {
+            val request = chain.request()
+            Log.d(TAG, "🚀 DetailedLoggingInterceptor.intercept() 被调用")
+            Log.d(TAG, "📤 请求URL: ${request.url}")
+
+            // 📤 打印请求信息
+            logRequest(request)
+
+            // 执行请求
+            val response = chain.proceed(request)
+
+            // 📥 打印响应信息
+            logResponse(response)
+
+            return response
+        }
+
+        private fun logRequest(request: Request) {
+            Log.d(TAG, "╔══════════════════════════════════════════════════════════════════════════════")
+            Log.d(TAG, "║ 📤 HTTP 请求")
+            Log.d(TAG, "╠══════════════════════════════════════════════════════════════════════════════")
+            Log.d(TAG, "║ 方法: ${request.method}")
+            Log.d(TAG, "║ URL: ${request.url}")
+            Log.d(TAG, "║ 请求头:")
+            request.headers.forEach { (name, value) ->
+                if (name.lowercase() != "authorization") {  // 不打印 token
+                    Log.d(TAG, "║   $name: $value")
+                } else {
+                    Log.d(TAG, "║   $name: Bearer ***")  // token 部分隐藏
+                }
+            }
+
+            // 打印请求体
+            val requestBody = request.body
+            if (requestBody != null) {
+                val buffer = Buffer()
+                requestBody.writeTo(buffer)
+                val charset = requestBody.contentType()?.charset() ?: Charsets.UTF_8
+                val bodyString = buffer.readString(charset)
+
+                Log.d(TAG, "║ 请求体:")
+                if (bodyString.length > 1000) {
+                    Log.d(TAG, "║   ${bodyString.take(1000)}...")
+                    Log.d(TAG, "║   (总长度: ${bodyString.length} 字符)")
+                } else {
+                    Log.d(TAG, "║   $bodyString")
+                }
+            }
+
+            Log.d(TAG, "╚══════════════════════════════════════════════════════════════════════════════")
+        }
+
+        private fun logResponse(response: Response) {
+            // 使用 peekBody() 读取响应体但不消费它
+            val responseBody = response.peekBody(Long.MAX_VALUE)
+            val charset = responseBody.contentType()?.charset() ?: Charsets.UTF_8
+            val bodyString = responseBody.string()
+
+            Log.d(TAG, "╔══════════════════════════════════════════════════════════════════════════════")
+            Log.d(TAG, "║ 📥 HTTP 响应")
+            Log.d(TAG, "╠══════════════════════════════════════════════════════════════════════════════")
+            Log.d(TAG, "║ 状态码: ${response.code}")
+            Log.d(TAG, "║ 消息: ${response.message}")
+            Log.d(TAG, "║ URL: ${response.request.url}")
+
+            // 打印响应体
+            if (bodyString.isNotEmpty()) {
+                Log.d(TAG, "║ 响应体:")
+                if (bodyString.length > 2000) {
+                    Log.d(TAG, "║   ${bodyString.take(2000)}...")
+                    Log.d(TAG, "║   (总长度: ${bodyString.length} 字符)")
+                } else {
+                    // 格式化 JSON
+                    val formatted = try {
+                        val gson = com.google.gson.GsonBuilder().setPrettyPrinting().create()
+                        val jsonElement = com.google.gson.JsonParser.parseString(bodyString)
+                        gson.toJson(jsonElement)
+                    } catch (e: Exception) {
+                        bodyString
+                    }
+                    formatted.lines().forEach { line ->
+                        Log.d(TAG, "║   $line")
+                    }
+                }
+            }
+
+            Log.d(TAG, "╚══════════════════════════════════════════════════════════════════════════════")
+        }
     }
 }

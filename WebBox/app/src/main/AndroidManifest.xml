@@ -4,6 +4,25 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- 相机权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!-- Android 12及以下版本：读取外部存储 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="32" />
+
+    <!-- Android 13及以上版本：细粒度媒体权限 -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+    <!-- 写入外部存储（Android 10以下需要） -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="28"
+                     tools:ignore="ScopedStorage" />
+
+    <!-- 相机特性声明 -->
+    <uses-feature android:name="android.hardware.camera.any"
+                  android:required="false" />
+
     <!-- 第二步：添加这行，允许明文HTTP请求 -->
 <!--    android:usesCleartextTraffic="true"-->
     <application
@@ -35,6 +54,17 @@
         <activity
             android:name=".MainActivity"
             android:exported="false" />
+
+        <!-- FileProvider 用于相机拍照 -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
     </application>
 
 </manifest>

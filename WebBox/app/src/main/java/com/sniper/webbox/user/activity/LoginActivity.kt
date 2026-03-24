@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputLayout
 import com.sniper.webbox.R
 import com.sniper.webbox.base.activity.BaseActivity
+import com.sniper.webbox.config.AppConfig
 import com.sniper.webbox.network.api.UserApi
 import com.sniper.webbox.user.manager.AppUserManager
 import kotlinx.coroutines.launch
@@ -181,12 +182,7 @@ class LoginActivity : BaseActivity() {
      */
     private fun navigateToTestBridge() {
         val intent = Intent(this, Class.forName("com.sniper.webbox.web.activity.WebActivity"))
-//         intent.putExtra("extra_url", "file:///android_asset/test_bridge.html")
-//         intent.putExtra("extra_title", "JS Bridge测试")
-//         intent.putExtra("extra_show_toolbar", true)
-//         startActivity(intent)
-//        intent.putExtra("extra_url", "http://10.0.2.2:5173")
-        intent.putExtra("extra_url", "http://10.0.2.2:5173")
+        intent.putExtra("extra_url", AppConfig.H5Url.CURRENT)
         intent.putExtra("extra_title", "首页")
         intent.putExtra("extra_show_toolbar", false)  // 隐藏原生导航栏，让H5页面全屏显示
         startActivity(intent)

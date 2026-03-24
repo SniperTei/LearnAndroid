@@ -1,14 +1,19 @@
 package com.sniper.webbox.network.config
 
+import com.sniper.webbox.config.AppConfig
+
 /**
  * 网络配置管理类
  * 使用单例模式，允许动态修改配置项
  */
 object NetworkConfig {
-    // 基础URL
-//    private var baseUrl: String = "http://192.168.130.128:8000"
-    private var baseUrl: String = "http://10.0.2.2:8000"
-//    private var baseUrl: String = "http://0.0.0.0:8000"
+    // 基础URL（根据AppConfig.H5Url.CURRENT自动匹配）
+    private var baseUrl: String = when (AppConfig.H5Url.CURRENT) {
+        AppConfig.H5Url.LOCAL_DEV -> AppConfig.ApiUrl.LOCAL_DEV
+        AppConfig.H5Url.TEST -> AppConfig.ApiUrl.TEST
+        AppConfig.H5Url.PROD -> AppConfig.ApiUrl.PROD
+        else -> AppConfig.ApiUrl.LOCAL_DEV
+    }
     
     // 是否启用日志
     var logEnable: Boolean = true
@@ -64,10 +69,10 @@ object NetworkConfig {
      */
     fun switchEnvironment(envType: EnvironmentType, customUrl: String? = null) {
         baseUrl = customUrl ?: when (envType) {
-            EnvironmentType.DEVELOP -> "http://10.0.2.2:8000"
-            EnvironmentType.TEST -> "https://test-api.example.com"
+            EnvironmentType.DEVELOP -> AppConfig.ApiUrl.LOCAL_DEV
+            EnvironmentType.TEST -> AppConfig.ApiUrl.TEST
             EnvironmentType.PRE_PROD -> "https://pre-api.example.com"
-            EnvironmentType.PROD -> "https://api.example.com"
+            EnvironmentType.PROD -> AppConfig.ApiUrl.PROD
         }
         
         // 根据环境自动设置日志和SSL验证

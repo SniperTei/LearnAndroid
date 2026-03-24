@@ -1,5 +1,6 @@
 package com.sniper.webbox.web.bridge.handler
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.ContentResolver
@@ -10,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
@@ -20,11 +22,51 @@ import android.graphics.BitmapFactory
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.widget.ArrayAdapter
 
 class CameraHandler(private val context: Context) : JSHandler {
     private val mainHandler = Handler(Looper.getMainLooper())
     private var currentCallback: ((String, String, Any?) -> Unit)? = null
     private val gson = Gson()
+
+    // 拍照相关
+    private var cameraPermissionLauncher: androidx.activity.result.ActivityResultLauncher<String>? = null
+    private var takePhotoLauncher: androidx.activity.result.ActivityResultLauncher<Uri>? = null
+    private var photoUri: Uri? = null
+
+    // 图片选择相关
+    private var selectImageLauncher: androidx.activity.result.ActivityResultLauncher<Unit>? = null
+
+    init {
+        // 在初始化时注册所有 ActivityResultLauncher
+        if (context is AppCompatActivity) {
+            // 注册图片选择 launcher
+            selectImageLauncher = context.registerForActivityResult(SelectMultipleImagesContract()) { uris ->
+                handleImageSelectionResult(uris)
+            }
+
+            // 注册相机权限 launcher
+            cameraPermissionLauncher = context.registerForActivityResult(
+                androidx.activity.result.contract.ActivityResultContracts.RequestPermission()
+            ) { isGranted ->
+                mainHandler.post {
+                    if (isGranted) {
+                        launchCamera(context)
+                    } else {
+                        currentCallback?.invoke("900001", "Camera permission denied", null)
+                        currentCallback = null
+                    }
+                }
+            }
+
+            // 注册拍照 launcher
+            takePhotoLauncher = context.registerForActivityResult(
+                androidx.activity.result.contract.ActivityResultContracts.TakePicture()
+            ) { success ->
+                handlePhotoResult(success)
+            }
+        }
+    }
 
     override fun getModuleName(): String {
         return "camera"
@@ -37,15 +79,27 @@ class CameraHandler(private val context: Context) : JSHandler {
     ) {
         when (functionName) {
             "takePhoto" -> {
-                // 拍照功能待实现
-                callback("100001", "takePhoto not implemented", null)
+                Log.d("CameraHandler", "takePhoto called")
+                // 保存回调
+                currentCallback = callback
+
+                // 检查并请求相机权限
+                checkAndRequestCameraPermission()
             }
             "selectImage" -> {
                 // 保存回调
                 currentCallback = callback
-                
+
                 // 启动相册选择图片
                 startImagePicker()
+            }
+            "showImagePickerDialog" -> {
+                Log.d("CameraHandler", "showImagePickerDialog called")
+                // 保存回调
+                currentCallback = callback
+
+                // 显示选择对话框
+                showImageSourceDialog()
             }
             else -> {
                 // 不支持的方法
@@ -55,34 +109,57 @@ class CameraHandler(private val context: Context) : JSHandler {
     }
 
     /**
+     * 显示图片来源选择对话框
+     * 让用户选择是拍照还是从相册选择
+     */
+    private fun showImageSourceDialog() {
+        mainHandler.post {
+            val options = arrayOf("拍照", "从相册选择")
+
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("选择图片来源")
+                .setItems(options) { dialog, which ->
+                    when (which) {
+                        0 -> {
+                            // 选择拍照
+                            Log.d("CameraHandler", "用户选择拍照")
+                            checkAndRequestCameraPermission()
+                        }
+                        1 -> {
+                            // 选择相册
+                            Log.d("CameraHandler", "用户选择相册")
+                            startImagePicker()
+                        }
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton("取消") { dialog, _ ->
+                    // 用户取消
+                    currentCallback?.invoke("900401", "用户取消", null)
+                    currentCallback = null
+                    dialog.dismiss()
+                }
+
+            val dialog = builder.create()
+            dialog.show()
+        }
+    }
+
+    /**
      * 启动相册选择图片
      */
     private fun startImagePicker() {
-        val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Intent(Intent.ACTION_OPEN_DOCUMENT)
-        } else {
-            Intent(Intent.ACTION_GET_CONTENT)
-        }
-        
-        // 设置为图片类型
-        intent.type = "image/*"
-        // 支持多选
-        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        // 允许读取文件
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        
-        // 检查是否是Activity上下文
-        if (context is AppCompatActivity) {
-            // 注册ActivityResult回调
-            val resultLauncher = context.registerForActivityResult(SelectMultipleImagesContract()) {
-                handleImageSelectionResult(it)
+        // 检查 launcher 是否已注册
+        if (selectImageLauncher == null) {
+            mainHandler.post {
+                currentCallback?.invoke("900002", "selectImageLauncher not initialized", null)
+                currentCallback = null
             }
-            resultLauncher.launch(Unit)
-        } else {
-            // 非Activity上下文无法启动Activity
-            currentCallback?.invoke("900002", "Context is not an Activity", null)
-            currentCallback = null
+            return
         }
+
+        // 启动相册选择器（Intent 已在 Contract 中定义）
+        selectImageLauncher?.launch(Unit)
     }
 
     /**
@@ -264,29 +341,25 @@ class CameraHandler(private val context: Context) : JSHandler {
      */
     private class SelectMultipleImagesContract : ActivityResultContract<Unit, List<Uri>>() {
         override fun createIntent(context: Context, input: Unit): Intent {
-            val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                Intent(Intent.ACTION_OPEN_DOCUMENT)
-            } else {
-                Intent(Intent.ACTION_GET_CONTENT)
+            // 使用 ACTION_PICK 打开相册
+            val intent = Intent(Intent.ACTION_PICK).apply {
+                type = "image/*"
+                putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-            
-            intent.type = "image/*"
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            
             return intent
         }
 
         override fun parseResult(resultCode: Int, intent: Intent?): List<Uri> {
             val uris = mutableListOf<Uri>()
-            
+
             if (resultCode == AppCompatActivity.RESULT_OK && intent != null) {
                 // 处理单选情况
                 val dataUri = intent.data
                 if (dataUri != null) {
                     uris.add(dataUri)
                 }
-                
+
                 // 处理多选情况
                 val clipData = intent.clipData
                 if (clipData != null) {
@@ -296,8 +369,132 @@ class CameraHandler(private val context: Context) : JSHandler {
                     }
                 }
             }
-            
+
             return uris
         }
+    }
+
+    /**
+     * 检查并请求相机权限
+     */
+    private fun checkAndRequestCameraPermission() {
+        val activity = context as? AppCompatActivity
+        if (activity == null) {
+            mainHandler.post {
+                currentCallback?.invoke("900002", "Context is not an Activity", null)
+                currentCallback = null
+            }
+            return
+        }
+
+        when {
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
+                if (activity.checkSelfPermission(android.Manifest.permission.CAMERA)
+                    == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                    launchCamera(activity)
+                } else {
+                    requestCameraPermission(activity)
+                }
+            }
+            else -> {
+                launchCamera(activity)
+            }
+        }
+    }
+
+    /**
+     * 请求相机权限
+     */
+    private fun requestCameraPermission(activity: AppCompatActivity) {
+        // Launcher 已在 init 中注册，直接调用
+        cameraPermissionLauncher?.launch(android.Manifest.permission.CAMERA) ?: run {
+            mainHandler.post {
+                currentCallback?.invoke("900002", "Camera permission launcher not initialized", null)
+                currentCallback = null
+            }
+        }
+    }
+
+    /**
+     * 启动相机拍照
+     */
+    private fun launchCamera(activity: AppCompatActivity) {
+        try {
+            val photoFile = createImageFile()
+            photoUri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                FileProvider.getUriForFile(
+                    context,
+                    "${context.packageName}.fileprovider",
+                    photoFile
+                )
+            } else {
+                Uri.fromFile(photoFile)
+            }
+
+            // Launcher 已在 init 中注册，直接调用
+            // 确保 photoUri 不为 null
+            photoUri?.let { uri ->
+                takePhotoLauncher?.launch(uri)
+            } ?: run {
+                throw IllegalStateException("Failed to create photo URI")
+            }
+
+        } catch (e: Exception) {
+            Log.e("CameraHandler", "Error launching camera: ${e.message}", e)
+            mainHandler.post {
+                currentCallback?.invoke("900005", "Failed to launch camera: ${e.message}", null)
+                currentCallback = null
+            }
+        }
+    }
+
+    /**
+     * 处理拍照结果
+     */
+    private fun handlePhotoResult(success: Boolean) {
+        mainHandler.post {
+            if (!success) {
+                currentCallback?.invoke("900006", "User cancelled taking photo", null)
+                currentCallback = null
+                return@post
+            }
+
+            try {
+                val uri = photoUri
+                if (uri != null) {
+                    val base64 = uriToBase64(uri)
+                    if (base64 != null) {
+                        currentCallback?.invoke("000000", "success", base64)
+                    } else {
+                        currentCallback?.invoke("900007", "Failed to process photo", null)
+                    }
+                } else {
+                    currentCallback?.invoke("900008", "Photo URI is null", null)
+                }
+            } catch (e: Exception) {
+                Log.e("CameraHandler", "Error handling photo result: ${e.message}", e)
+                currentCallback?.invoke("900009", "Error handling photo result: ${e.message}", null)
+            } finally {
+                currentCallback = null
+                photoUri = null
+            }
+        }
+    }
+
+    /**
+     * 创建临时图片文件
+     */
+    @Throws(IOException::class)
+    private fun createImageFile(): java.io.File {
+        val timeStamp = java.text.SimpleDateFormat("yyyyMMdd_HHmmss", java.util.Locale.getDefault())
+            .format(java.util.Date())
+
+        val storageDir: java.io.File = context.externalCacheDir ?: context.cacheDir
+
+        return java.io.File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        )
     }
 }

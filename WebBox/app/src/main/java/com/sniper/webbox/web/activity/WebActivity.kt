@@ -114,6 +114,11 @@ class WebActivity : BaseActivity() {
         // 启用JavaScript（必需，用于H5交互）
         webSettings.javaScriptEnabled = true
 
+        // 🆕 图片加载相关设置
+        webSettings.loadsImagesAutomatically = true        // 自动加载图片
+        webSettings.blockNetworkImage = false               // 不阻止网络图片
+        webSettings.blockNetworkLoads = false              // 不阻止网络加载
+
         // 混合内容模式：仅允许HTTPS，不安全HTTP内容将被阻止
         // 对于开发环境，可以使用MIXED_CONTENT_COMPATIBILITY_MODE
         webSettings.mixedContentMode = if (isDevelopmentEnvironment()) {
@@ -133,6 +138,13 @@ class WebActivity : BaseActivity() {
 
         // 设置UserAgent
         webSettings.userAgentString = webSettings.userAgentString + " WebBoxApp"
+
+        // 🆕 视口和缩放设置
+        webSettings.setSupportZoom(true)                    // 支持缩放
+        webSettings.builtInZoomControls = false             // 隐藏内置缩放控件
+        webSettings.displayZoomControls = false             // 不显示缩放控件
+        webSettings.loadWithOverviewMode = true             // 页面概览模式
+        webSettings.useWideViewPort = true                 // 使用宽视口
 
         // 安全设置：禁用文件访问（防止file://协议攻击）
         webSettings.allowFileAccess = false
@@ -160,12 +172,13 @@ class WebActivity : BaseActivity() {
                     title = view?.title
                     tvTitle.text = title
                 }
+
+                Log.d(TAG, "页面加载完成: $url")
             }
 
             override fun onReceivedError(view: WebView?, errorCode: Int, description: String?, failingUrl: String?) {
                 super.onReceivedError(view, errorCode, description, failingUrl)
-                stopLoading()
-                showShortToast("加载失败: $description")
+                Log.e(TAG, "资源加载失败: code=$errorCode, desc=$description, url=$failingUrl")
             }
         }
 
@@ -205,6 +218,8 @@ class WebActivity : BaseActivity() {
         return url.contains("10.0.2.2") ||
                 url.contains("192.168") ||
                 url.contains("localhost") ||
+                url.contains("app-test") ||           // 🆕 测试环境域名
+                url.contains("api-test") ||           // 🆕 API测试环境域名
                 BuildConfig.DEBUG
     }
 

@@ -24,10 +24,26 @@
         <!-- 内网开发环境（可根据实际开发环境修改） -->
         <domain includeSubdomains="true">192.168.130.128</domain>
 
+        <!-- 测试环境域名 -->
+        <domain includeSubdomains="true">app-test.sniper14.online</domain>
+        <domain includeSubdomains="true">api-test.sniper14.online</domain>
+
+        <!-- 七牛云CDN（允许HTTP访问，作为备选方案） -->
+        <domain includeSubdomains="true">snpfiles.sniper14.online</domain>
+
         <!-- 信任系统证书和用户证书（便于开发环境使用自签名证书） -->
         <trust-anchors>
             <certificates src="system" />
             <certificates src="user" />
         </trust-anchors>
+    </domain-config>
+
+    <!-- 图片CDN配置：允许访问外部图片服务 -->
+    <domain-config cleartextTrafficPermitted="false">
+        <!-- placeholder.com - 占位图服务（HTTPS） -->
+        <domain includeSubdomains="false">via.placeholder.com</domain>
+        <!-- 七牛云官方CDN（HTTPS） -->
+        <domain includeSubdomains="true">qiniucdn.com</domain>
+        <domain includeSubdomains="true">clouddn.com</domain>
     </domain-config>
 </network-security-config>
