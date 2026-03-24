@@ -19,8 +19,18 @@
                      android:maxSdkVersion="28"
                      tools:ignore="ScopedStorage" />
 
+    <!-- 位置权限 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
     <!-- 相机特性声明 -->
     <uses-feature android:name="android.hardware.camera.any"
+                  android:required="false" />
+
+    <!-- 位置特性声明 -->
+    <uses-feature android:name="android.hardware.location.gps"
+                  android:required="false" />
+    <uses-feature android:name="android.hardware.location.network"
                   android:required="false" />
 
     <!-- 第二步：添加这行，允许明文HTTP请求 -->
@@ -36,21 +46,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WebBox">
+
+        <!-- 容器启动活动（LAUNCHER） -->
         <activity
-            android:name=".web.activity.WebActivity"
-            android:exported="false" />
-        <activity
-            android:name=".user.activity.RegisterActivity"
-            android:exported="false" />
-        <activity
-            android:name=".user.activity.LoginActivity"
-            android:exported="true">
+            android:name=".container.ContainerActivity"
+            android:exported="true"
+            android:theme="@style/Theme.WebBox">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- WebView 容器活动 -->
+        <activity
+            android:name=".web.activity.WebActivity"
+            android:exported="false"
+            android:configChanges="orientation|screenSize|keyboardHidden" />
+
+        <!-- 主活动（可选，用于调试） -->
         <activity
             android:name=".MainActivity"
             android:exported="false" />

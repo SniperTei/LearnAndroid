@@ -5,22 +5,57 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import com.google.gson.Gson
+import com.sniper.webbox.container.ContainerConfig
+import com.sniper.webbox.container.ContainerConfigManager
 import com.sniper.webbox.web.bridge.callback.JSCallback
 import com.sniper.webbox.web.bridge.handler.JSHandler
 
+/**
+ * JS Bridge 管理器
+ *
+ * 职责：
+ * 1. 管理 JS Handler 的注册和调用
+ * 2. 验证方法名和函数名格式（安全防护）
+ * 3. 根据容器配置动态控制可用功能
+ * 4. 确保回调在主线程执行
+ */
 class JSBridgeManager private constructor() {
+    private val TAG = "JSBridgeManager"
+
     // 存储 模块名 与 handler 的映射（如 "device" → DeviceHandler()）
     private val handlerMap = mutableMapOf<String, JSHandler>()
     private val mainHandler = Handler(Looper.getMainLooper())
 
-    // 允许的模块名白名单（防止注入攻击）
-    private val allowedModules = setOf("device", "userInfo", "camera")
+    // 动态允许的模块名白名单（从容器配置读取）
+    private val allowedModules = mutableSetOf<String>()
 
     // 允许的函数名正则表达式（只允许字母、数字、下划线）
     private val functionNamePattern = Regex("^[a-zA-Z0-9_]+$")
 
     companion object {
         val instance by lazy { JSBridgeManager() }
+
+        /**
+         * 错误码定义
+         */
+        const val ERROR_INVALID_METHOD = "900400"      // 方法名格式无效
+        const val ERROR_METHOD_FORMAT = "900401"       // 方法格式错误
+        const val ERROR_MODULE_NOT_ALLOWED = "900403"  // 模块未授权
+        const val ERROR_MODULE_NOT_FOUND = "900404"    // 未找到模块
+        const val ERROR_FUNCTION_INVALID = "900405"    // 函数名包含非法字符
+        const val ERROR_PARSE_PARAMS = "900001"        // 参数解析失败
+        const val ERROR_CALLBACK_EXCEPTION = "900500"  // 回调处理异常
+    }
+
+    /**
+     * 配置可用功能（从容器配置读取）
+     *
+     * @param enabledFeatures 启用的功能列表
+     */
+    fun configureFeatures(enabledFeatures: List<String>) {
+        allowedModules.clear()
+        allowedModules.addAll(enabledFeatures)
+        Log.d(TAG, "✅ JS Bridge 功能已配置: ${allowedModules.joinToString()}")
     }
 
     /**
@@ -29,11 +64,8 @@ class JSBridgeManager private constructor() {
      */
     fun registerHandler(handler: JSHandler) {
         val moduleName = handler.getModuleName()
-        if (moduleName in allowedModules) {
-            handlerMap[moduleName] = handler
-        } else {
-            throw IllegalArgumentException("Module '$moduleName' is not in the allowed list")
-        }
+        handlerMap[moduleName] = handler
+        Log.d(TAG, "📝 Handler 已注册: $moduleName")
     }
 
     /**
@@ -63,15 +95,15 @@ class JSBridgeManager private constructor() {
         try {
             // 验证方法名格式
             if (!validateMethod(method)) {
-                callback?.error("900400", "方法名格式无效或包含非法字符")
-                Log.e("JSBridgeManager", "Invalid method name: $method")
+                callback?.error(ERROR_INVALID_METHOD, "方法名格式无效或包含非法字符")
+                Log.e(TAG, "❌ Invalid method name: $method")
                 return
             }
 
             // 解析方法名，格式为"模块名.方法名"
             val parts = method.split(".")
             if (parts.size != 2) {
-                callback?.error("900400", "方法格式错误，请使用'模块名.方法名'格式")
+                callback?.error(ERROR_METHOD_FORMAT, "方法格式错误，请使用'模块名.方法名'格式")
                 return
             }
 
@@ -80,25 +112,26 @@ class JSBridgeManager private constructor() {
 
             // 验证模块名是否在白名单中
             if (moduleName !in allowedModules) {
-                callback?.error("900403", "模块 '$moduleName' 不存在或未授权")
-                Log.e("JSBridgeManager", "Module not in whitelist: $moduleName")
+                callback?.error(ERROR_MODULE_NOT_ALLOWED, "模块 '$moduleName' 不存在或未授权")
+                Log.e(TAG, "❌ Module not allowed: $moduleName (allowed: $allowedModules)")
                 return
             }
 
             // 验证函数名格式
             if (!functionNamePattern.matches(functionName)) {
-                callback?.error("900400", "函数名包含非法字符")
-                Log.e("JSBridgeManager", "Invalid function name: $functionName")
+                callback?.error(ERROR_FUNCTION_INVALID, "函数名包含非法字符")
+                Log.e(TAG, "❌ Invalid function name: $functionName")
                 return
             }
 
             // 获取对应的处理器
             val handler = getHandler(moduleName)
             if (handler == null) {
-                callback?.error("900404", "未找到模块: $moduleName")
+                callback?.error(ERROR_MODULE_NOT_FOUND, "未找到模块: $moduleName")
+                Log.e(TAG, "❌ Module not found: $moduleName")
                 return
             }
-            Log.d("JSBridgeManager", "handle: $moduleName.$functionName")
+            Log.d(TAG, "✅ Handle: $moduleName.$functionName")
 
             // 将paramsMap转换为JSON字符串
             val paramsJson = if (params != null) {
@@ -117,15 +150,17 @@ class JSBridgeManager private constructor() {
                         callback?.success(code, msg, data)
                     } catch (e: Exception) {
                         // 回调过程中出错
-                        callback?.error("900500", "回调处理异常: ${e.message}")
+                        Log.e(TAG, "❌ Callback exception: ${e.message}", e)
+                        callback?.error(ERROR_CALLBACK_EXCEPTION, "回调处理异常: ${e.message}")
                     }
                 }
             }
 
         } catch (e: Exception) {
             // 确保在主线程执行错误回调
+            Log.e(TAG, "❌ Handle exception: ${e.message}", e)
             mainHandler.post {
-                callback?.error("900500", "处理异常: ${e.message}")
+                callback?.error(ERROR_CALLBACK_EXCEPTION, "处理异常: ${e.message}")
             }
         }
     }
@@ -155,7 +190,7 @@ class JSBridgeManager private constructor() {
      */
     fun handle(method: String, params: String, callback: JSCallback?) {
         try {
-            Log.d("JSBridgeManager", "handle string params: $method, params: $params")
+            Log.d(TAG, "📥 Handle (string params): $method, params: $params")
             // 尝试解析参数字符串为Map
             val paramsMap = if (params.isNotEmpty() && params != "null") {
                 Gson().fromJson(params, Map::class.java) as? Map<String, Any>
@@ -164,8 +199,22 @@ class JSBridgeManager private constructor() {
             }
             handle(method, paramsMap, callback)
         } catch (e: Exception) {
-            Log.e("JSBridgeManager", "parse params error: ${e.message}")
-            callback?.error("900001", "参数解析失败: ${e.message}")
+            Log.e(TAG, "❌ Parse params error: ${e.message}", e)
+            callback?.error(ERROR_PARSE_PARAMS, "参数解析失败: ${e.message}")
         }
+    }
+
+    /**
+     * 获取当前允许的模块列表（用于调试）
+     */
+    fun getAllowedModules(): Set<String> {
+        return allowedModules.toSet()
+    }
+
+    /**
+     * 获取已注册的处理器列表（用于调试）
+     */
+    fun getRegisteredModules(): Set<String> {
+        return handlerMap.keys.toSet()
     }
 }

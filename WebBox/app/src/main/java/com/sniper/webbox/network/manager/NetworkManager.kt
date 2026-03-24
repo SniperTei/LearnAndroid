@@ -85,8 +85,8 @@ object NetworkManager {
             Log.d("NetworkManager", "✅ HttpLoggingInterceptor 已添加 (level=${loggingInterceptor.level})")
         }
 
-        // 添加认证拦截器
-        builder.addInterceptor(AuthInterceptor())
+        // 注意：通用容器不添加认证拦截器
+        // 认证由 H5 页面自己处理
 
         // 添加默认请求头拦截器
         builder.addInterceptor(DefaultHeaderInterceptor())
@@ -253,18 +253,13 @@ object NetworkManager {
         requestBuilder.addHeader("Accept", "application/json")
         requestBuilder.addHeader("User-Agent", NetworkConfig.userAgent)
 
-        // 添加认证头
-        if (request.needAuth()) {
-            val fullToken = com.sniper.webbox.user.manager.AppUserManager.getFullAuthToken()
-            if (!fullToken.isNullOrEmpty()) {
-                requestBuilder.addHeader("Authorization", fullToken)
-            }
-        }
-
         // 添加自定义请求头
         request.getHeaders().forEach { (key, value) ->
             requestBuilder.addHeader(key, value)
         }
+
+        // 注意：通用容器不处理认证，认证由 H5 页面自己处理
+        // 如果需要，H5 可以通过请求的自定义 header 传递 token
     }
 
     /**
@@ -320,25 +315,6 @@ object NetworkManager {
         }
 
         return builder.build()
-    }
-
-    /**
-     * 认证拦截器
-     * 用于添加认证相关的请求头
-     */
-    private class AuthInterceptor : Interceptor {
-        override fun intercept(chain: Interceptor.Chain): Response {
-            val originalRequest = chain.request()
-            val requestBuilder = originalRequest.newBuilder()
-
-            // 从AppUserManager获取认证信息
-            val fullToken = com.sniper.webbox.user.manager.AppUserManager.getFullAuthToken()
-            if (!fullToken.isNullOrEmpty()) {
-                requestBuilder.addHeader("Authorization", fullToken)
-            }
-
-            return chain.proceed(requestBuilder.build())
-        }
     }
 
     /**

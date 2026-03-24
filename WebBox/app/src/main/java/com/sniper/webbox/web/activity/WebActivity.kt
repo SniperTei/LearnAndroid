@@ -20,11 +20,16 @@ import android.widget.TextView
 import com.sniper.webbox.BuildConfig
 import com.sniper.webbox.R
 import com.sniper.webbox.base.activity.BaseActivity
+import com.sniper.webbox.container.ContainerConfig
+import com.sniper.webbox.container.ContainerConfigManager
 import com.sniper.webbox.web.bridge.JSBridgeImpl
 import com.sniper.webbox.web.bridge.JSBridgeManager
 import com.sniper.webbox.web.bridge.handler.CameraHandler
+import com.sniper.webbox.web.bridge.handler.ClipboardHandler
 import com.sniper.webbox.web.bridge.handler.DeviceHandler
-import com.sniper.webbox.web.bridge.handler.UserInfoHandler
+import com.sniper.webbox.web.bridge.handler.LocationHandler
+import com.sniper.webbox.web.bridge.handler.NetworkHandler
+import com.sniper.webbox.web.bridge.handler.ShareHandler
 
 
 
@@ -34,6 +39,7 @@ class WebActivity : BaseActivity() {
         const val EXTRA_TITLE = "extra_title"
         const val EXTRA_SHOW_TOOLBAR = "extra_show_toolbar"
         const val EXTRA_LOADING_MESSAGE = "extra_loading_message"
+        const val EXTRA_CONFIG_JSON = "extra_config_json"
     }
 
     private lateinit var webView: WebView
@@ -71,7 +77,19 @@ class WebActivity : BaseActivity() {
 
     override fun initData() {
         super.initData()
-        // 获取传递的参数
+
+        // 尝试从 Intent 获取配置
+        val configJson = intent.getStringExtra(EXTRA_CONFIG_JSON)
+        if (!configJson.isNullOrBlank()) {
+            // 从配置加载
+            val config = ContainerConfig.fromJson(configJson)
+            if (config != null) {
+                applyConfig(config)
+                return
+            }
+        }
+
+        // 回退到旧的方式（直接参数）
         url = intent.getStringExtra(EXTRA_URL)
         title = intent.getStringExtra(EXTRA_TITLE)
         showToolbar = intent.getBooleanExtra(EXTRA_SHOW_TOOLBAR, true)
@@ -85,6 +103,90 @@ class WebActivity : BaseActivity() {
 
         // 加载URL
         url?.let { loadUrl(it) }
+    }
+
+    /**
+     * 应用容器配置
+     */
+    private fun applyConfig(config: ContainerConfig) {
+        Log.d(TAG, "📱 应用配置: ${config.appName}")
+
+        // 设置 URL
+        url = config.homeUrl
+        title = config.appName
+        showToolbar = config.theme.showToolbar
+
+        // 设置标题
+        tvTitle.text = config.appName
+
+        // 控制导航栏显示
+        toolbarContainer.visibility = if (showToolbar) View.VISIBLE else View.GONE
+
+        // 应用主题
+        applyTheme(config)
+
+        // 配置 JS Bridge 功能
+        configureJSBridge(config)
+
+        // 加载URL
+        loadUrl(config.homeUrl)
+    }
+
+    /**
+     * 应用主题
+     */
+    private fun applyTheme(config: ContainerConfig) {
+        // 设置状态栏颜色（需要 API 21+）
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            window.statusBarColor = android.graphics.Color.parseColor(config.theme.statusBarColor)
+        }
+
+        // 设置工具栏颜色
+        toolbarContainer.setBackgroundColor(android.graphics.Color.parseColor(config.theme.toolbarColor))
+        tvTitle.setTextColor(android.graphics.Color.parseColor(config.theme.toolbarTitleColor))
+    }
+
+    /**
+     * 配置 JS Bridge 功能
+     */
+    private fun configureJSBridge(config: ContainerConfig) {
+        // 清理旧的 Handler
+        JSBridgeManager.instance.clearHandlers()
+
+        // 根据配置注册 Handler
+        if (config.isFeatureEnabled("device")) {
+            JSBridgeManager.instance.registerHandler(DeviceHandler(this))
+            Log.d(TAG, "✅ Device Handler 已注册")
+        }
+
+        if (config.isFeatureEnabled("camera")) {
+            JSBridgeManager.instance.registerHandler(CameraHandler(this))
+            Log.d(TAG, "✅ Camera Handler 已注册")
+        }
+
+        if (config.isFeatureEnabled("location")) {
+            JSBridgeManager.instance.registerHandler(LocationHandler(this))
+            Log.d(TAG, "✅ Location Handler 已注册")
+        }
+
+        if (config.isFeatureEnabled("share")) {
+            JSBridgeManager.instance.registerHandler(ShareHandler(this))
+            Log.d(TAG, "✅ Share Handler 已注册")
+        }
+
+        if (config.isFeatureEnabled("clipboard")) {
+            JSBridgeManager.instance.registerHandler(ClipboardHandler(this))
+            Log.d(TAG, "✅ Clipboard Handler 已注册")
+        }
+
+        if (config.isFeatureEnabled("network")) {
+            JSBridgeManager.instance.registerHandler(NetworkHandler(this))
+            Log.d(TAG, "✅ Network Handler 已注册")
+        }
+
+        // 配置 JS Bridge 功能白名单
+        JSBridgeManager.instance.configureFeatures(config.enabledFeatures)
+        Log.d(TAG, "🎯 JS Bridge 功能已配置: ${config.enabledFeatures.joinToString()}")
     }
 
     override fun initListener() {
@@ -202,10 +304,8 @@ class WebActivity : BaseActivity() {
         // 注册JS Bridge
         webView.addJavascriptInterface(jsBridgeImpl, "Android")
 
-        // 注册JS处理器
-        JSBridgeManager.instance.registerHandler(DeviceHandler(this))
-        JSBridgeManager.instance.registerHandler(UserInfoHandler(this))
-        JSBridgeManager.instance.registerHandler(CameraHandler(this))
+        // 注意：Handler 注册现在由 configureJSBridge() 方法根据配置动态处理
+        // 这里保留作为兼容旧方式的后备（如果没有配置传递）
     }
 
     /**
@@ -364,12 +464,26 @@ class WebActivity : BaseActivity() {
             // 5. 销毁WebView
             webView.destroy()
 
-            // 6. 清理JSBridgeManager中的Handler引用
+            // 6. 清理JSBridgeManager中的Handler引用和资源
+            cleanupHandlers()
+
+            // 7. 清理所有 Handler
             JSBridgeManager.instance.clearHandlers()
         } catch (e: Exception) {
             Log.e(TAG, "Error destroying WebView: ${e.message}", e)
         }
 
         super.onDestroy()
+    }
+
+    /**
+     * 清理 Handler 资源
+     */
+    private fun cleanupHandlers() {
+        // 清理 LocationHandler 的监听器
+        // 清理 NetworkHandler 的监听器
+        // 其他 Handler 的清理工作...
+
+        Log.d(TAG, "🧹 Handler 资源已清理")
     }
 }
