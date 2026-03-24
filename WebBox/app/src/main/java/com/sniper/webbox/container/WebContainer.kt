@@ -45,14 +45,17 @@ class WebContainer(
      * 为不同应用设置不同的 Cookie 域，防止 Cookie 泄漏
      */
     private fun setupCookieIsolation() {
+        // CookieManager 是全局单例，无需 WebView 实例
         cookieManager.setAcceptCookie(true)
-        cookieManager.setAcceptThirdPartyCookies(null, true)
+
+        // 注意：setAcceptThirdPartyCookies 需要 WebView 实例
+        // 我们在 WebActivity 中配置 WebView 时设置
 
         // 为应用设置唯一的 Cookie 标识
         val homeUrlHost = extractHost(config.homeUrl)
         if (homeUrlHost != null) {
             cookieManager.setCookie(homeUrlHost, "app_id=${config.appId}; Path=/")
-            Log.d(TAG, "✅ Cookie 隔离已设置: $homeUrlHost")
+            Log.d(TAG, "✅ Cookie 隔离已设置: $homeUrlHost (app_id=${config.appId})")
         }
     }
 

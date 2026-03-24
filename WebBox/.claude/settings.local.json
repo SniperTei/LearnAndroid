@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(./gradlew compileDebugKotlin)",
-      "Bash(./gradlew assembleDebug)"
+      "Bash(./gradlew assembleDebug)",
+      "Bash(curl -s http://localhost:15622/health)",
+      "Bash(pkill -f \"node mock-login-api.cjs\")"
     ]
   }
 }

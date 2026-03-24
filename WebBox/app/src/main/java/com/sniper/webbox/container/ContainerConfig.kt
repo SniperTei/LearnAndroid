@@ -106,9 +106,10 @@ data class ContainerConfig(
 
         /**
          * 是否显示导航栏
+         * 默认隐藏（false），让 H5 页面全屏显示
          */
         @SerializedName("showToolbar")
-        val showToolbar: Boolean = true,
+        val showToolbar: Boolean = false,
 
         /**
          * 是否显示返回按钮

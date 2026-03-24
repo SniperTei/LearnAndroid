@@ -20,6 +20,10 @@
         <!-- 本地开发环境 -->
         <domain includeSubdomains="true">localhost</domain>
         <domain includeSubdomains="true">10.0.2.2</domain> <!-- Android模拟器访问主机 -->
+        <domain includeSubdomains="true">192.168.229.128</domain> <!-- 局域网开发环境（真机） -->
+
+        <!-- 后端服务器 -->
+        <domain includeSubdomains="true">156.226.180.172</domain>
 
         <!-- 内网开发环境（可根据实际开发环境修改） -->
         <domain includeSubdomains="true">192.168.130.128</domain>

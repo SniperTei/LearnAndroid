@@ -92,7 +92,7 @@ class WebActivity : BaseActivity() {
         // 回退到旧的方式（直接参数）
         url = intent.getStringExtra(EXTRA_URL)
         title = intent.getStringExtra(EXTRA_TITLE)
-        showToolbar = intent.getBooleanExtra(EXTRA_SHOW_TOOLBAR, true)
+        showToolbar = intent.getBooleanExtra(EXTRA_SHOW_TOOLBAR, false)  // 默认隐藏导航栏
         loadingMessage = intent.getStringExtra(EXTRA_LOADING_MESSAGE) ?: "加载中..."
 
         // 设置标题
@@ -252,6 +252,12 @@ class WebActivity : BaseActivity() {
         webSettings.allowFileAccess = false
         webSettings.allowFileAccessFromFileURLs = false
         webSettings.allowUniversalAccessFromFileURLs = false
+
+        // ✅ 配置 CookieManager：允许第三方 Cookie（针对此 WebView）
+        android.webkit.CookieManager.getInstance().apply {
+            setAcceptCookie(true)
+            setAcceptThirdPartyCookies(webView, true)
+        }
 
         // 设置WebViewClient
         webView.webViewClient = object : WebViewClient() {

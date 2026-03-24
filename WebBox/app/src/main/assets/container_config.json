@@ -1,10 +1,11 @@
 {
-  "appId": "com.webbox.example",
-  "appName": "示例应用",
-  "homeUrl": "https://example.com",
+  "appId": "com.yimei.h5",
+  "appName": "医美 H5",
+  "homeUrl": "http://192.168.229.128:5173",
   "allowedDomains": [
-    "example.com",
-    "api.example.com"
+    "localhost",
+    "192.168.229.128",
+    "156.226.180.172"
   ],
   "enabledFeatures": [
     "device",
@@ -15,15 +16,15 @@
     "network"
   ],
   "theme": {
-    "statusBarColor": "#FF000000",
-    "toolbarColor": "#FFFFFFFF",
-    "toolbarTitleColor": "#FF000000",
-    "showToolbar": true,
+    "statusBarColor": "#FFE91E63",
+    "toolbarColor": "#FFE91E63",
+    "toolbarTitleColor": "#FFFFFFFF",
+    "showToolbar": false,
     "showBackButton": true,
     "showCloseButton": false
   },
   "networkSecurity": {
-    "allowCleartext": false,
+    "allowCleartext": true,
     "trustedDomains": []
   },
   "webview": {
@@ -31,7 +32,7 @@
     "domStorageEnabled": true,
     "databaseEnabled": true,
     "cacheEnabled": true,
-    "userAgentSuffix": "WebBox/1.0",
+    "userAgentSuffix": "WebBox-YimeiH5/1.0",
     "defaultZoom": 1.0,
     "minZoom": 0.5,
     "maxZoom": 2.0,
